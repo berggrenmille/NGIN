@@ -1,12 +1,15 @@
 ﻿// NGIN.cpp : Defines the entry point for the application.
 //
 
-#include "NGIN.h"
+
+#include "engine.h"
+#include <iostream>
 
 using namespace std;
 
 int main()
 {
-	cout << "Hello CMake." << endl;
+	std::cout << "Hello CMake." << std::endl;
+	MyFunction();
 	return 0;
 }
