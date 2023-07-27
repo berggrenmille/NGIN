@@ -1,0 +1,278 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					],
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "_deps/dylib-build",
+					"jsonFile" : "directory-_deps.dylib-build-Release-4fd7f306a098bef795d5.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "build/x64-release/_deps/dylib-src"
+				},
+				{
+					"build" : "_deps/sdl-build",
+					"jsonFile" : "directory-_deps.sdl-build-Release-a9dc937dee7e4a240587.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "build/x64-release/_deps/sdl-src",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						8,
+						9
+					]
+				},
+				{
+					"build" : "_deps/loguru-build",
+					"jsonFile" : "directory-_deps.loguru-build-Release-81980425f26dd9a80092.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "build/x64-release/_deps/loguru-src",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "NGIN",
+					"jsonFile" : "directory-NGIN-Release-133145f76cdeff378b60.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "NGIN",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "NGIN_EDITOR",
+					"jsonFile" : "directory-NGIN_EDITOR-Release-8bdbf15e66c7782e1385.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "NGIN_EDITOR",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "docs",
+					"jsonFile" : "directory-docs-Release-a0a153f7bea992cedd45.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "docs",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						4,
+						6
+					],
+					"name" : "NGIN",
+					"targetIndexes" : 
+					[
+						0,
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "dylib",
+					"parentIndex" : 0
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "SDL2",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						8,
+						9
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "loguru",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "NGIN_EDITOR",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 4,
+					"id" : "NGIN::@ecaea569bd412e59ed16",
+					"jsonFile" : "target-NGIN-Release-a285bf99bd026a529c6a.json",
+					"name" : "NGIN",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "NGIN_EDITOR::@2a4495bfab245d1f620c",
+					"jsonFile" : "target-NGIN_EDITOR-Release-42af14635d2fe4519dcc.json",
+					"name" : "NGIN_EDITOR",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "SDL2::@fc7b397d5a055aba6d5e",
+					"jsonFile" : "target-SDL2-Release-c707b68ab659824bcdc4.json",
+					"name" : "SDL2",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "SDL2-static::@fc7b397d5a055aba6d5e",
+					"jsonFile" : "target-SDL2-static-Release-45f0dd8f2d5b4bfcfc80.json",
+					"name" : "SDL2-static",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "SDL2_test::@fc7b397d5a055aba6d5e",
+					"jsonFile" : "target-SDL2_test-Release-aa082b646c0677619fb2.json",
+					"name" : "SDL2_test",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "SDL2main::@fc7b397d5a055aba6d5e",
+					"jsonFile" : "target-SDL2main-Release-2fdc5851cd18de0703a8.json",
+					"name" : "SDL2main",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "docs::@25ace4044b5cefe8d37f",
+					"jsonFile" : "target-docs-Release-5f89b7e7f2011a9f859c.json",
+					"name" : "docs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "loguru::@f58db0901cf2ac5ffb3c",
+					"jsonFile" : "target-loguru-Release-c0ff8f6d22616379243b.json",
+					"name" : "loguru",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "sdl_headers_copy::@fc7b397d5a055aba6d5e",
+					"jsonFile" : "target-sdl_headers_copy-Release-254490ecf5ef70728abb.json",
+					"name" : "sdl_headers_copy",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "uninstall::@fc7b397d5a055aba6d5e",
+					"jsonFile" : "target-uninstall-Release-7fb3814c5a190d3209df.json",
+					"name" : "uninstall",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Projects/NGIN/build/x64-release",
+		"source" : "C:/Projects/NGIN"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

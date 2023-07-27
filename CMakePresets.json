@@ -1,101 +1,128 @@
-﻿{
-    "version": 3,
-    "configurePresets": [
-        {
-            "name": "windows-base",
-            "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            }
-        },
-        {
-            "name": "x64-debug",
-            "displayName": "x64 Debug",
-            "inherits": "windows-base",
-            "architecture": {
-                "value": "x64",
-                "strategy": "external"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "x64-release",
-            "displayName": "x64 Release",
-            "inherits": "x64-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "x86-debug",
-            "displayName": "x86 Debug",
-            "inherits": "windows-base",
-            "architecture": {
-                "value": "x86",
-                "strategy": "external"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "x86-release",
-            "displayName": "x86 Release",
-            "inherits": "x86-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "linux-debug",
-            "displayName": "Linux Debug",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "vendor": {
-                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-                }
-            }
-        },
-        {
-            "name": "macos-debug",
-            "displayName": "macOS Debug",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            },
-            "vendor": {
-                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-                }
-            }
-        }
-    ]
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "x64-debug",
+      "displayName": "x64 Debug",
+      "description": "Debug build for x64 architecture",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+        "BUILD_DOCUMENTATION": "OFF"
+      }
+    },
+    {
+      "name": "x64-release",
+      "displayName": "x64 Release",
+      "description": "Release build for x64 architecture",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+        "BUILD_DOCUMENTATION": "ON"
+      }
+    },
+    {
+      "name": "x64-dist",
+      "displayName": "x64 Dist",
+      "description": "Distribution build for x64 architecture",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Dist",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+        "BUILD_DOCUMENTATION": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "buildAll-debug",
+      "displayName": "Build All (Debug)",
+      "description": "Builds all projects in Debug mode",
+      "configurePreset": "x64-debug",
+      "targets": "all"
+    },
+    {
+      "name": "buildAll-release",
+      "displayName": "Build All (Release)",
+      "description": "Builds all projects in Release mode",
+      "configurePreset": "x64-release",
+      "targets": "all"
+    },
+    {
+      "name": "buildAll-dist",
+      "displayName": "Build All (Dist)",
+      "description": "Builds all projects in Distribution mode",
+      "configurePreset": "x64-dist",
+      "targets": "all"
+    },
+    {
+      "name": "buildEngine-debug",
+      "displayName": "Build Engine (Debug)",
+      "description": "Builds only the engine library in Debug mode",
+      "configurePreset": "x64-debug",
+      "targets": "NGIN"
+    },
+    {
+      "name": "buildEngine-release",
+      "displayName": "Build Engine (Release)",
+      "description": "Builds only the engine library in Release mode",
+      "configurePreset": "x64-release",
+      "targets": "NGIN"
+    },
+    {
+      "name": "buildEngine-dist",
+      "displayName": "Build Engine (Dist)",
+      "description": "Builds only the engine library in Distribution mode",
+      "configurePreset": "x64-dist",
+      "targets": "NGIN"
+    },
+    {
+      "name": "buildEditor-debug",
+      "displayName": "Build Editor (Debug)",
+      "description": "Builds only the editor in Debug mode",
+      "configurePreset": "x64-debug",
+      "targets": "NGIN_EDITOR"
+    },
+    {
+      "name": "buildEditor-release",
+      "displayName": "Build Editor (Release)",
+      "description": "Builds only the editor in Release mode",
+      "configurePreset": "x64-release",
+      "targets": "NGIN_EDITOR"
+    },
+    {
+      "name": "buildEditor-dist",
+      "displayName": "Build Editor (Dist)",
+      "description": "Builds only the editor in Distribution mode",
+      "configurePreset": "x64-dist",
+      "targets": "NGIN_EDITOR"
+    },
+    {
+      "name": "buildDocs",
+      "displayName": "Build Documentation",
+      "description": "Builds the API documentation into HTML format",
+      "configurePreset": "x64-release",
+      "targets": "docs"
+    }
+  ]
 }

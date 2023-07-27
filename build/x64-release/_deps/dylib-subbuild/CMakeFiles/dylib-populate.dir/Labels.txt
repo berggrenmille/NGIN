@@ -1,0 +1,14 @@
+# Target labels
+ dylib-populate
+# Source files and their labels
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/CMakeFiles/dylib-populate
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/CMakeFiles/dylib-populate.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/CMakeFiles/dylib-populate-complete.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-build.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-configure.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-download.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-install.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-mkdir.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-patch.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-test.rule
+C:/Projects/NGIN/build/x64-release/_deps/dylib-subbuild/dylib-populate-prefix/src/dylib-populate-stamp/dylib-populate-update.rule

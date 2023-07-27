@@ -1,0 +1,15 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=git
+command=C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe;-P;C:/Projects/NGIN/build/x64-debug/_deps/dylib-subbuild/dylib-populate-prefix/tmp/dylib-populate-gitclone.cmake
+source_dir=C:/Projects/NGIN/build/x64-debug/_deps/dylib-src
+work_dir=C:/Projects/NGIN/build/x64-debug/_deps
+repository=https://github.com/martin-olivier/dylib
+remote=origin
+init_submodules=TRUE
+recurse_submodules=--recursive
+submodules=
+CMP0097=NEW
+
