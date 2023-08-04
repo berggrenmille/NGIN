@@ -37,6 +37,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Projects/NGIN/build/x64-debug/_deps/dylib-build/cmake_install.cmake")
   include("C:/Projects/NGIN/build/x64-debug/_deps/sdl-build/cmake_install.cmake")
   include("C:/Projects/NGIN/build/x64-debug/_deps/loguru-build/cmake_install.cmake")
+  include("C:/Projects/NGIN/build/x64-debug/_deps/json-build/cmake_install.cmake")
   include("C:/Projects/NGIN/build/x64-debug/NGIN/cmake_install.cmake")
   include("C:/Projects/NGIN/build/x64-debug/NGIN_EDITOR/cmake_install.cmake")
 

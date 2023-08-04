@@ -4656,15 +4656,6 @@ build NGIN\CMakeFiles\NGIN.dir\src\SDLWindow.cpp.obj: CXX_COMPILER__NGIN_unscann
   TARGET_COMPILE_PDB = NGIN\CMakeFiles\NGIN.dir\
   TARGET_PDB = NGIN\NGIN.pdb
 
-build NGIN\CMakeFiles\NGIN.dir\src\Memory\Allocator.cpp.obj: CXX_COMPILER__NGIN_unscanned_Release C$:\Projects\NGIN\NGIN\src\Memory\Allocator.cpp || cmake_object_order_depends_target_NGIN
-  DEFINES = -DNGIN_EXPORTS
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD
-  INCLUDES = -IC:\Projects\NGIN\NGIN\include -IC:\Projects\NGIN\build\x64-release\_deps\loguru-src -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include\SDL2 -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include-config-release\SDL2 -IC:\Projects\NGIN\build\x64-release\_deps\dylib-src\include
-  OBJECT_DIR = NGIN\CMakeFiles\NGIN.dir
-  OBJECT_FILE_DIR = NGIN\CMakeFiles\NGIN.dir\src\Memory
-  TARGET_COMPILE_PDB = NGIN\CMakeFiles\NGIN.dir\
-  TARGET_PDB = NGIN\NGIN.pdb
-
 build NGIN\CMakeFiles\NGIN.dir\src\App.cpp.obj: CXX_COMPILER__NGIN_unscanned_Release C$:\Projects\NGIN\NGIN\src\App.cpp || cmake_object_order_depends_target_NGIN
   DEFINES = -DNGIN_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD
@@ -4683,6 +4674,24 @@ build NGIN\CMakeFiles\NGIN.dir\src\EntryPoint.cpp.obj: CXX_COMPILER__NGIN_unscan
   TARGET_COMPILE_PDB = NGIN\CMakeFiles\NGIN.dir\
   TARGET_PDB = NGIN\NGIN.pdb
 
+build NGIN\CMakeFiles\NGIN.dir\src\Memory\LinearAllocator.cpp.obj: CXX_COMPILER__NGIN_unscanned_Release C$:\Projects\NGIN\NGIN\src\Memory\LinearAllocator.cpp || cmake_object_order_depends_target_NGIN
+  DEFINES = -DNGIN_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD
+  INCLUDES = -IC:\Projects\NGIN\NGIN\include -IC:\Projects\NGIN\build\x64-release\_deps\loguru-src -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include\SDL2 -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include-config-release\SDL2 -IC:\Projects\NGIN\build\x64-release\_deps\dylib-src\include
+  OBJECT_DIR = NGIN\CMakeFiles\NGIN.dir
+  OBJECT_FILE_DIR = NGIN\CMakeFiles\NGIN.dir\src\Memory
+  TARGET_COMPILE_PDB = NGIN\CMakeFiles\NGIN.dir\
+  TARGET_PDB = NGIN\NGIN.pdb
+
+build NGIN\CMakeFiles\NGIN.dir\src\Memory\Allocator.cpp.obj: CXX_COMPILER__NGIN_unscanned_Release C$:\Projects\NGIN\NGIN\src\Memory\Allocator.cpp || cmake_object_order_depends_target_NGIN
+  DEFINES = -DNGIN_EXPORTS
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD
+  INCLUDES = -IC:\Projects\NGIN\NGIN\include -IC:\Projects\NGIN\build\x64-release\_deps\loguru-src -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include\SDL2 -IC:\Projects\NGIN\build\x64-release\_deps\sdl-build\include-config-release\SDL2 -IC:\Projects\NGIN\build\x64-release\_deps\dylib-src\include
+  OBJECT_DIR = NGIN\CMakeFiles\NGIN.dir
+  OBJECT_FILE_DIR = NGIN\CMakeFiles\NGIN.dir\src\Memory
+  TARGET_COMPILE_PDB = NGIN\CMakeFiles\NGIN.dir\
+  TARGET_PDB = NGIN\NGIN.pdb
+
 
 # =============================================================================
 # Link build statements for SHARED_LIBRARY target NGIN
@@ -4691,7 +4700,7 @@ build NGIN\CMakeFiles\NGIN.dir\src\EntryPoint.cpp.obj: CXX_COMPILER__NGIN_unscan
 #############################################
 # Link the shared library NGIN\NGIN.dll
 
-build NGIN\NGIN.dll NGIN\NGIN.lib: CXX_SHARED_LIBRARY_LINKER__NGIN_Release NGIN\CMakeFiles\NGIN.dir\src\Layer.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\LayerStack.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\SDLWindow.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\Memory\Allocator.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\App.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\EntryPoint.cpp.obj | _deps\loguru-build\loguru.lib _deps\sdl-build\SDL2-static.lib _deps\sdl-build\SDL2main.lib || _deps\loguru-build\loguru.lib _deps\sdl-build\SDL2-static.lib _deps\sdl-build\SDL2main.lib
+build NGIN\NGIN.dll NGIN\NGIN.lib: CXX_SHARED_LIBRARY_LINKER__NGIN_Release NGIN\CMakeFiles\NGIN.dir\src\Layer.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\LayerStack.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\SDLWindow.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\App.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\EntryPoint.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\Memory\LinearAllocator.cpp.obj NGIN\CMakeFiles\NGIN.dir\src\Memory\Allocator.cpp.obj | _deps\loguru-build\loguru.lib _deps\sdl-build\SDL2-static.lib _deps\sdl-build\SDL2main.lib || _deps\loguru-build\loguru.lib _deps\sdl-build\SDL2-static.lib _deps\sdl-build\SDL2main.lib
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   LINK_FLAGS = /machine:x64 /INCREMENTAL:NO
   LINK_LIBRARIES = _deps\loguru-build\loguru.lib  _deps\sdl-build\SDL2-static.lib  _deps\sdl-build\SDL2main.lib  user32.lib  gdi32.lib  winmm.lib  imm32.lib  ole32.lib  oleaut32.lib  version.lib  uuid.lib  advapi32.lib  setupapi.lib  dinput8.lib  shell32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

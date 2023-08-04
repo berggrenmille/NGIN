@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EventBus.h" // Include the event bus header file or any other necessary dependencies
+#include "EventBus.h" 
 namespace NGIN
 {
 	class Layer

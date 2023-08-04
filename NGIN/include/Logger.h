@@ -1,74 +1,120 @@
 #pragma once
 #include <Core.h>
-#include <loguru.hpp>
+#include <HideWarnings/Loguru.hpp>
 #include <source_location>
 #include <cstdarg>
+#include <tuple>
+#include <utility>
+
+#include <string>
+#include <Detail/LoggingHelper.hpp>
+
+
+//DEFINES
+#define CURR_FILE() ::std::source_location::current()
+#define NGIN_LOG(verbosity, ...) ::NGIN::Logger::Log(CURR_FILE(), verbosity, __VA_ARGS__)
+#define NGIN_LOG_IF(verbosity, condition, ...) ::NGIN::Logger::LogIf(CURR_FILE(), verbosity, condition, __VA_ARGS__)
+#define NGIN_INFO(...) ::NGIN::Logger::Log(CURR_FILE(), ::NGIN::Logger::Verbosity::INFO, __VA_ARGS__)
+#define NGIN_WARNING(...) ::NGIN::Logger::Log(CURR_FILE(), ::NGIN::Logger::Verbosity::WARNING, __VA_ARGS__)
+#define NGIN_ERROR(...) ::NGIN::Logger::Log(CURR_FILE(), ::NGIN::Logger::Verbosity::ERROR, __VA_ARGS__)
+
+#define NGIN_ASSERT(condition, ...) DCHECK_F(condition, __VA_ARGS__)
+
 namespace NGIN
 {
-	//Wrapper for loguru verbosity
-	enum Verbosity : int
-	{
-		// Used to mark an invalid verbosity. Do not log to this level.
-		INVALID = -10, // Never do LOG_F(INVALID)
 
-		// You may use Verbosity_OFF on g_stderr_verbosity, but for nothing else!
-		OFF = -9, // Never do LOG_F(OFF)
-
-		// Prefer to use ABORT_F or ABORT_S over LOG_F(FATAL) or LOG_S(FATAL).
-		FATAL = -3,
-		ERROR = -2,
-		WARNING = -1,
-
-		// Normal messages. By default written to stderr.
-		INFO = 0,
-
-		// Same as Verbosity_INFO in every way.
-		Verbosity_0 = 0,
-
-		// Verbosity levels 1-9 are generally not written to stderr, but are written to file.
-		Verbosity_1 = +1,
-		Verbosity_2 = +2,
-		Verbosity_3 = +3,
-		Verbosity_4 = +4,
-		Verbosity_5 = +5,
-		Verbosity_6 = +6,
-		Verbosity_7 = +7,
-		Verbosity_8 = +8,
-		Verbosity_9 = +9,
-
-		// Do not use higher verbosity levels, as that will make grepping log files harder.
-		Verbosity_MAX = +9,
-	};
 	/// <summary>
 	/// LOG is only used to initialize the loguru library
 	/// </summary>
 	namespace Logger
 	{
+		/**
+		 * @brief Represents the verbosity levels of the logging system.
+		 *
+		 * Basically a wrapper for Logurus verbosity levels
+		 */
+		enum Verbosity : int
+		{
+			// Used to mark an invalid verbosity. Do not log to this level.
+			INVALID = -10, // Never do LOG_F(INVALID)
 
+			// You may use Verbosity_OFF on g_stderr_verbosity, but for nothing else!
+			OFF = -9, // Never do LOG_F(OFF)
 
+			// Prefer to use ABORT_F or ABORT_S over LOG_F(FATAL) or LOG_S(FATAL).
+			FATAL = -3,
+			ERROR = -2,
+			WARNING = -1,
+
+			// Normal messages. By default written to stderr.
+			INFO = 0,
+
+			// Same as Verbosity_INFO in every way.
+			Verbosity_0 = 0,
+
+			// Verbosity levels 1-9 are generally not written to stderr, but are written to file.
+			Verbosity_1 = +1,
+			Verbosity_2 = +2,
+			Verbosity_3 = +3,
+			Verbosity_4 = +4,
+			Verbosity_5 = +5,
+			Verbosity_6 = +6,
+			Verbosity_7 = +7,
+			Verbosity_8 = +8,
+			Verbosity_9 = +9,
+
+			// Do not use higher verbosity levels, as that will make grepping log files harder.
+			Verbosity_MAX = +9,
+		};
+
+		/*
+		 * @brief Initializes the logging system.
+		 *
+		 * This function should be called before any logging is done.
+		 *
+		 * @param argc The number of command line arguments.
+		 * @param argv The command line arguments.
+		 */
 		inline static void Init(int& argc, char* argv[])
 		{
 			loguru::init(argc, argv);
 		}
 
-		inline static void Log(Verbosity verbosity, const std::source_location& location, const char* format, ...)
+		struct StringArg
 		{
-			va_list va;
-			va_start(va, format);
-			loguru::vlog(verbosity, location.file_name(), location.line(), format, va);
+			const char* str;
+			StringArg(const char* s) : str(s) {}
+
+			// conversion operator
+			operator const char* () const
+			{
+				return str;
+			}
+		};
+
+
+
+		template <class... Args>
+		inline static void Log_impl(std::tuple<Args...> args, Verbosity verbosity, const std::source_location& location)
+		{
+
+			Detail::Apply(args, [&](auto&&... args) {
+				loguru::log(verbosity, location.file_name(), location.line(), std::forward<decltype(args)>(args)...);
+						  });
 		}
 
-		inline static void Log(Verbosity verbosity, const char* format, ...)
+
+
+		template <class... Args>
+		inline static void Log(const std::source_location& location = std::source_location::current(), Verbosity verbosity = Verbosity::INFO, const char* msg = "", Args... args)
 		{
-			va_list va;
-			va_start(va, format);
-			loguru::vlog(verbosity, "Unknown", 0, format, va);
+			Log_impl(Detail::FORMAT_TO_TUPLE(msg, args...), verbosity, location);
 		}
+
 	};
 }
-#define CURR_FILE() ::std::source_location::current()
-#define NGIN_LOG(...) ::LOG_F(INFO, __VA_ARGS__)
-#define NGIN_WARNING(...) ::LOG_F(WARNING, __VA_ARGS__)
-#define NGIN_ERROR(...) ::LOG_F(ERROR, __VA_ARGS__)
-#define NGIN_LOG_FUNCTION(verbosity) ::LOG_SCOPE_FUNCTION(verbosity)
+
+
+
+
 

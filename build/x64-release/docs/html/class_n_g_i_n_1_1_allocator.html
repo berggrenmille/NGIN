@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>NGIN</b></li><li class="navelem"><a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_n_g_i_n.html">NGIN</a></li><li class="navelem"><a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -81,45 +81,53 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A base class for memory allocation.  
+<p>A base class for custom memory allocation.  
  <a href="class_n_g_i_n_1_1_allocator.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_allocator_8h_source.html">Allocator.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for NGIN::Allocator:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_n_g_i_n_1_1_allocator.png" usemap="#NGIN::Allocator_map" alt=""/>
+  <map id="NGIN::Allocator_map" name="NGIN::Allocator_map">
+<area href="class_n_g_i_n_1_1_linear_allocator.html" alt="NGIN::LinearAllocator" shape="rect" coords="0,56,135,80"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae8e92817e04608a77d5bec202c5a62df"><td class="memItemLeft" align="right" valign="top"><a id="ae8e92817e04608a77d5bec202c5a62df" name="ae8e92817e04608a77d5bec202c5a62df"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> ()=default</td></tr>
-<tr class="memdesc:ae8e92817e04608a77d5bec202c5a62df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
-<tr class="separator:ae8e92817e04608a77d5bec202c5a62df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4f4e912b7d719ce59f0ad89ccf98b3a"><td class="memItemLeft" align="right" valign="top"><a id="ac4f4e912b7d719ce59f0ad89ccf98b3a" name="ac4f4e912b7d719ce59f0ad89ccf98b3a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> ()</td></tr>
+<tr class="memdesc:ac4f4e912b7d719ce59f0ad89ccf98b3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:ac4f4e912b7d719ce59f0ad89ccf98b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae88d0b5c56e34511087c5879d500115e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ae88d0b5c56e34511087c5879d500115e">Allocator</a> (const <a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a> &amp;)=delete</td></tr>
 <tr class="memdesc:ae88d0b5c56e34511087c5879d500115e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor marked as delete to prevent copying.  <br /></td></tr>
 <tr class="separator:ae88d0b5c56e34511087c5879d500115e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab15d78f84e5fc2a3bc70f77ad042aa05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ab15d78f84e5fc2a3bc70f77ad042aa05">operator=</a> (const <a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a> &amp;)=delete</td></tr>
 <tr class="memdesc:ab15d78f84e5fc2a3bc70f77ad042aa05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator marked as delete to prevent assignment.  <br /></td></tr>
 <tr class="separator:ab15d78f84e5fc2a3bc70f77ad042aa05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa630a7785b8953aec66029f97fe165b"><td class="memItemLeft" align="right" valign="top"><a id="aaa630a7785b8953aec66029f97fe165b" name="aaa630a7785b8953aec66029f97fe165b"></a>
+<tr class="memitem:aaaaf132f4b4f32ecfb49dd84ac6eb644"><td class="memItemLeft" align="right" valign="top"><a id="aaaaf132f4b4f32ecfb49dd84ac6eb644" name="aaaaf132f4b4f32ecfb49dd84ac6eb644"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Allocator</b> ()</td></tr>
-<tr class="memdesc:aaa630a7785b8953aec66029f97fe165b"><td class="mdescLeft">&#160;</td><td class="mdescRight">destructor <br /></td></tr>
-<tr class="separator:aaa630a7785b8953aec66029f97fe165b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:aaaaf132f4b4f32ecfb49dd84ac6eb644"><td class="mdescLeft">&#160;</td><td class="mdescRight">destructor <br /></td></tr>
+<tr class="separator:aaaaf132f4b4f32ecfb49dd84ac6eb644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adad0d294d208a6479a98226546b029bb"><td class="memItemLeft" align="right" valign="top">virtual void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#adad0d294d208a6479a98226546b029bb">Allocate</a> (size_t size, size_t alignment=alignof(std::max_align_t))=0</td></tr>
 <tr class="memdesc:adad0d294d208a6479a98226546b029bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a block of memory.  <br /></td></tr>
 <tr class="separator:adad0d294d208a6479a98226546b029bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9437077d5c0178382b6dfcf11722985f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a9437077d5c0178382b6dfcf11722985f">Deallocate</a> (void *ptr=nullptr)=0</td></tr>
 <tr class="memdesc:a9437077d5c0178382b6dfcf11722985f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocates a block of memory.  <br /></td></tr>
 <tr class="separator:a9437077d5c0178382b6dfcf11722985f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedccd7abd8e3d4d9a596edb3bcee096e"><td class="memItemLeft" align="right" valign="top"><a id="aedccd7abd8e3d4d9a596edb3bcee096e" name="aedccd7abd8e3d4d9a596edb3bcee096e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>DeallocateAll</b> ()=0</td></tr>
-<tr class="memdesc:aedccd7abd8e3d4d9a596edb3bcee096e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocates all memory managed by the allocator. <br /></td></tr>
+<tr class="memitem:aedccd7abd8e3d4d9a596edb3bcee096e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#aedccd7abd8e3d4d9a596edb3bcee096e">DeallocateAll</a> ()=0</td></tr>
+<tr class="memdesc:aedccd7abd8e3d4d9a596edb3bcee096e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocates all blocks of memory.  <br /></td></tr>
 <tr class="separator:aedccd7abd8e3d4d9a596edb3bcee096e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a574bcb55321a5baf8caed7b681a86447"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
-<tr class="memitem:a574bcb55321a5baf8caed7b681a86447"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a574bcb55321a5baf8caed7b681a86447">New</a> (Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:a574bcb55321a5baf8caed7b681a86447"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an object in the allocated memory.  <br /></td></tr>
-<tr class="separator:a574bcb55321a5baf8caed7b681a86447"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a906e5336a5f7682dfbc699f71446bf0b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a906e5336a5f7682dfbc699f71446bf0b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a906e5336a5f7682dfbc699f71446bf0b">Delete</a> (T &amp;object)</td></tr>
-<tr class="memdesc:a906e5336a5f7682dfbc699f71446bf0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys an object and deallocates its memory.  <br /></td></tr>
-<tr class="separator:a906e5336a5f7682dfbc699f71446bf0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaef53ddbd1c78e7dcce921d3c991f5f"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
+<tr class="memitem:acaef53ddbd1c78e7dcce921d3c991f5f"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#acaef53ddbd1c78e7dcce921d3c991f5f">New</a> (Args &amp;&amp;... args, const std::source_location &amp;location=std::source_location::current())</td></tr>
+<tr class="memdesc:acaef53ddbd1c78e7dcce921d3c991f5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an object in the allocated memory.  <br /></td></tr>
+<tr class="separator:acaef53ddbd1c78e7dcce921d3c991f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af757ba5b14bb1a18814c07b53f34249b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:af757ba5b14bb1a18814c07b53f34249b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_allocator.html#af757ba5b14bb1a18814c07b53f34249b">Delete</a> (T *object, const std::source_location &amp;location=std::source_location::current())</td></tr>
+<tr class="memdesc:af757ba5b14bb1a18814c07b53f34249b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys an object and deallocates its memory.  <br /></td></tr>
+<tr class="separator:af757ba5b14bb1a18814c07b53f34249b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -131,8 +139,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a1eed1cc31142582b7b941c970643bc12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A base class for memory allocation. </p>
-<p>This class represents a basic allocator for memory management. It provides an interface for memory allocation and deallocation. </p>
+<div class="textblock"><p>A base class for custom memory allocation. </p>
+<p>This class provides an interface for memory allocation and deallocation, and allows derived classes to provide custom allocation strategies. It also provides debug information for detecting memory leaks. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae88d0b5c56e34511087c5879d500115e" name="ae88d0b5c56e34511087c5879d500115e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae88d0b5c56e34511087c5879d500115e">&#9670;&#160;</a></span>Allocator()</h2>
@@ -199,6 +207,7 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allocates a block of memory. </p>
+<p>Allocates a block of memory of the specified size, with the specified alignment. The actual allocation strategy is provided by the derived classes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">size</td><td>Size of memory to allocate. </td></tr>
@@ -207,6 +216,8 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the allocated memory. </dd></dl>
+
+<p>Implemented in <a class="el" href="class_n_g_i_n_1_1_linear_allocator.html#a5378c113da2437db8980d5338438fe29">NGIN::LinearAllocator</a>.</p>
 
 </div>
 </div>
@@ -235,6 +246,7 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Deallocates a block of memory. </p>
+<p>Deallocates the block of memory pointed to by the specified pointer. The actual deallocation strategy is provided by the derived classes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ptr</td><td>Pointer to the memory to deallocate. Default is nullptr. </td></tr>
@@ -242,10 +254,48 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Implemented in <a class="el" href="class_n_g_i_n_1_1_linear_allocator.html#a87876b36013a6687765fa5ec1c68da51">NGIN::LinearAllocator</a>.</p>
+
 </div>
 </div>
-<a id="a906e5336a5f7682dfbc699f71446bf0b" name="a906e5336a5f7682dfbc699f71446bf0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a906e5336a5f7682dfbc699f71446bf0b">&#9670;&#160;</a></span>Delete()</h2>
+<a id="aedccd7abd8e3d4d9a596edb3bcee096e" name="aedccd7abd8e3d4d9a596edb3bcee096e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedccd7abd8e3d4d9a596edb3bcee096e">&#9670;&#160;</a></span>DeallocateAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void NGIN::Allocator::DeallocateAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deallocates all blocks of memory. </p>
+<p>Deallocates all blocks of memory reserved by the allocator. The actual deallocation strategy is provided by the derived classes.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>Pointer to the memory to deallocate. Default is nullptr. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="class_n_g_i_n_1_1_linear_allocator.html#abd4c1af5c6887f9b9f5660bb37055220">NGIN::LinearAllocator</a>.</p>
+
+</div>
+</div>
+<a id="af757ba5b14bb1a18814c07b53f34249b" name="af757ba5b14bb1a18814c07b53f34249b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af757ba5b14bb1a18814c07b53f34249b">&#9670;&#160;</a></span>Delete()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,9 +308,19 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="memname">void NGIN::Allocator::Delete </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>object</em></td><td>)</td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::source_location &amp;&#160;</td>
+          <td class="paramname"><em>location</em> = <code>std::source_location::current()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -271,6 +331,7 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 
 <p>Destroys an object and deallocates its memory. </p>
+<p>Calls the destructor of the specified object and then deallocates the memory for the object.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Type of the object. </td></tr>
@@ -321,9 +382,10 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 
 <p>Get the alignment adjustment of a pointer. </p>
+<p>Returns the adjustment needed to align a pointer to the desired alignment. Assumes alignment is a power of 2.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">alignment</td><td>Desired alignment. </td></tr>
+    <tr><td class="paramname">alignment</td><td>Desired alignment. Must be a power of 2. </td></tr>
     <tr><td class="paramname">ptr</td><td>Pointer to get the adjustment of. </td></tr>
   </table>
   </dd>
@@ -367,9 +429,10 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 
 <p>Get the alignment offset of a pointer. </p>
+<p>Returns the offset from the desired alignment for a given pointer. Assumes alignment is a power of 2.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">alignment</td><td>Desired alignment. </td></tr>
+    <tr><td class="paramname">alignment</td><td>Desired alignment. Must be a power of 2. </td></tr>
     <tr><td class="paramname">ptr</td><td>Pointer to get the offset of. </td></tr>
   </table>
   </dd>
@@ -378,8 +441,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a574bcb55321a5baf8caed7b681a86447" name="a574bcb55321a5baf8caed7b681a86447"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a574bcb55321a5baf8caed7b681a86447">&#9670;&#160;</a></span>New()</h2>
+<a id="acaef53ddbd1c78e7dcce921d3c991f5f" name="acaef53ddbd1c78e7dcce921d3c991f5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaef53ddbd1c78e7dcce921d3c991f5f">&#9670;&#160;</a></span>New()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -393,8 +456,18 @@ template&lt;class T , class... Args&gt; </div>
           <td class="memname">T * NGIN::Allocator::New </td>
           <td>(</td>
           <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::source_location &amp;&#160;</td>
+          <td class="paramname"><em>location</em> = <code>std::source_location::current()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -405,6 +478,7 @@ template&lt;class T , class... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Constructs an object in the allocated memory. </p>
+<p>Constructs an object of the specified type in the memory allocated by the Allocate method. The constructor of the object is called with the specified arguments.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Type of object to construct. </td></tr>

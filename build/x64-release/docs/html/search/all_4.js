@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['init_0',['Init',['../class_n_g_i_n_1_1_app.html#a1bcaeebf0fba935e1fd15cf62c20fe8f',1,'NGIN::App::Init()'],['../class_editor_app.html#ab880678423a9d92bbdd01d596665ed5d',1,'EditorApp::Init()']]]
+  ['getalignmentadjustment_0',['GetAlignmentAdjustment',['../class_n_g_i_n_1_1_allocator.html#a1eed1cc31142582b7b941c970643bc12',1,'NGIN::Allocator']]],
+  ['getalignmentoffset_1',['GetAlignmentOffset',['../class_n_g_i_n_1_1_allocator.html#ad9b78294311d18ad764b2b081aee53ef',1,'NGIN::Allocator']]]
 ];

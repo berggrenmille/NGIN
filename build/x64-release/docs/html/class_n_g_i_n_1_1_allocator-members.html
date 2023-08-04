@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>NGIN</b></li><li class="navelem"><a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_n_g_i_n.html">NGIN</a></li><li class="navelem"><a class="el" href="class_n_g_i_n_1_1_allocator.html">Allocator</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -80,16 +80,16 @@ $(function() {
 <p>This is the complete list of members for <a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a>, including all inherited members.</p>
 <table class="directory">
   <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#adad0d294d208a6479a98226546b029bb">Allocate</a>(size_t size, size_t alignment=alignof(std::max_align_t))=0</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ae8e92817e04608a77d5bec202c5a62df">Allocator</a>()=default</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ac4f4e912b7d719ce59f0ad89ccf98b3a">Allocator</a>()</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ae88d0b5c56e34511087c5879d500115e">Allocator</a>(const Allocator &amp;)=delete</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a9437077d5c0178382b6dfcf11722985f">Deallocate</a>(void *ptr=nullptr)=0</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#aedccd7abd8e3d4d9a596edb3bcee096e">DeallocateAll</a>()=0</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a906e5336a5f7682dfbc699f71446bf0b">Delete</a>(T &amp;object)</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#af757ba5b14bb1a18814c07b53f34249b">Delete</a>(T *object, const std::source_location &amp;location=std::source_location::current())</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a1eed1cc31142582b7b941c970643bc12">GetAlignmentAdjustment</a>(size_t alignment, const void *const ptr)</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ad9b78294311d18ad764b2b081aee53ef">GetAlignmentOffset</a>(size_t alignment, const void *const ptr)</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#a574bcb55321a5baf8caed7b681a86447">New</a>(Args &amp;&amp;... args)</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#acaef53ddbd1c78e7dcce921d3c991f5f">New</a>(Args &amp;&amp;... args, const std::source_location &amp;location=std::source_location::current())</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#ab15d78f84e5fc2a3bc70f77ad042aa05">operator=</a>(const Allocator &amp;)=delete</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#aaa630a7785b8953aec66029f97fe165b">~Allocator</a>()</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html#aaaaf132f4b4f32ecfb49dd84ac6eb644">~Allocator</a>()</td><td class="entry"><a class="el" href="class_n_g_i_n_1_1_allocator.html">NGIN::Allocator</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -48,7 +48,6 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/libsdl-org/SDL"
     GIT_TAG        "release-2.28.1"
 )
-#add_compile_definitions(SDL_MAIN_HANDLED)
 FetchContent_MakeAvailable(SDL)
 
 # LOGURU
@@ -57,9 +56,17 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/emilk/loguru"
     GIT_TAG        "master"
 )
-
-
 FetchContent_MakeAvailable(LOGURU)
+
+# JSON
+FetchContent_Declare(json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG v3.11.2
+)
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+FetchContent_MakeAvailable(json)
+
+
 
 
 

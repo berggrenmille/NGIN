@@ -69,38 +69,101 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>NGIN</b></li><li class="navelem"><a class="el" href="class_n_g_i_n_1_1_event_bus.html">EventBus</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_n_g_i_n.html">NGIN</a></li><li class="navelem"><a class="el" href="class_n_g_i_n_1_1_event_bus.html">EventBus</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_n_g_i_n_1_1_event_bus-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">NGIN::EventBus Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for event bus.  
+ <a href="class_n_g_i_n_1_1_event_bus.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_event_bus_8h_source.html">EventBus.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:af87ad35a2235746151ac34286c58c968"><td class="memTemplParams" colspan="2"><a id="af87ad35a2235746151ac34286c58c968" name="af87ad35a2235746151ac34286c58c968"></a>
-template&lt;typename EventType &gt; </td></tr>
-<tr class="memitem:af87ad35a2235746151ac34286c58c968"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Listener</b> = std::function&lt; void(EventType &amp;)&gt;</td></tr>
-<tr class="separator:af87ad35a2235746151ac34286c58c968"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8699638231e22f68ea9e796b5d3ed8aa"><td class="memTemplParams" colspan="2"><a id="a8699638231e22f68ea9e796b5d3ed8aa" name="a8699638231e22f68ea9e796b5d3ed8aa"></a>
-template&lt;typename EventType &gt; </td></tr>
-<tr class="memitem:a8699638231e22f68ea9e796b5d3ed8aa"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Subscribe</b> (Listener&lt; EventType &gt; const &amp;listener)</td></tr>
-<tr class="separator:a8699638231e22f68ea9e796b5d3ed8aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4732f9fd834e68e62804c356a79d12e3"><td class="memTemplParams" colspan="2"><a id="a4732f9fd834e68e62804c356a79d12e3" name="a4732f9fd834e68e62804c356a79d12e3"></a>
-template&lt;typename EventType &gt; </td></tr>
-<tr class="memitem:a4732f9fd834e68e62804c356a79d12e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Publish</b> (EventType &amp;event)</td></tr>
+<tr class="memitem:a4073009b78c54b44a987501e6f96b9e0"><td class="memTemplParams" colspan="2">template&lt;typename EventType &gt; </td></tr>
+<tr class="memitem:a4073009b78c54b44a987501e6f96b9e0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_event_bus.html#a4073009b78c54b44a987501e6f96b9e0">Subscribe</a> (typename <a class="el" href="class_n_g_i_n_1_1_event_listener.html">EventListener</a>&lt; EventType &gt;::Listener const &amp;listener)</td></tr>
+<tr class="separator:a4073009b78c54b44a987501e6f96b9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4732f9fd834e68e62804c356a79d12e3"><td class="memTemplParams" colspan="2">template&lt;typename EventType &gt; </td></tr>
+<tr class="memitem:a4732f9fd834e68e62804c356a79d12e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_g_i_n_1_1_event_bus.html#a4732f9fd834e68e62804c356a79d12e3">Publish</a> (EventType &amp;event)</td></tr>
 <tr class="separator:a4732f9fd834e68e62804c356a79d12e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for event bus. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4732f9fd834e68e62804c356a79d12e3" name="a4732f9fd834e68e62804c356a79d12e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4732f9fd834e68e62804c356a79d12e3">&#9670;&#160;</a></span>Publish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename EventType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void NGIN::EventBus::Publish </td>
+          <td>(</td>
+          <td class="paramtype">EventType &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Publishes an event to all its listeners </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">EventType</td><td>Type of event </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>Reference to the event object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4073009b78c54b44a987501e6f96b9e0" name="a4073009b78c54b44a987501e6f96b9e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4073009b78c54b44a987501e6f96b9e0">&#9670;&#160;</a></span>Subscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename EventType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void NGIN::EventBus::Subscribe </td>
+          <td>(</td>
+          <td class="paramtype">typename <a class="el" href="class_n_g_i_n_1_1_event_listener.html">EventListener</a>&lt; EventType &gt;::Listener const &amp;&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Subscribes a listener to a specific event type </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">EventType</td><td>Type of event </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listener</td><td>Function pointer to the listener </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>C:/Projects/NGIN/NGIN/include/<a class="el" href="_event_bus_8h_source.html">EventBus.h</a></li>
+<li>C:/Projects/NGIN/NGIN/include/<a class="el" href="_event_bus_8inl_source.html">EventBus.inl</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -13,6 +13,8 @@ C:/Projects/NGIN/build/x64-debug/_deps/sdl-build/CMakeFiles/rebuild_cache.dir
 C:/Projects/NGIN/build/x64-debug/_deps/loguru-build/CMakeFiles/loguru.dir
 C:/Projects/NGIN/build/x64-debug/_deps/loguru-build/CMakeFiles/edit_cache.dir
 C:/Projects/NGIN/build/x64-debug/_deps/loguru-build/CMakeFiles/rebuild_cache.dir
+C:/Projects/NGIN/build/x64-debug/_deps/json-build/CMakeFiles/edit_cache.dir
+C:/Projects/NGIN/build/x64-debug/_deps/json-build/CMakeFiles/rebuild_cache.dir
 C:/Projects/NGIN/build/x64-debug/NGIN/CMakeFiles/NGIN.dir
 C:/Projects/NGIN/build/x64-debug/NGIN/CMakeFiles/edit_cache.dir
 C:/Projects/NGIN/build/x64-debug/NGIN/CMakeFiles/rebuild_cache.dir

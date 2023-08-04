@@ -3,22 +3,23 @@
 // Includes required for the NGIN game engine
 #include <Core.h>
 
-// Disables warnings from various libraries
-#include <WarningDisabler.h>
-
 // Additional NGIN includes
 #include <App.h>
 #include <Window.h>
 #include <Layer.h>
 #include <EventBus.h>
 #include <Logger.h>
+#include <Config/Config.h>
 
-// Includes for the SDL2 library, used for managing low-level tasks
+// Includes for the SDL2 library
 #include <SDL2/SDL.h>
 
 // Standard includes
 #include <iostream>
 
+	/**
+	 * @brief The main namespace
+	 */
 namespace NGIN
 {
 
@@ -33,23 +34,28 @@ namespace NGIN
 	template<NGIN::is_app T>
 	int Init(int argc, char* argv[])
 	{
+
+
 		// Initialize logger
-		Logger::Log(Verbosity::WARNING, CURR_FILE(), "Initializing Logger...");
 		Logger::Init(argc, argv);
-		Logger::Log(Verbosity::INFO, CURR_FILE(), "Logger Initialized");
+		NGIN_INFO("Logger initialized.");
+
+		// Init Config
+		Config::Load();
+		Config::Get("TEST");
 
 		// Initialize SDL and log the initialization process
-		Logger::Log(Verbosity::WARNING, CURR_FILE(), "Initializing SDL...");
-		if (SDL_Init(SDL_INIT_EVERYTHING))
+		NGIN_WARNING("Initializing SDL...");
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
 		{
 			std::cout << SDL_GetError() << std::endl;
-			Logger::Log(Verbosity::ERROR, CURR_FILE(), "SDL failed to initialize: %s", SDL_GetError());
+			NGIN_ERROR("SDL failed to initialize.", SDL_GetError());
 			return 1;
 		}
-		Logger::Log(Verbosity::INFO, CURR_FILE(), "SDL initialized");
+		NGIN_INFO("SDL initialized.");
 
 		// Initialize App
-		Logger::Log(Verbosity::WARNING, CURR_FILE(), "Initializing NGIN...");
+		NGIN_WARNING("Initializing App...");
 		NGIN::App* app = new T();
 		app->Init();
 		// Free memory after app initialization is done

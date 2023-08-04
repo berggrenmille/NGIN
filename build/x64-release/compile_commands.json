@@ -2437,12 +2437,6 @@
 },
 {
   "directory": "C:/Projects/NGIN/build/x64-release",
-  "command": "C:\\PROGRA~1\\MICROS~2\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1436~1.325\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DNGIN_EXPORTS -IC:\\Projects\\NGIN\\NGIN\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\loguru-src -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include-config-release\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\dylib-src\\include /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD /FoNGIN\\CMakeFiles\\NGIN.dir\\src\\Memory\\Allocator.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Projects\\NGIN\\NGIN\\src\\Memory\\Allocator.cpp",
-  "file": "C:\\Projects\\NGIN\\NGIN\\src\\Memory\\Allocator.cpp",
-  "output": "NGIN\\CMakeFiles\\NGIN.dir\\src\\Memory\\Allocator.cpp.obj"
-},
-{
-  "directory": "C:/Projects/NGIN/build/x64-release",
   "command": "C:\\PROGRA~1\\MICROS~2\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1436~1.325\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DNGIN_EXPORTS -IC:\\Projects\\NGIN\\NGIN\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\loguru-src -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include-config-release\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\dylib-src\\include /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD /FoNGIN\\CMakeFiles\\NGIN.dir\\src\\App.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Projects\\NGIN\\NGIN\\src\\App.cpp",
   "file": "C:\\Projects\\NGIN\\NGIN\\src\\App.cpp",
   "output": "NGIN\\CMakeFiles\\NGIN.dir\\src\\App.cpp.obj"
@@ -2452,6 +2446,18 @@
   "command": "C:\\PROGRA~1\\MICROS~2\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1436~1.325\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DNGIN_EXPORTS -IC:\\Projects\\NGIN\\NGIN\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\loguru-src -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include-config-release\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\dylib-src\\include /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD /FoNGIN\\CMakeFiles\\NGIN.dir\\src\\EntryPoint.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Projects\\NGIN\\NGIN\\src\\EntryPoint.cpp",
   "file": "C:\\Projects\\NGIN\\NGIN\\src\\EntryPoint.cpp",
   "output": "NGIN\\CMakeFiles\\NGIN.dir\\src\\EntryPoint.cpp.obj"
+},
+{
+  "directory": "C:/Projects/NGIN/build/x64-release",
+  "command": "C:\\PROGRA~1\\MICROS~2\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1436~1.325\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DNGIN_EXPORTS -IC:\\Projects\\NGIN\\NGIN\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\loguru-src -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include-config-release\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\dylib-src\\include /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD /FoNGIN\\CMakeFiles\\NGIN.dir\\src\\Memory\\LinearAllocator.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Projects\\NGIN\\NGIN\\src\\Memory\\LinearAllocator.cpp",
+  "file": "C:\\Projects\\NGIN\\NGIN\\src\\Memory\\LinearAllocator.cpp",
+  "output": "NGIN\\CMakeFiles\\NGIN.dir\\src\\Memory\\LinearAllocator.cpp.obj"
+},
+{
+  "directory": "C:/Projects/NGIN/build/x64-release",
+  "command": "C:\\PROGRA~1\\MICROS~2\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1436~1.325\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DNGIN_EXPORTS -IC:\\Projects\\NGIN\\NGIN\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\loguru-src -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\sdl-build\\include-config-release\\SDL2 -IC:\\Projects\\NGIN\\build\\x64-release\\_deps\\dylib-src\\include /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG -std:c++20 /O2 /MD /FoNGIN\\CMakeFiles\\NGIN.dir\\src\\Memory\\Allocator.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Projects\\NGIN\\NGIN\\src\\Memory\\Allocator.cpp",
+  "file": "C:\\Projects\\NGIN\\NGIN\\src\\Memory\\Allocator.cpp",
+  "output": "NGIN\\CMakeFiles\\NGIN.dir\\src\\Memory\\Allocator.cpp.obj"
 },
 {
   "directory": "C:/Projects/NGIN/build/x64-release",

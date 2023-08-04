@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['_7eallocator_0',['~Allocator',['../class_n_g_i_n_1_1_allocator.html#aaa630a7785b8953aec66029f97fe165b',1,'NGIN::Allocator']]],
-  ['_7eapp_1',['~App',['../class_n_g_i_n_1_1_app.html#aa7815b5c1e8a9079e7c2751a97897eca',1,'NGIN::App']]]
+  ['sdlwindow_0',['SDLWindow',['../class_n_g_i_n_1_1_s_d_l_window.html',1,'NGIN']]],
+  ['stringarg_1',['StringArg',['../struct_n_g_i_n_1_1_logger_1_1_string_arg.html',1,'NGIN::Logger']]],
+  ['subscribe_2',['Subscribe',['../class_n_g_i_n_1_1_event_bus.html#a4073009b78c54b44a987501e6f96b9e0',1,'NGIN::EventBus']]]
 ];

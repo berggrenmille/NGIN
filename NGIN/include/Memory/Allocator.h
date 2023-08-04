@@ -1,5 +1,7 @@
 #pragma once
 #include <Core.h>
+
+#include <iostream>
 #include <cstddef>
 #include <cstdint>
 #include <type_traits>
@@ -11,29 +13,32 @@ namespace NGIN
 {
 
 	/**
-	* @class Allocator
-	* @brief A base class for memory allocation.
-	*
-	* This class represents a basic allocator for memory management.
-	* It provides an interface for memory allocation and deallocation.
-	*/
+	 * @class Allocator
+	 * @brief A base class for custom memory allocation.
+	 *
+	 * This class provides an interface for memory allocation and deallocation, and allows
+	 * derived classes to provide custom allocation strategies. It also provides debug information
+	 * for detecting memory leaks.
+	 */
 	class Allocator
 	{
-	protected:
 #ifdef DEBUG
+	protected:
 		struct DebugAllocatorHandle
 		{
 			void* ptr;
 			size_t size;
-			std::source_location& location;
+			std::source_location location;
 			friend bool operator==(const DebugAllocatorHandle& lhs, const DebugAllocatorHandle& rhs) { return lhs.ptr == rhs.ptr && lhs.size == rhs.size; };
 		};
 
-		static std::vector<DebugAllocatorHandle> debugAllocations;
+		std::vector<DebugAllocatorHandle> debugAllocations;
+
+		void AddDebugAllocation(void* ptr, size_t size, const std::source_location& location = std::source_location::current());
 #endif // DEBUG
 	public:
 		/// Default constructor.
-		Allocator() = default;
+		Allocator();
 
 		/**
 		* @brief Copy constructor marked as delete to prevent copying.
@@ -52,10 +57,13 @@ namespace NGIN
 		Allocator& operator=(const Allocator&) = delete;
 
 		///destructor
-		virtual ~Allocator() {}
+		virtual ~Allocator();
 
 		/**
 		 * @brief Allocates a block of memory.
+		 *
+		 * Allocates a block of memory of the specified size, with the specified alignment. The actual
+		 * allocation strategy is provided by the derived classes.
 		 *
 		 * @param size Size of memory to allocate.
 		 * @param alignment Alignment of the allocated memory. Default is max alignment.
@@ -66,15 +74,28 @@ namespace NGIN
 		/**
 		 * @brief Deallocates a block of memory.
 		 *
+		 * Deallocates the block of memory pointed to by the specified pointer. The actual
+		 * deallocation strategy is provided by the derived classes.
+		 *
 		 * @param ptr Pointer to the memory to deallocate. Default is nullptr.
 		 */
 		virtual void Deallocate(void* ptr = nullptr) = 0;
 
-		/// Deallocates all memory managed by the allocator.
+		/**
+		 * @brief Deallocates all blocks of memory
+		 *
+		 * Deallocates all blocks of memory reserved by the allocator. The actual
+		 * deallocation strategy is provided by the derived classes.
+		 *
+		 * @param ptr Pointer to the memory to deallocate. Default is nullptr.
+		 */
 		virtual void DeallocateAll() = 0;
 
 		/**
 		 * @brief Constructs an object in the allocated memory.
+		 *
+		 * Constructs an object of the specified type in the memory allocated by the Allocate method.
+		 * The constructor of the object is called with the specified arguments.
 		 *
 		 * @tparam T Type of object to construct.
 		 * @tparam Args Types of constructor arguments.
@@ -87,6 +108,8 @@ namespace NGIN
 		/**
 		 * @brief Destroys an object and deallocates its memory.
 		 *
+		 * Calls the destructor of the specified object and then deallocates the memory for the object.
+		 *
 		 * @tparam T Type of the object.
 		 * @param object Reference to the object to destroy.
 		 */
@@ -97,7 +120,10 @@ namespace NGIN
 		/**
 		 * @brief Get the alignment offset of a pointer.
 		 *
-		 * @param alignment Desired alignment.
+		 * Returns the offset from the desired alignment for a given pointer. Assumes
+		 * alignment is a power of 2.
+		 *
+		 * @param alignment Desired alignment. Must be a power of 2.
 		 * @param ptr Pointer to get the offset of.
 		 * @return Offset needed to achieve desired alignment.
 		 */
@@ -106,7 +132,10 @@ namespace NGIN
 		/**
 		 * @brief Get the alignment adjustment of a pointer.
 		 *
-		 * @param alignment Desired alignment.
+		 * Returns the adjustment needed to align a pointer to the desired alignment. Assumes
+		 * alignment is a power of 2.
+		 *
+		 * @param alignment Desired alignment. Must be a power of 2.
 		 * @param ptr Pointer to get the adjustment of.
 		 * @return Adjustment needed to achieve desired alignment.
 		 */

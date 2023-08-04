@@ -377,5 +377,6 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Bb]uild/
 # Add this line
 out/

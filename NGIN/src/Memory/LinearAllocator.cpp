@@ -1,44 +1,55 @@
+// LinearAllocator.cpp
 #include <Memory/LinearAllocator.h>
+#include <Logger.h>
 
 namespace NGIN
 {
-
-	LinearAllocator::LinearAllocator(size_t size)
-		: start_(static_cast<uint8_t*>(std::malloc(size))), offset_(0), size_(size)
-	{}
+	LinearAllocator::LinearAllocator(size_t size) : size(size)
+	{
+		// Allocate a block of memory of the specified size
+		start = std::malloc(size);
+		// Set the current position to the start of the memory block
+		current = start;
+	}
 
 	LinearAllocator::~LinearAllocator()
 	{
-		std::free(start_);
+		// Free the block of memory
+		std::free(start);
 	}
 
 	void* LinearAllocator::Allocate(size_t size, size_t alignment)
 	{
-		uintptr_t rawAddress = reinterpret_cast<uintptr_t>(start_) + offset_;
-		uintptr_t offsetAdjustment = GetAlignmentAdjustment(alignment, (void*)rawAddress);
-		if (offset_ + offsetAdjustment + size > size_) return nullptr; // Not enough memory
+		// Calculate the adjustment needed to keep the object correctly aligned
+		uintptr_t adjustment = GetAlignmentAdjustment(alignment, current);
 
-		offset_ += offsetAdjustment + size;
+		// Check if there's enough remaining memory
+		if ((uintptr_t)current + adjustment + size > (uintptr_t)start + this->size)
+			return nullptr; // Not enough memory
 
-#ifdef DEBUG
-		// create and store debug handle
-		DebugAllocatorHandle handle = { reinterpret_cast<void*>(rawAddress + offsetAdjustment), size, std::source_location::current() };
-		debugAllocations.push_back(handle);
-#endif
+		// Determine the new memory location
+		void* alignedAddress = (void*)((uintptr_t)current + adjustment);
 
-		return reinterpret_cast<void*>(rawAddress + offsetAdjustment);
+		// Update the current position to the next free memory location
+		current = (void*)((uintptr_t)alignedAddress + size);
+
+		// Return the allocated memory
+		return alignedAddress;
 	}
 
 	void LinearAllocator::Deallocate(void* ptr)
 	{
-		// Linear allocator does not support deallocation of individual blocks
+		// Deallocate does nothing in a linear allocator. This is because in a linear allocator, 
+		// freeing individual objects isn't possible without tracking the size of each allocation. 
+		// If deallocation of individual objects is required, consider using a different type of allocator.
+		NGIN_ASSERT(false, "Deallocate is not supported in a linear allocator");
 	}
 
 	void LinearAllocator::DeallocateAll()
 	{
-#ifdef DEBUG
-		debugAllocations.clear();
-#endif
-		offset_ = 0;
+		// Reset the current position to the start of the memory block
+		// This effectively deallocates all the memory, since we will start overwriting
+		// the old objects on the next allocation
+		current = start;
 	}
 }
