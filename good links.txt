@@ -1,5 +1,0 @@
-https://www.gamedev.net/forums/topic/699117-vulkan-with-sdl2-getting-started/
-
-variadic 
-https://stackoverflow.com/questions/14805192/c-variadic-template-function-parameter-with-default-value
-https://stackoverflow.com/questions/66366964/is-it-possible-to-pass-variadic-template-parameters-to-va-list
