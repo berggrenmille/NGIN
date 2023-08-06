@@ -34,25 +34,27 @@ namespace NGIN
 	template<NGIN::is_app T>
 	int Init(int argc, char* argv[])
 	{
-
-
+		std::cout << "\033]0;" << "NGIN" << "\007";
 		// Initialize logger
 		Logger::Init(argc, argv);
-		NGIN_INFO("Logger initialized.");
+		NGIN_INFO("Logger initialized");
 
 		// Init Config
-		Config::Load();
-		Config::Get("TEST");
+		Config::Init();
+		NGIN_INFO("{}", Config::Get<int>("test"));
+
+
+
+
 
 		// Initialize SDL and log the initialization process
 		NGIN_WARNING("Initializing SDL...");
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
 		{
-			std::cout << SDL_GetError() << std::endl;
-			NGIN_ERROR("SDL failed to initialize.", SDL_GetError());
+			NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
 			return 1;
 		}
-		NGIN_INFO("SDL initialized.");
+		NGIN_INFO("SDL initialized");
 
 		// Initialize App
 		NGIN_WARNING("Initializing App...");

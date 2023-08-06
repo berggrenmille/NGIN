@@ -27,14 +27,22 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "Dist")
         add_compile_options(-O3)
     endif()
     if(CMAKE_BUILD_TYPE STREQUAL "Dist")
-        add_compile_definitions(DNDEBUG)
+        add_compile_definitions(NDEBUG)
     endif()
 endif()
 
 #---------------------------------------------------------------------------------
 # Third party libraries
-# DYLIB
 include(FetchContent)
+#fmtlib
+FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY "https://github.com/fmtlib/fmt"
+    GIT_TAG "10.0.0"
+)
+FetchContent_MakeAvailable(fmt)
+
+# DYLIB
 FetchContent_Declare(
     DYLIB
     GIT_REPOSITORY "https://github.com/martin-olivier/dylib"
@@ -48,6 +56,8 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/libsdl-org/SDL"
     GIT_TAG        "release-2.28.1"
 )
+SET(SDL_TEST OFF)
+SET(SDL_VULKAN ON)
 FetchContent_MakeAvailable(SDL)
 
 # LOGURU
@@ -56,7 +66,9 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/emilk/loguru"
     GIT_TAG        "master"
 )
+SET(LOGURU_USE_FMTLIB TRUE)
 FetchContent_MakeAvailable(LOGURU)
+
 
 # JSON
 FetchContent_Declare(json

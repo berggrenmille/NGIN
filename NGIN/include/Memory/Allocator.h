@@ -160,4 +160,12 @@ namespace NGIN
 	template<typename T>
 	concept is_allocator_ptr = std::is_base_of<Allocator, std::remove_pointer_t<T>>::value;
 }
+
+#ifdef DEBUG 
+
+#define NGIN_NEW(allocator, type, ...) allocator.New<type>(__VA_ARGS__, std::source_location::current())
+#define NGIN_DELETE(allocator, object) allocator.Delete(object, std::source_location::current())
+
+
+#endif DEBUG
 #include <Memory/Allocator.inl>

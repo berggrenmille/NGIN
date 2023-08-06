@@ -21,7 +21,7 @@ add_library(NGIN SHARED
   "src/Memory/LinearAllocator.cpp"
   "src/Memory/Allocator.cpp"
   "include/Detail/Docs.h"
-  "include/Config/Config.h"
+  "include/Core/Config.h"
   "src/Config/Config.cpp")
   
  if (MSVC)
@@ -42,6 +42,7 @@ target_include_directories(NGIN PUBLIC
     ${PROJECT_SOURCE_DIR}/include
 )
 # Link Thirdparty
+
 target_link_libraries(NGIN PUBLIC loguru)
 target_link_libraries(NGIN PUBLIC SDL2::SDL2-static SDL2::SDL2main)
 target_link_libraries(NGIN PRIVATE dylib)

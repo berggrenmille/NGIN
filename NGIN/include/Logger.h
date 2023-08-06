@@ -9,6 +9,7 @@
 #include <string>
 #include <Detail/LoggingHelper.hpp>
 
+#include <fmt/format.h>
 
 //DEFINES
 #define CURR_FILE() ::std::source_location::current()
@@ -18,7 +19,8 @@
 #define NGIN_WARNING(...) ::NGIN::Logger::Log(CURR_FILE(), ::NGIN::Logger::Verbosity::WARNING, __VA_ARGS__)
 #define NGIN_ERROR(...) ::NGIN::Logger::Log(CURR_FILE(), ::NGIN::Logger::Verbosity::ERROR, __VA_ARGS__)
 
-#define NGIN_ASSERT(condition, ...) DCHECK_F(condition, __VA_ARGS__)
+#define NGIN_ASSERT(condition, ...) (condition) == true ? (void)0 : loguru::log_and_abort(0, "CHECK FAILED: " #condition "  ", __FILE__, __LINE__, ##__VA_ARGS__)
+#define NGIN_ASSERT_SRC(condition, source, ...) (condition) == true ? (void)0 : loguru::log_and_abort(0, "CHECK FAILED: " #condition "  ", source.file_name(), source.line(), ##__VA_ARGS__)
 
 namespace NGIN
 {
