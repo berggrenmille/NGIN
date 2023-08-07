@@ -1,8 +1,10 @@
 #pragma once
+#include "Core/Logger.h"
+
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <Logger.h>
+
 namespace NGIN
 {
 	namespace Detail
@@ -42,5 +44,7 @@ namespace NGIN
 		}
 
 
+
 	}
+
 }

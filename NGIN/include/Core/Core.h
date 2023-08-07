@@ -7,3 +7,4 @@
 #else
 #define NGIN_API __declspec(dllimport)
 #endif
+

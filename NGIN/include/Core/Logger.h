@@ -1,5 +1,5 @@
 #pragma once
-#include <Core.h>
+#include <Core/Core.h>
 #include <HideWarnings/Loguru.hpp>
 #include <source_location>
 #include <cstdarg>
@@ -8,8 +8,8 @@
 
 #include <string>
 #include <Detail/LoggingHelper.hpp>
-
 #include <fmt/format.h>
+
 
 //DEFINES
 #define CURR_FILE() ::std::source_location::current()
@@ -24,10 +24,6 @@
 
 namespace NGIN
 {
-
-	/// <summary>
-	/// LOG is only used to initialize the loguru library
-	/// </summary>
 	namespace Logger
 	{
 		/**
@@ -35,7 +31,7 @@ namespace NGIN
 		 *
 		 * Basically a wrapper for Logurus verbosity levels
 		 */
-		enum Verbosity : int
+		enum class Verbosity : int
 		{
 			// Used to mark an invalid verbosity. Do not log to this level.
 			INVALID = -10, // Never do LOG_F(INVALID)
@@ -79,20 +75,12 @@ namespace NGIN
 		 */
 		inline static void Init(int& argc, char* argv[])
 		{
+			loguru::g_preamble_thread = false;
 			loguru::init(argc, argv);
+
+			loguru::add_file("NGIN.log", loguru::Truncate, loguru::Verbosity_INFO);
+
 		}
-
-		struct StringArg
-		{
-			const char* str;
-			StringArg(const char* s) : str(s) {}
-
-			// conversion operator
-			operator const char* () const
-			{
-				return str;
-			}
-		};
 
 
 
@@ -101,7 +89,7 @@ namespace NGIN
 		{
 
 			Detail::Apply(args, [&](auto&&... args) {
-				loguru::log(verbosity, location.file_name(), location.line(), std::forward<decltype(args)>(args)...);
+				loguru::log(static_cast<int>(verbosity), location.file_name(), location.line(), std::forward<decltype(args)>(args)...);
 						  });
 		}
 

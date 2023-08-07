@@ -1,5 +1,5 @@
 #pragma once
-#include <Core.h>
+#include <Core/Core.h>
 #include <type_traits>
 
 namespace NGIN

@@ -1,6 +1,7 @@
 // LinearAllocator.cpp
+#include <PCH.h>
 #include <Memory/LinearAllocator.h>
-#include <Logger.h>
+#include <Core/Logger.h>
 
 namespace NGIN
 {

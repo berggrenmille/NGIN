@@ -70,6 +70,16 @@ SET(LOGURU_USE_FMTLIB TRUE)
 FetchContent_MakeAvailable(LOGURU)
 
 
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm
+    GIT_TAG 0.9.9.8  # replace with the version you want
+)
+
+FetchContent_MakeAvailable(glm)
+
+
+
 # JSON
 FetchContent_Declare(json
     GIT_REPOSITORY https://github.com/nlohmann/json
@@ -77,9 +87,6 @@ FetchContent_Declare(json
 )
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 FetchContent_MakeAvailable(json)
-
-
-
 
 
 

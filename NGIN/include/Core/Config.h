@@ -1,10 +1,13 @@
 #pragma once
+
+#include <Core/Core.h>
+#include <Detail/ConfigHelper.hpp>
+
 #include <string>
 #include <mutex>
 #include <unordered_map>
 #include <source_location>
-#include <Core.h>
-#include <Detail/ConfigHelper.hpp>
+
 namespace NGIN
 {
 	/**

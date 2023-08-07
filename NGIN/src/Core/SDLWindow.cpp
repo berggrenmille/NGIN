@@ -1,4 +1,5 @@
-#include "SDLWindow.h"
+#include <PCH.h>
+#include "Core/SDLWindow.h"
 using namespace NGIN;
 SDLWindow::SDLWindow() : window(nullptr), renderer(nullptr) {}
 

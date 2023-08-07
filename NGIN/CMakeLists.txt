@@ -3,26 +3,29 @@ project(NGIN)
 # Add all your source files here
 add_library(NGIN SHARED
 
-  "include/Layer.h"
-  "include/EventBus.h"
-  "include/LayerStack.h"
-  "src/Layer.cpp"
-  "src/LayerStack.cpp"
-  "include/Window.h"
-  "src/SDLWindow.cpp"
-  "include/Core.h"
-  "include/App.h"
+  "include/Core/Layer.h"
+  "include/Core/EventBus.h"
+  "include/Core/LayerStack.h"
+  "src/Core/Layer.cpp"
+  "src/Core/LayerStack.cpp"
+  "include/Core/Window.h"
+  "src/Core/SDLWindow.cpp"
+  "include/Core/Core.h"
+  "include/Core/App.h"
   "include/NGIN.h"
   "include/Memory/Allocator.h"
   "include/Memory/LinearAllocator.h"
-  "include/Logger.h"
-  "src/App.cpp"
-  "src/EntryPoint.cpp"
+  "include/Core/Logger.h"
+  "src/Core/App.cpp"
+  
   "src/Memory/LinearAllocator.cpp"
   "src/Memory/Allocator.cpp"
-  "include/Detail/Docs.h"
+  
   "include/Core/Config.h"
-  "src/Config/Config.cpp")
+  "src/Core/Config.cpp" "include/Docs/Docs.h" "include/PCH.h" "src/PCH.cpp")
+
+# Setup precompiled header
+target_precompile_headers(NGIN PRIVATE include/PCH.h)
   
  if (MSVC)
     # Set /MD flag for Release configurations
@@ -47,6 +50,7 @@ target_link_libraries(NGIN PUBLIC loguru)
 target_link_libraries(NGIN PUBLIC SDL2::SDL2-static SDL2::SDL2main)
 target_link_libraries(NGIN PRIVATE dylib)
 target_link_libraries(NGIN PUBLIC nlohmann_json::nlohmann_json)
+target_link_libraries(NGIN PUBLIC glm)
 
 
 

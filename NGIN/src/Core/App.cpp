@@ -1,5 +1,6 @@
-#include <App.h>
-#include <Logger.h>
+#include <PCH.h>
+#include <Core/App.h>
+
 namespace NGIN
 {
 	App::App()
