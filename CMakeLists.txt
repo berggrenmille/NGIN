@@ -79,8 +79,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(glm)
 
-
-
 # JSON
 FetchContent_Declare(json
     GIT_REPOSITORY https://github.com/nlohmann/json
@@ -89,6 +87,18 @@ FetchContent_Declare(json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 FetchContent_MakeAvailable(json)
 
+# Google Test
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest
+    GIT_TAG main
+)
+set(BUILD_GTEST ON CACHE BOOL "" FORCE)
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(googletest)
 
 
 
@@ -96,6 +106,12 @@ FetchContent_MakeAvailable(json)
 # Include sub-projects.
 add_subdirectory("NGIN")
 add_subdirectory ("NGIN_EDITOR")
+
+option(NGIN_BUILD_TESTS "Build NGIN tests" ON)
+message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
+if(NGIN_BUILD_TESTS)
+    add_subdirectory("tests")
+endif()
 
 option(BUILD_DOCUMENTATION "Build documentation" OFF)
 message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
