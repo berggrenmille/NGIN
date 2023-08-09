@@ -20,21 +20,21 @@ namespace NGIN
 	 * derived classes to provide custom allocation strategies. It also provides debug information
 	 * for detecting memory leaks.
 	 */
-	class Allocator
+	class NGIN_API Allocator
 	{
-#ifdef DEBUG
+#ifdef NGIN_DEBUG
 	protected:
 		struct DebugAllocatorHandle
 		{
 			void* ptr;
-			size_t size;
+			std::string typeName;
 			std::source_location location;
-			friend bool operator==(const DebugAllocatorHandle& lhs, const DebugAllocatorHandle& rhs) { return lhs.ptr == rhs.ptr && lhs.size == rhs.size; };
+			friend bool operator==(const DebugAllocatorHandle& lhs, const DebugAllocatorHandle& rhs) { return lhs.ptr == rhs.ptr; };
 		};
 
 		std::vector<DebugAllocatorHandle> debugAllocations;
 
-		void AddDebugAllocation(void* ptr, size_t size, const std::source_location& location = std::source_location::current());
+		void AddDebugAllocation(void* ptr, const std::string& typeName, const std::source_location& location = std::source_location::current());
 #endif // DEBUG
 	public:
 		/// Default constructor.
@@ -69,7 +69,8 @@ namespace NGIN
 		 * @param alignment Alignment of the allocated memory. Default is max alignment.
 		 * @return Pointer to the allocated memory.
 		 */
-		virtual void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t)) = 0;
+		virtual void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
+							   const std::source_location& location = std::source_location::current()) = 0;
 
 		/**
 		 * @brief Deallocates a block of memory.
@@ -96,6 +97,8 @@ namespace NGIN
 		 *
 		 * Constructs an object of the specified type in the memory allocated by the Allocate method.
 		 * The constructor of the object is called with the specified arguments.
+		 * It is recommended to use the macro NGIN_NEW instead of calling this function directly
+		 * Calling this function directly might lead to confusing logs in debug builds.
 		 *
 		 * @tparam T Type of object to construct.
 		 * @tparam Args Types of constructor arguments.
@@ -109,13 +112,30 @@ namespace NGIN
 		 * @brief Destroys an object and deallocates its memory.
 		 *
 		 * Calls the destructor of the specified object and then deallocates the memory for the object.
+		 * It is recommended to use the macro NGIN_DELETE instead of calling this function directly
+		 * Calling this function directly might lead to confusing logs in debug builds.
 		 *
 		 * @tparam T Type of the object.
 		 * @param object Reference to the object to destroy.
 		 */
 		template<class T>
 		void Delete(T* object, const std::source_location& location = std::source_location::current());
+
+		/**
+		 * @brief Gets the total memory allocated by the allocator since its creation.
+		 *
+		 * @return Total allocated memory in bytes.
+		 */
+		size_t getAllocatedMemory() const { return size; }
+
+		/**
+		 * @brief Gets the current memory being used by the allocator.
+		 *
+		 * @return Current used memory in bytes.
+		 */
+		size_t getUsedMemory() const { return usedMemory; }
 	protected:
+		using Address = uintptr_t;
 
 		/**
 		 * @brief Get the alignment offset of a pointer.
@@ -127,7 +147,7 @@ namespace NGIN
 		 * @param ptr Pointer to get the offset of.
 		 * @return Offset needed to achieve desired alignment.
 		 */
-		uintptr_t GetAlignmentOffset(size_t alignment, const void* const ptr);
+		Address GetAlignmentOffset(size_t alignment, const void* const ptr);
 
 		/**
 		 * @brief Get the alignment adjustment of a pointer.
@@ -139,9 +159,10 @@ namespace NGIN
 		 * @param ptr Pointer to get the adjustment of.
 		 * @return Adjustment needed to achieve desired alignment.
 		 */
-		uintptr_t GetAlignmentAdjustment(size_t alignment, const void* const ptr);
+		Address GetAlignmentAdjustment(size_t alignment, const void* const ptr);
 
-
+		size_t size; ///< Total size of the block.
+		size_t usedMemory; ///< Amount of memory that has been used.
 	};
 
 	/**
@@ -159,13 +180,41 @@ namespace NGIN
 	 */
 	template<typename T>
 	concept is_allocator_ptr = std::is_base_of<Allocator, std::remove_pointer_t<T>>::value;
+
+
+	// TEMPLATE DECLARATIONS -------------------------------------------------------
+	template <class T, class... Args>
+	inline T* Allocator::New(Args&&... args, const std::source_location& location)
+	{
+#ifdef NGIN_DEBUG
+		void* ptr = Allocate(sizeof(T), alignof(T));
+		AddDebugAllocation(ptr, typeid(T).name(), location);
+		return new (ptr) T(std::forward<Args>(args)...);
+#else
+		return new (Allocate(sizeof(T), alignof(T))) T(std::forward<Args>(args)...);
+#endif
+	}
+
+	template<class T>
+	inline void Allocator::Delete(T* object, const std::source_location& location)
+	{
+#ifdef NGIN_DEBUG
+		auto it = std::find_if(debugAllocations.begin(), debugAllocations.end(),
+							   [&object](const DebugAllocatorHandle& handle) { return handle.ptr == object; });
+		if (it != debugAllocations.end())
+		{
+			debugAllocations.erase(it);
+		}
+#endif
+		object->~T();
+		Deallocate(object);
+	}
 }
 
-#ifdef DEBUG 
+
 
 #define NGIN_NEW(allocator, type, ...) allocator.New<type>(__VA_ARGS__, std::source_location::current())
 #define NGIN_DELETE(allocator, object) allocator.Delete(object, std::source_location::current())
 
 
-#endif DEBUG
-#include <Memory/Allocator.inl>
+

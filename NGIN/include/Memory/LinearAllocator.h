@@ -1,56 +1,58 @@
-// LinearAllocator.h
 #pragma once
 #include <Memory/Allocator.h>
+#include <mutex>
 
 namespace NGIN
 {
+
 	/**
 	 * @class LinearAllocator
-	 * @brief Custom memory allocator that allocates memory linearly in a block (also known as an arena).
+	 * @brief A memory allocator that allocates memory in a linear fashion.
 	 *
-	 * A LinearAllocator is one of the simplest and fastest custom allocators. It allocates memory by
-	 * incrementing a pointer within a pre-allocated block. Once the memory is exhausted, it can't be
-	 * replenished. Memory deallocation can only happen when all allocations are deallocated at once.
+	 * The LinearAllocator uses a single contiguous block of memory and places each new allocation directly after the last.
+	 * It does not support deallocation of individual objects. Instead, all the memory can be deallocated at once.
+	 * This allocator is designed to be fast and is thread-safe.
+	 *
+	 * @note The allocator does not support deallocation of individual objects, but all objects can be deallocated at once.
 	 */
-	class LinearAllocator : public Allocator
+	class NGIN_API LinearAllocator : public Allocator
 	{
 	public:
 		/**
-		 * @brief Constructor that initializes the LinearAllocator with a block of memory.
-		 * @param size Size of the memory block to be used by the allocator.
+		 * @brief Constructor for LinearAllocator.
+		 *
+		 * @param size The size of the memory block that the allocator manages.
 		 */
-		LinearAllocator(size_t size);
+		explicit LinearAllocator(size_t size);
 
 		/**
-		 * @brief Destructor that frees the block of memory used by the allocator.
+		 * @brief Destructor for LinearAllocator.
+		 *
+		 * Frees the memory block used by the allocator.
 		 */
 		~LinearAllocator();
 
-		/**
-		 * @brief Allocates a block of memory from the pre-allocated block.
-		 * @param size Size of memory to allocate.
-		 * @param alignment Alignment of the allocated memory. Default is max alignment.
-		 * @return Pointer to the allocated memory, or nullptr if not enough memory remains.
-		 */
-		void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t)) override;
+		void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
+					   const std::source_location& location = std::source_location::current()) override;
 
 		/**
-		 * @brief Deallocates a block of memory. In this case, does nothing.
-		 * @note Deallocating individual blocks of memory is not supported by this allocator.
-		 * @param ptr Pointer to the memory to deallocate. Default is nullptr.
-		 */
+		* @brief Deallocate is not supported in LinearAllocator
+		* Use DeallocateAll() to reset the allocator instead.
+		*/
 		void Deallocate(void* ptr = nullptr) override;
 
-		/**
-		 * @brief Deallocates all memory by resetting the allocator.
-		 *
-		 * This is the only way to free memory in a LinearAllocator.
-		 */
 		void DeallocateAll() override;
 
+		/**
+		 * @brief Gets the remaining memory of the allocator.
+		 *
+		 * @return Remaining memory in bytes.
+		 */
+		size_t getRemainingMemory() const;
+
 	private:
-		void* start;    ///< Start of pre-allocated memory block.
-		void* current;  ///< Current allocation position within memory block.
-		size_t size;    ///< Size of the pre-allocated memory block.
+		void* startPtr;      ///< Start of the memory block.
+		void* currentPtr;    ///< Current position in the block.
 	};
-}
+
+}  // namespace NGIN

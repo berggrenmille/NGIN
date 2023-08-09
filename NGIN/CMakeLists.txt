@@ -22,7 +22,7 @@ add_library(NGIN SHARED
   "src/Memory/Allocator.cpp"
   
   "include/Core/Config.h"
-  "src/Core/Config.cpp" "include/Docs/Docs.h" "include/PCH.h" "src/PCH.cpp")
+  "src/Core/Config.cpp" "include/Docs/Docs.h" "include/PCH.h" "src/PCH.cpp" "include/Memory/StackAllocator.h" "src/Memory/StackAllocator.cpp" "include/Memory/FreeListAllocator.h" "src/Memory/FreeListAllocator.cpp")
 
 # Setup precompiled header
 target_precompile_headers(NGIN PRIVATE include/PCH.h)

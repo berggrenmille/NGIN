@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # Debug-specific settings
     add_compile_definitions(DEBUG)
+    add_compile_definitions(NGIN_DEBUG)
     if(MSVC)
         add_compile_options(/Zi /Ob0 /Od)
     else()

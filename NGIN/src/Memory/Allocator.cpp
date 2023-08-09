@@ -5,42 +5,42 @@ namespace NGIN
 {
 
 	Allocator::Allocator()
+		: size(0), usedMemory(0)
 	{
-#ifdef DEBUG
+#ifdef NGIN_DEBUG
 		debugAllocations.reserve(100);
 #endif // DEBUG
 	}
 
 	Allocator::~Allocator()
 	{
-#ifdef DEBUG
+#ifdef NGIN_DEBUG
 		for (auto& handle : debugAllocations)
 		{
 			if (handle.ptr)
 			{
-
-
-				Logger::Log(handle.location, Logger::Verbosity::ERROR, "Memory not freed at of size %d bytes at %p", handle.size, handle.ptr);
+				Logger::Log(handle.location, Logger::Verbosity::ERROR,
+							"Object of type {} never got destroyed at {}", handle.typeName, handle.ptr);  // updated to show type name
 			}
 		}
-#endif // DEBUG
+#endif
 	}
 
-#ifdef DEBUG
-	void Allocator::AddDebugAllocation(void* ptr, size_t size, const std::source_location& location)
+#ifdef NGIN_DEBUG
+	void Allocator::AddDebugAllocation(void* ptr, const std::string& typeName, const std::source_location& location)
 	{
-		debugAllocations.push_back({ ptr, size, location });
+		debugAllocations.push_back({ ptr, typeName, location });   // added typeName here
 	}
-#endif // DEBUG
+#endif
 
-	uintptr_t Allocator::GetAlignmentOffset(size_t alignment, const void* const ptr)
+	Allocator::Address Allocator::GetAlignmentOffset(size_t alignment, const void* const ptr)
 	{
-		return (uintptr_t)(ptr) & (alignment - 1);
+		return (Address)(ptr) & (alignment - 1);
 	}
 
-	uintptr_t Allocator::GetAlignmentAdjustment(size_t alignment, const void* const ptr)
+	Allocator::Address Allocator::GetAlignmentAdjustment(size_t alignment, const void* const ptr)
 	{
-		uintptr_t offset = GetAlignmentOffset(alignment, ptr);
+		Address offset = GetAlignmentOffset(alignment, ptr);
 		if (offset == 0)
 			return 0;
 		return alignment - offset;
