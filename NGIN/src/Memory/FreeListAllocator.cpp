@@ -5,145 +5,220 @@
 namespace NGIN
 {
 	FreeListAllocator::FreeListAllocator(size_t size)
+		: Allocator(), freeBlocks(nullptr), start(nullptr)
 	{
+		NGIN_ASSERT(size > sizeof(FreeBlock), "Size should be greater than the size of a FreeBlock: {} bytes", sizeof(FreeBlock));
+
 		this->size = size;
 		this->usedMemory = 0;
-		this->freeBlocks = (FreeBlock*)::operator new(size);
+		start = ::operator new(size);
+		freeBlocks = static_cast<FreeBlock*>(start);
 		// Might be able to handle this error more gracefully, like throwing an exception or falling back to another allocator
 		// Very unlikely, soooo... TODO
 		NGIN_ASSERT(freeBlocks != nullptr, "FreeListAllocator failed to allocate memory at contruction");
 
 		freeBlocks->size = size;
+		freeBlocks->previous = nullptr;
 		freeBlocks->next = nullptr;
 	}
 
 	FreeListAllocator::~FreeListAllocator()
 	{
-		::operator delete(freeBlocks);
+		::operator delete(start);
 	}
 
 	void* FreeListAllocator::Allocate(size_t size, size_t alignment, const std::source_location& location)
 	{
+		NGIN_ASSERT(size > 0, "Cannot allocate zero bytes.");
 
-		Address currentAddress;
-		FreeBlock* previousBlock = nullptr;
-		FreeBlock* currentBlock = freeBlocks;
+		// Add the AllocationHeader's size to the requested size
 
-		while (currentBlock != nullptr)
+
+		auto [foundBlock, headerAdjustment] = FindFreeBlock(size, alignment);
+		if (foundBlock == nullptr) [[unlikely]]
 		{
-			// Calculate adjustment needed to keep object correctly aligned
-			currentAddress = Address(currentBlock);
-			size_t adjustment = GetAlignmentAdjustment(alignment, currentBlock);
+			Logger::Log(location, Logger::Verbosity::ERROR, "Allocator reached it's capacity\n NOTE: Some engine provided allocators supports configurable size in Config.json ");
+			return nullptr;
+		}
+		RemoveBlockFromFreeList(foundBlock);
 
-			size_t totalSize = size + adjustment;
+		FreeBlock oldBlock = *foundBlock;
 
-			// If allocation doesn't fit in this FreeBlock, try the next
-			if (currentBlock->size < totalSize)
-			{
-				previousBlock = currentBlock;
-				currentBlock = currentBlock->next;
-				continue;
-			}
+		// Calculate allocation information
+		Address headerPtr = Address(foundBlock) + headerAdjustment;
+		Address payloadPtr = headerPtr + sizeof(AllocationHeader);
 
-			// If allocations in the remaining memory will be impossible
-			if (currentBlock->size - totalSize <= sizeof(AllocationHeader))
-			{
-				// Increase allocation size instead of creating a new FreeBlock
-				totalSize = currentBlock->size;
+		size_t payloadSpace = oldBlock.size - sizeof(AllocationHeader) - headerAdjustment;
+		auto header = new (reinterpret_cast<void*>(headerPtr)) AllocationHeader(payloadSpace, headerAdjustment);
 
-				if (previousBlock != nullptr)
-				{
-					previousBlock->next = currentBlock->next;
-				}
-				else
-				{
-					freeBlocks = currentBlock->next;
-				}
-			}
-			else
-			{
-				// Else create a new FreeBlock containing remaining memory
-				FreeBlock* newBlock = (FreeBlock*)(currentAddress + totalSize);
-				newBlock->size = currentBlock->size - totalSize;
-				newBlock->next = currentBlock->next;
+		Address payloadEnd = payloadPtr + size;
+		Address blockEnd = payloadPtr + payloadSpace;
 
-				if (previousBlock != nullptr)
-				{
-					previousBlock->next = newBlock;
-				}
-				else
-				{
-					freeBlocks = newBlock;
-				}
-			}
+		Address newBlockAdjustment = GetAlignmentAdjustment(alignof(FreeBlock), reinterpret_cast<void*>(payloadEnd));
 
-			// Setup the header
-			AllocationHeader* header = (AllocationHeader*)(currentAddress + adjustment - sizeof(AllocationHeader));
-			header->size = totalSize;
-			header->adjustment = adjustment;
+		size_t padding = blockEnd - (payloadEnd + newBlockAdjustment);
 
-			usedMemory += totalSize;
-			return (void*)(currentAddress + adjustment);
+		if (padding >= minBlockSize)
+		{
+			header->size -= padding;
+
+			void* newBlockPtr = reinterpret_cast<void*>(payloadEnd + newBlockAdjustment);
+			FreeBlock* newBlock = new (newBlockPtr) FreeBlock(padding);
+
+			AddBlockToFreeList(newBlock);
 		}
 
-		return nullptr;  // No free blocks found
+		usedMemory += header->size;
+		return reinterpret_cast<void*>(payloadPtr);
 	}
+
 
 	void FreeListAllocator::Deallocate(void* ptr)
 	{
-		// Retrieve the AllocationHeader from the ptr
-		AllocationHeader* header = (AllocationHeader*)((Address)ptr - sizeof(AllocationHeader));
+		NGIN_ASSERT(ptr != nullptr, "Cannot deallocate a nullptr.");
 
+		AllocationHeader* header = (AllocationHeader*)((uintptr_t)ptr - sizeof(AllocationHeader));
+		size_t blockSize = header->adjustment + header->size + sizeof(AllocationHeader);
 
-		// Add the block to the list
-		FreeBlock* block = (FreeBlock*)(Address(ptr) - header->adjustment);
-		block->size = header->size;
-
-		// Initialize pointers to blocks
-		FreeBlock* currentBlock = freeBlocks;
-		FreeBlock* previousBlock = nullptr;
-
-		// Find where to insert the deallocated block
-		while (currentBlock != nullptr && currentBlock < block)
-		{
-			previousBlock = currentBlock;
-			currentBlock = currentBlock->next;
-		}
-
-		// Merge with next block if possible
-		if (block + block->size == currentBlock)
-		{
-			block->size += currentBlock->size;
-			block->next = currentBlock->next;
-		}
-		else
-		{
-			block->next = currentBlock;
-		}
-
-		// Merge with previous block if possible
-		if (previousBlock != nullptr && previousBlock + previousBlock->size == block)
-		{
-			previousBlock->size += block->size;
-			previousBlock->next = block->next;
-		}
-		else if (previousBlock != nullptr)
-		{
-			previousBlock->next = block;
-		}
-		else
-		{
-			freeBlocks = block;
-		}
+		void* block = (void*)((uintptr_t)ptr - header->adjustment);
 
 		usedMemory -= header->size;
+
+		FreeBlock* newBlock = new (block) FreeBlock(blockSize);
+
+		AddBlockToFreeList(newBlock);
 	}
 
 	void FreeListAllocator::DeallocateAll()
 	{
+		freeBlocks = reinterpret_cast<FreeBlock*>(new char[size]);
 		freeBlocks->size = size;
 		freeBlocks->next = nullptr;
+
 		usedMemory = 0;
+	}
+
+
+	void FreeListAllocator::AddBlockToFreeList(FreeBlock* block)
+	{
+
+		if (freeBlocks == nullptr)
+		{
+			freeBlocks = block;
+			return;
+		}
+
+		if ((Address)block < (Address)freeBlocks)
+		{
+			block->next = freeBlocks;
+			freeBlocks->previous = block;
+			freeBlocks = block;
+			CoalesceBlock(block);
+			return;
+		}
+
+		auto currentBlock = freeBlocks;
+
+		while (currentBlock->next != nullptr)
+		{
+			if ((Address)block > (Address)currentBlock &&
+				(Address)block < (Address)(currentBlock->next))
+			{
+
+				block->next = currentBlock->next;
+				currentBlock->next->previous = block;
+				block->previous = currentBlock;
+				currentBlock->next = block;
+				CoalesceBlock(block);
+				return;
+			}
+			currentBlock = currentBlock->next;
+		}
+
+		currentBlock->next = block;
+		block->previous = currentBlock;
+		CoalesceBlock(block);
+
+
+	}
+
+	void FreeListAllocator::RemoveBlockFromFreeList(FreeBlock* block)
+	{
+		NGIN_ASSERT(block != nullptr, "Cannot remove null block");
+
+		if (block == freeBlocks)
+		{
+			freeBlocks = block->next;
+			return;
+		}
+
+		if (block->previous != nullptr)
+			block->next->previous = block->previous;
+
+
+		if (block->next != nullptr)
+			block->next->previous = block->previous;
+	}
+
+	void FreeListAllocator::CoalesceBlock(FreeBlock* block)
+	{
+		if (block->previous != nullptr)
+		{
+			Address leftEnd = Address(block->previous) + block->previous->size;
+			if (Address(block) == leftEnd)
+			{
+				block->previous->next = block->next;
+				if (block->next != nullptr)
+					block->next->previous = block->previous;
+				block->previous->size += block->size;
+				block = block->previous;
+			}
+		}
+
+		if (block->next != nullptr)
+		{
+			Address blockEnd = Address(block) + block->size;
+
+			// If the end of this block is the start of the next block, coalesce
+			if (blockEnd == Address(block->next))
+			{
+				block->size += block->next->size;
+				block->next = block->next->next;
+				if (block->next != nullptr)
+				{
+					block->next->previous = block;
+				}
+			}
+		}
+	}
+
+	std::pair<FreeListAllocator::FreeBlock*, size_t> FreeListAllocator::FindFreeBlock(size_t size, size_t alignment)
+	{
+		const auto totSize = size + sizeof(AllocationHeader);
+
+		const size_t reqAlignment = std::max(alignof(AllocationHeader), alignment);
+
+		FreeBlock* currentBlock = freeBlocks;
+
+		size_t headerAdjustment = 0;
+
+		while (currentBlock != nullptr)
+		{
+			Address first = reinterpret_cast<Address>(currentBlock) + sizeof(AllocationHeader);
+
+			size_t reqAdjustment =
+				GetAlignmentAdjustment(reqAlignment, reinterpret_cast<void*>(first));
+			size_t totAllocSize = totSize + reqAdjustment;
+
+			if (totAllocSize <= currentBlock->size)
+			{
+				return { currentBlock, reqAdjustment };
+			}
+
+			currentBlock = currentBlock->next;
+		}
+		return { nullptr, headerAdjustment };
+
 	}
 
 } // namespace NGIN

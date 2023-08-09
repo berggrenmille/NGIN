@@ -54,7 +54,7 @@ namespace NGIN
 
 
 #ifdef NGIN_DEBUG
-		debugAllocations.clear();
+		ClearDebugAllocations();
 #endif
 	}
 

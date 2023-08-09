@@ -63,7 +63,8 @@ namespace NGIN
 		usedMemory = 0;
 
 #ifdef NGIN_DEBUG
-		debugAllocations.clear();
+
+		ClearDebugAllocations();
 #endif
 	}
 

@@ -24,17 +24,13 @@ namespace NGIN
 	{
 #ifdef NGIN_DEBUG
 	protected:
-		struct DebugAllocatorHandle
-		{
-			void* ptr;
-			std::string typeName;
-			std::source_location location;
-			friend bool operator==(const DebugAllocatorHandle& lhs, const DebugAllocatorHandle& rhs) { return lhs.ptr == rhs.ptr; };
-		};
-
-		std::vector<DebugAllocatorHandle> debugAllocations;
+		struct DebugAllocationHandle;
+		struct DebugImpl;
+		DebugImpl* debugImpl;
 
 		void AddDebugAllocation(void* ptr, const std::string& typeName, const std::source_location& location = std::source_location::current());
+		void RemoveDebugAllocation(void* ptr);
+		void ClearDebugAllocations();
 #endif // DEBUG
 	public:
 		/// Default constructor.
@@ -106,7 +102,7 @@ namespace NGIN
 		 * @return Pointer to the constructed object.
 		 */
 		template<class T, class... Args>
-		T* New(Args&&... args, const std::source_location& location = std::source_location::current());
+		T* New(const std::source_location& location = std::source_location::current(), Args&&... args);
 
 		/**
 		 * @brief Destroys an object and deallocates its memory.
@@ -119,7 +115,7 @@ namespace NGIN
 		 * @param object Reference to the object to destroy.
 		 */
 		template<class T>
-		void Delete(T* object, const std::source_location& location = std::source_location::current());
+		void Delete(const std::source_location& location = std::source_location::current(), T* object = nullptr);
 
 		/**
 		 * @brief Gets the total memory allocated by the allocator since its creation.
@@ -184,10 +180,10 @@ namespace NGIN
 
 	// TEMPLATE DECLARATIONS -------------------------------------------------------
 	template <class T, class... Args>
-	inline T* Allocator::New(Args&&... args, const std::source_location& location)
+	inline T* Allocator::New(const std::source_location& location, Args&&... args)
 	{
 #ifdef NGIN_DEBUG
-		void* ptr = Allocate(sizeof(T), alignof(T));
+		void* ptr = Allocate(sizeof(T), alignof(T), location);
 		AddDebugAllocation(ptr, typeid(T).name(), location);
 		return new (ptr) T(std::forward<Args>(args)...);
 #else
@@ -196,25 +192,20 @@ namespace NGIN
 	}
 
 	template<class T>
-	inline void Allocator::Delete(T* object, const std::source_location& location)
+	inline void Allocator::Delete(const std::source_location& location, T* object)
 	{
-#ifdef NGIN_DEBUG
-		auto it = std::find_if(debugAllocations.begin(), debugAllocations.end(),
-							   [&object](const DebugAllocatorHandle& handle) { return handle.ptr == object; });
-		if (it != debugAllocations.end())
-		{
-			debugAllocations.erase(it);
-		}
-#endif
+		RemoveDebugAllocation(static_cast<void*>(object));
 		object->~T();
 		Deallocate(object);
 	}
+
+
 }
 
 
 
-#define NGIN_NEW(allocator, type, ...) allocator.New<type>(__VA_ARGS__, std::source_location::current())
-#define NGIN_DELETE(allocator, object) allocator.Delete(object, std::source_location::current())
+#define NGIN_NEW(allocator, type, ...) allocator.New<type>(std::source_location::current(), __VA_ARGS__)
+#define NGIN_DELETE(allocator, object) allocator.Delete(std::source_location::current(), object)
 
 
 

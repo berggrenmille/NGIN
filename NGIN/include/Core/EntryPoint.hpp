@@ -1,7 +1,6 @@
 #pragma once
 #include <Core/Core.h>
 #include <Memory/FreeListAllocator.h>
-
 namespace NGIN
 {
 
@@ -25,6 +24,13 @@ namespace NGIN
 		Config::Init();
 
 
+		FreeListAllocator alloc(1024);
+
+		void* block1 = alloc.Allocate(512);
+		alloc.Allocate(256);
+
+
+		NGIN_INFO("Allocated block1: {0}", alloc.getUsedMemory());
 
 
 
@@ -37,15 +43,6 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
-		NGIN::FreeListAllocator alloc1(1000000);
-
-		void** ptrs = new void* [100000];
-
-		for (int i = 0; i < 10000; i++)
-		{
-			ptrs[i] = (void*)alloc1.New<int>();
-			NGIN_INFO("{} : {}", i, alloc1.getUsedMemory());
-		}
 		//alloc1.Deallocate(ptrs[19]);
 		//NGIN_INFO("{} : {}", 0, alloc1.getUsedMemory());
 		//for (int i = 0; i < 100; i++)

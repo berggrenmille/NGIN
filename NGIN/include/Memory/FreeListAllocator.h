@@ -51,16 +51,37 @@ namespace NGIN
 		struct AllocationHeader
 		{
 			size_t size;
-			Address adjustment;
+			size_t adjustment;
+			AllocationHeader(size_t size = 0, size_t adjustment = 0) : adjustment(adjustment), size(size)
+			{}
 		};
 
 		struct FreeBlock
 		{
 			size_t size;
+			FreeBlock* previous;
 			FreeBlock* next;
+
+			FreeBlock(size_t block_size = 0, FreeBlock* prev = nullptr, FreeBlock* next = nullptr)
+				: size(block_size), previous(prev), next(next)
+			{}
 		};
 
+		static constexpr size_t minBlockSize =
+			std::max(sizeof(FreeBlock), sizeof(AllocationHeader) + 1);
+
+		static constexpr size_t maxMetadataAlignment =
+			std::max(alignof(FreeBlock), alignof(AllocationHeader));
+
+		void AddBlockToFreeList(FreeBlock* block);
+		void RemoveBlockFromFreeList(FreeBlock* block);
+		void CoalesceBlock(FreeBlock* block);
+		std::pair<FreeBlock*, size_t> FindFreeBlock(size_t size, size_t alignment);
+
+		void* start;
 		FreeBlock* freeBlocks;  ///< Pointer to the head of the free list.
 	};
+
+
 
 } // namespace NGIN
