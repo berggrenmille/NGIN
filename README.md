@@ -30,5 +30,5 @@ While NGIN is a personal project, feedback, suggestions, and contributions are a
 
 ## :scroll: License
 
-[License Info] - Ensure you specify the license you're using for this project.
+[License Info]
 
