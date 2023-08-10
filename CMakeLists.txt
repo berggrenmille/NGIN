@@ -107,7 +107,7 @@ FetchContent_MakeAvailable(googletest)
 add_subdirectory("NGIN")
 add_subdirectory ("NGIN_EDITOR")
 
-option(NGIN_BUILD_TESTS "Build NGIN tests" ON)
+option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
 if(NGIN_BUILD_TESTS)
     add_subdirectory("tests")

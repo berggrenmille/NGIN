@@ -12,6 +12,7 @@ namespace NGIN
 	 * The FreeListAllocator keeps track of free memory blocks using a linked list of free blocks.
 	 * When a memory allocation is requested, it scans the list to find a suitable block.
 	 * Once memory is deallocated, it gets reinserted into the free list.
+	 *
 	 * @note that there is an overhead for each allocation due to the AllocationHeader,
 	 * which means that the actual memory consumed might be slightly more than the requested size.
 	 */
