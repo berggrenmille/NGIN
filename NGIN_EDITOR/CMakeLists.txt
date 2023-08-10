@@ -13,7 +13,7 @@ target_include_directories(NGIN_EDITOR PUBLIC
     ${PROJECT_SOURCE_DIR}/include
 )
     
-# Link the executable to the NGIN library
+# Link the executable to the NGIN library 
 target_link_libraries(NGIN_EDITOR PUBLIC NGIN)
 
 # Copy dll from NGIN

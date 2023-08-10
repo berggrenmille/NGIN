@@ -32,7 +32,7 @@ namespace NGIN
 
 		NGIN_INFO("Allocated block1: {0}", alloc.getUsedMemory());
 
-
+		NGIN_ASSERT(false, "test");
 
 		// Initialize SDL and log the initialization process
 		NGIN_WARNING("Initializing SDL...");

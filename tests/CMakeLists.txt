@@ -4,7 +4,10 @@ enable_testing()
 file(GLOB_RECURSE NGIN_TEST_SOURCES "*.cpp")
 
 add_executable(NGIN_TESTS ${NGIN_TEST_SOURCES})
+
+target_compile_definitions(NGIN PRIVATE -DNGIN_TESTING)
 target_link_libraries(NGIN_TESTS PRIVATE gtest_main NGIN)
+
 
 # Register tests
 add_test(NAME NGIN_TESTS COMMAND NGIN_TESTS)

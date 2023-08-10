@@ -3,34 +3,48 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <algorithm>
 
 using namespace NGIN;
-
-namespace
-{
-	const std::string TEST_LOG_FILE = "TestNGIN.log";
-}
 
 class LoggerTest : public ::testing::Test
 {
 protected:
+	std::string currentLogFile;  // Store the current test's log file name
+
 	virtual void SetUp() override
 	{
-		// Redirect loguru output to a test file before each test
-		loguru::add_file(TEST_LOG_FILE.c_str(), loguru::Truncate, loguru::Verbosity_MAX);
+		// Generate a unique log file name based on the current test name
+		currentLogFile = std::string(::testing::UnitTest::GetInstance()->current_test_info()->test_suite_name())
+			+ "_"
+			+ ::testing::UnitTest::GetInstance()->current_test_info()->name()
+			+ ".log";
+
+		// Replace any non-alphanumeric characters (like '/') in the test name with underscores
+		std::replace_if(currentLogFile.begin(), currentLogFile.end(),
+						[](char c) { return !std::isalnum(c) && c != '.'; },
+						'_');
+
+		// Remove all previous logging destinations
+		loguru::remove_all_callbacks();
+
+		// Redirect loguru output to the unique test file
+		loguru::add_file(currentLogFile.c_str(), loguru::Truncate, loguru::Verbosity_MAX);
 	}
 
 	virtual void TearDown() override
 	{
-		// Delete the test log file after each test
-		std::remove(TEST_LOG_FILE.c_str());
-
+		loguru::remove_all_callbacks();
+		if (std::remove(currentLogFile.c_str()) != 0)
+		{
+			std::perror("Error deleting file"); // This will print the error message related to file removal
+		}
 	}
 
 	// Helper function to read the log file
 	std::string readLogFile()
 	{
-		std::ifstream file(TEST_LOG_FILE);
+		std::ifstream file(currentLogFile);
 		std::stringstream logContent;
 		logContent << file.rdbuf();
 		return logContent.str();
