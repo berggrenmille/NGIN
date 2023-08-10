@@ -31,31 +31,33 @@ namespace NGIN
 	{
 		NGIN_ASSERT(size > 0, "Cannot allocate zero bytes.");
 
-		// Add the AllocationHeader's size to the requested size
-
-
+		// Find a suitable free block for the allocation.
 		auto [foundBlock, headerAdjustment] = FindFreeBlock(size, alignment);
+		// If no suitable block is found, log the error and return nullptr.
 		if (foundBlock == nullptr) [[unlikely]]
 		{
 			Logger::Log(location, Logger::Verbosity::ERROR, "Allocator reached it's capacity\n NOTE: Some engine provided allocators supports configurable size in Config.json ");
 			return nullptr;
 		}
-		RemoveBlockFromFreeList(foundBlock);
 
+			// Remove the found block from the free list.
+		RemoveBlockFromFreeList(foundBlock);
+		// Store a copy of the old block's metadata.
 		FreeBlock oldBlock = *foundBlock;
 
-		// Calculate allocation information
+		// Calculate the locations for the AllocationHeader and the payload.
 		Address headerPtr = Address(foundBlock) + headerAdjustment;
 		Address payloadPtr = headerPtr + sizeof(AllocationHeader);
 
+		// Determine the available space for the payload.
 		size_t payloadSpace = oldBlock.size - sizeof(AllocationHeader) - headerAdjustment;
 		auto header = new (reinterpret_cast<void*>(headerPtr)) AllocationHeader(payloadSpace, headerAdjustment);
 
 		Address payloadEnd = payloadPtr + size;
 		Address blockEnd = payloadPtr + payloadSpace;
 
+		// Check if a new free block can be created from the remaining space.
 		Address newBlockAdjustment = GetAlignmentAdjustment(alignof(FreeBlock), reinterpret_cast<void*>(payloadEnd));
-
 		size_t padding = blockEnd - (payloadEnd + newBlockAdjustment);
 
 		if (padding >= minBlockSize)

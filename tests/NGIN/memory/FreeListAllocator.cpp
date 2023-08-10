@@ -76,9 +76,11 @@ TEST_F(FreeListAllocatorTest, Fragmentation)
 {
 	void* block1 = allocator.Allocate(200);
 	void* block2 = allocator.Allocate(200);
+	allocator.Deallocate(block2); // Free the second 200 bytes
 	allocator.Deallocate(block1); // Free the first 200 bytes
 
 	void* block3 = allocator.Allocate(300);  // Should allocate in the space after block2 due to fragmentation
 	EXPECT_NE(block3, nullptr);
 }
+
 
