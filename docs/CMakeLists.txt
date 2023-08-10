@@ -8,7 +8,7 @@
 
         # log doc build/install paths
         set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.out)
-        set(DOXYGEN_IN "${CMAKE_SOURCE_DIR}/docs/Doxyfile.in")
+        set(DOXYGEN_IN "${CMAKE_SOURCE_DIR}/DOCS/Doxyfile.in")
 
         message(STATUS "Documentation will be built in ${DOXYGEN_OUT}")
 
@@ -25,7 +25,7 @@
 
         #request to configure the file
         configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-        doxygen_add_docs( docs ALL
+        doxygen_add_docs( DOCS ALL
             ${NGIN_SOURCE_DIR}/include
             ${NGIN_SOURCE_DIR}/src
             ${NGIN_EDITOR_SOURCE_DIR}/include

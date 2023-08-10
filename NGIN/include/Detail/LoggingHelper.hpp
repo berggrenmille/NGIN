@@ -20,7 +20,7 @@ namespace NGIN
 		}
 
 		/**
-		 * @brief Helper function to unpack the tuple and apply a function to its elements.
+		 * @brief Helper function to unpack a tuple and apply a function to its elements.
 		 * @param t The tuple to be unpacked.
 		 * @param f The function to be applied to the tuple's elements.
 		 * @param index_sequence A std::index_sequence to access tuple's elements.

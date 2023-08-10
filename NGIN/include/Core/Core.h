@@ -1,5 +1,4 @@
 #pragma once
-#include "Core.h"
 
 
 #ifdef NGIN_EXPORTS

@@ -2,10 +2,8 @@
   "version": 3,
   "configurePresets": [
     {
-      "name": "x64-debug",
-      "displayName": "x64 Debug",
-      "description": "Debug build for x64 architecture",
-      "hidden": false,
+      "name": "base",
+      "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "architecture": {
@@ -13,116 +11,119 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
-        "BUILD_DOCUMENTATION": "OFF"
+        "NGIN_BUILD_DOCUMENTATION": "OFF",
+        "NGIN_BUILD_TESTS": "OFF"
+      }
+    },
+    {
+      "name": "x64-debug",
+      "inherits": "base",
+      "displayName": "Debug",
+      "description": "Debug build for x64 architecture",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "x64-debug-with-tests",
+      "inherits": "base",
+      "displayName": "DebugWithTests",
+      "description": "Debug build for x64 architecture",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "NGIN_BUILD_TESTS": "ON"
       }
     },
     {
       "name": "x64-release",
-      "displayName": "x64 Release",
+      "inherits": "base",
+      "displayName": "Release",
       "description": "Release build for x64 architecture",
-      "hidden": false,
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
-        "BUILD_DOCUMENTATION": "ON"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
       "name": "x64-dist",
-      "displayName": "x64 Dist",
+      "inherits": "base",
+      "displayName": "Dist",
       "description": "Distribution build for x64 architecture",
-      "hidden": false,
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Dist",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
-        "BUILD_DOCUMENTATION": "OFF"
+        "CMAKE_BUILD_TYPE": "Dist"
+      }
+    },
+    {
+      "name": "x64-release-with-tests",
+      "inherits": "base",
+      "displayName": "ReleaseWithTests",
+      "description": "Release build for x64 architecture with tests",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "NGIN_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "x64-release-final",
+      "inherits": "base",
+      "displayName": "x64 Release Final",
+      "description": "Release build for x64 architecture, with tests and documentation",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "NGIN_BUILD_DOCUMENTATION": "ON",
+        "NGIN_BUILD_TESTS": "ON"
       }
     }
   ],
   "buildPresets": [
     {
-      "name": "buildAll-debug",
-      "displayName": "Build All (Debug)",
+      "name": "buildDebug",
+      "displayName": "Debug",
       "description": "Builds all projects in Debug mode",
       "configurePreset": "x64-debug",
       "targets": "all"
     },
     {
-      "name": "buildAll-release",
-      "displayName": "Build All (Release)",
+      "name": "buildDebugWithTests",
+      "displayName": "DebugWithTests",
+      "description": "Builds all projects in Debug mode, including tests",
+      "configurePreset": "x64-debug-with-tests",
+      "targets": "all"
+    },
+    {
+      "name": "buildRelease",
+      "displayName": "Release",
       "description": "Builds all projects in Release mode",
       "configurePreset": "x64-release",
       "targets": "all"
     },
     {
-      "name": "buildAll-dist",
-      "displayName": "Build All (Dist)",
+      "name": "buildDist",
+      "displayName": "Dist",
       "description": "Builds all projects in Distribution mode",
       "configurePreset": "x64-dist",
       "targets": "all"
     },
     {
-      "name": "buildEngine-debug",
-      "displayName": "Build Engine (Debug)",
-      "description": "Builds only the engine library in Debug mode",
-      "configurePreset": "x64-debug",
-      "targets": "NGIN"
-    },
-    {
-      "name": "buildEngine-release",
-      "displayName": "Build Engine (Release)",
-      "description": "Builds only the engine library in Release mode",
-      "configurePreset": "x64-release",
-      "targets": "NGIN"
-    },
-    {
-      "name": "buildEngine-dist",
-      "displayName": "Build Engine (Dist)",
-      "description": "Builds only the engine library in Distribution mode",
-      "configurePreset": "x64-dist",
-      "targets": "NGIN"
-    },
-    {
-      "name": "buildEditor-debug",
-      "displayName": "Build Editor (Debug)",
-      "description": "Builds only the editor in Debug mode",
-      "configurePreset": "x64-debug",
-      "targets": "NGIN_EDITOR"
-    },
-    {
-      "name": "buildEditor-release",
-      "displayName": "Build Editor (Release)",
-      "description": "Builds only the editor in Release mode",
-      "configurePreset": "x64-release",
-      "targets": "NGIN_EDITOR"
-    },
-    {
-      "name": "buildEditor-dist",
-      "displayName": "Build Editor (Dist)",
-      "description": "Builds only the editor in Distribution mode",
-      "configurePreset": "x64-dist",
-      "targets": "NGIN_EDITOR"
-    },
-    {
       "name": "buildDocs",
       "displayName": "Build Documentation",
       "description": "Builds the API documentation into HTML format",
-      "configurePreset": "x64-release",
+      "configurePreset": "x64-release-final",
       "targets": "docs"
+    },
+    {
+      "name": "buildTests",
+      "displayName": "Test",
+      "description": "Builds the tests for NGIN",
+      "configurePreset": "x64-release-with-tests",
+      "targets": "NGIN_TESTS"
+    },
+    {
+      "name": "buildFinal",
+      "displayName": "Final (Release)",
+      "description": "Builds all targets, including documentation and tests in release mode",
+      "configurePreset": "x64-release-final",
+      "targets": "all"
     }
   ]
 }

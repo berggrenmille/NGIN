@@ -9,6 +9,17 @@ enable_language(C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
+message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
+option(NGIN_BUILD_DOCUMENTATION "Build NGIN documentation" OFF)
+message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
+
+# When building shared lib for Windows with MinGW,
+# avoid the DLL having a "lib" prefix
+if(WINDOWS)
+  set(CMAKE_SHARED_LIBRARY_PREFIX "")
+endif()
+
 #---------------------------------------------------------------------------------------------------------
 # Specify different compiler flags and settings based on the build type
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -57,6 +68,7 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/libsdl-org/SDL"
     GIT_TAG        "release-2.28.1"
 )
+SET(SDL_TEST_ENABLED_BY_DEFAULT OFF)
 SET(SDL_TEST OFF)
 SET(SDL_VULKAN ON)
 FetchContent_MakeAvailable(SDL)
@@ -70,7 +82,7 @@ FetchContent_Declare(
 SET(LOGURU_USE_FMTLIB TRUE)
 FetchContent_MakeAvailable(LOGURU)
 
-
+# GLM
 FetchContent_Declare(
     glm
     GIT_REPOSITORY https://github.com/g-truc/glm
@@ -107,14 +119,10 @@ FetchContent_MakeAvailable(googletest)
 add_subdirectory("NGIN")
 add_subdirectory ("NGIN_EDITOR")
 
-option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
-message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
-if(NGIN_BUILD_TESTS)
-    add_subdirectory("tests")
-endif()
 
-option(BUILD_DOCUMENTATION "Build documentation" OFF)
-message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
-if (BUILD_DOCUMENTATION)
-    add_subdirectory ("docs")
+if(NGIN_BUILD_TESTS)
+    add_subdirectory("TESTS")
+endif()
+if (NGIN_BUILD_DOCUMENTATION)
+    add_subdirectory ("DOCS")
 endif()
