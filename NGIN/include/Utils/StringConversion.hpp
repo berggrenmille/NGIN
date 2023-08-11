@@ -7,7 +7,7 @@
 
 namespace NGIN
 {
-	namespace Detail
+	namespace Util
 	{
 		/**
 		 * @brief Converts a string to the specified type T.
