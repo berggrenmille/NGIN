@@ -1,7 +1,7 @@
 #include <PCH.h>
-#include <Memory/FreeListAllocator.h>
+#include <Core/Memory/FreeListAllocator.hpp>
 #include <cassert>
-#include <core/Logger.h>
+#include <Core/Logger.h>
 namespace NGIN
 {
 	FreeListAllocator::FreeListAllocator(size_t size)

@@ -1,4 +1,4 @@
-#include "ConsoleSink.hpp"
+#include <Core/Logging/ConsoleSink.hpp>
 namespace NGIN
 {
 	ConsoleSink::ConsoleSink()
@@ -13,9 +13,9 @@ namespace NGIN
 
 	void ConsoleSink::Log(LogLevel level, const std::string& message)
 	{
-		setColor(level);
+		SetColor(level);
 		std::cerr << message << "\n";
-		resetColor();
+		ResetColor();
 	}
 
 #ifdef _WIN32
@@ -24,11 +24,11 @@ namespace NGIN
 		WORD color;
 		switch (level)
 		{
-		case LogLevel::WARNING:
+		case LogLevel::Warning:
 			color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 			break;
-		case LogLevel::ERROR:
-		case LogLevel::FATAL:
+		case LogLevel::Error:
+		case LogLevel::Critical:
 			color = FOREGROUND_RED | FOREGROUND_INTENSITY;
 			break;
 		default:
@@ -69,3 +69,4 @@ namespace NGIN
 			std::cout << "\033[0m";  // Reset
 	}
 #endif
+}

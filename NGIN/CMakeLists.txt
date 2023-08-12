@@ -3,29 +3,20 @@ project(NGIN)
 # Add all your source files here
 add_library(NGIN SHARED
 
-  "include/Core/Layer.h"
-  "include/Core/EventBus.h"
-  "include/Core/LayerStack.h"
+  "src/Core/App.cpp"
+  "src/Core/Config.cpp"
   "src/Core/Layer.cpp"
   "src/Core/LayerStack.cpp"
-  "include/Core/Window.h"
   "src/Core/SDLWindow.cpp"
-  "include/Core/Core.h"
-  "include/Core/App.h"
-  "include/NGIN.h"
-  "include/Memory/Allocator.h"
-  "include/Memory/LinearAllocator.h"
-  "include/Core/Logger.h"
-  "src/Core/App.cpp"
-  
-  "src/Memory/LinearAllocator.cpp"
-  "src/Memory/Allocator.cpp"
-  
-  "include/Core/Config.h"
-  "src/Core/Config.cpp" "include/Docs/Docs.h" "include/Core/Precompiled/PCH.h" "src/PCH.cpp" "include/Memory/StackAllocator.h" "src/Memory/StackAllocator.cpp" "include/Memory/FreeListAllocator.h" "src/Memory/FreeListAllocator.cpp")
-
+  "src/Core/Memory/Allocator.cpp"
+  "src/Core/Memory/LinearAllocator.cpp"
+  "src/Core/Memory/StackAllocator.cpp"
+  "src/Core/Memory/FreeListAllocator.cpp"
+  "src/Precompiled/PCH.cpp"
+  "src/Core/Logging/ConsoleSink.cpp"
+)
 # Setup precompiled header
-target_precompile_headers(NGIN PRIVATE include/PCH.h)
+target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
   
  if (MSVC)
     # Set /MD flag for Release configurations
@@ -43,6 +34,10 @@ target_compile_definitions(NGIN PRIVATE NGIN_EXPORTS)
 # Link the include folder
 target_include_directories(NGIN PUBLIC 
     ${PROJECT_SOURCE_DIR}/include
+)
+
+target_include_directories(NGIN PRIVATE 
+    ${PROJECT_SOURCE_DIR}/include/Precompiled
 )
 # Link Thirdparty
 

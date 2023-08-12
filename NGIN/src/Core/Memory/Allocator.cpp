@@ -1,5 +1,5 @@
 #include <PCH.h>
-#include <Memory/Allocator.h>
+#include <Core/Memory/Allocator.hpp>
 #include <Core/Logger.h>
 namespace NGIN
 {

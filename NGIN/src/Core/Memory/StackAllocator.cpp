@@ -1,5 +1,5 @@
 #include <PCH.h>
-#include <Memory/StackAllocator.h>
+#include <Core/Memory/StackAllocator.hpp>
 #include <Core/Logger.h>
 
 namespace NGIN

@@ -1,5 +1,5 @@
 #include <PCH.h>
-#include <Memory/LinearAllocator.h>
+#include <Core/Memory/LinearAllocator.hpp>
 #include <cassert>
 
 namespace NGIN

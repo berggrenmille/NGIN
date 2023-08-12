@@ -12,12 +12,12 @@
 namespace NGIN
 {
 
-	class ConsoleSink : public ILogSink
+	class ConsoleSink : public LogSink
 	{
 	public:
 		ConsoleSink();
 		virtual void Log(LogLevel level, const std::string& message) override;
-		virtual void LogBatch(LogLevel level, const std::vector<std::string>& entries) override;
+
 	private:
 #ifdef _WIN32
 		HANDLE hConsole;
@@ -25,7 +25,7 @@ namespace NGIN
 		bool isTerminal;
 #endif
 		void SetColor(LogLevel level);
-		void Resetcolor();
+		void ResetColor();
 	};
 
 } // namespace NGIN

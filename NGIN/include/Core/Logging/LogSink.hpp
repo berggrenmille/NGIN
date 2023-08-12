@@ -1,30 +1,33 @@
 #include <string>
-#include "LogDefinitions.hpp"
+
 namespace NGIN
 {
 
-	/**
-	*  @brief Representation for message data
-	*/
-	struct LogEntry
-	{
-		LogLevel level;
-		std::string message;
-	};
+
+
+
 
 	/**
 	 * @brief Enum class representing the log severity/level.
 	 */
 	enum class LogLevel
 	{
-		TRACE,    ///< Trace-level log, usually very detailed.
-		INFO,     ///< Informational messages, general knowledge about system operations.
-		DEBUG,    ///< Used during debugging to log additional info.
-		WARNING,  ///< Represents warnings that aren't critical but might indicate potential issues.
-		ERROR,    ///< Represents errors that aren't fatal but might impact normal operation.
-		CRITICAL  ///< Critical errors that might cause the system to terminate.
+		Trace,    ///< Trace-level log, usually very detailed.
+		Info,     ///< Informational messages, general knowledge about system operations.
+		Debug,    ///< Used during debugging to log additional info.
+		Warning,  ///< Represents warnings that aren't critical but might indicate potential issues.
+		Error,    ///< Represents errors that aren't fatal but might impact normal operation.
+		Critical  ///< Critical errors that might cause the system to terminate.
 	};
 
+	/**
+	*  @brief Representation for all data a sink needs to print
+	*/
+	struct LogEntry
+	{
+		LogLevel level;
+		std::string message;
+	};
 
 	/**
 	 * @brief Interface for all log sinks within the NGIN framework.
@@ -60,11 +63,12 @@ namespace NGIN
 		 */
 		virtual void Log(LogLevel level, const std::string& message) = 0;
 
-		virtual void LogBatch(const std::vector<LogEntry>& entries)
-		{
-			for (const auto& entry : entries)
-				Log(level, entry);
-		};
+
+		/**
+		 * @brief Flushes the sink and ensures all pending messages are outputted.
+		 */
+		virtual void Flush() {};
+
 
 
 	};
