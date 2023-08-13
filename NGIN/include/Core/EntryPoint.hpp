@@ -1,6 +1,8 @@
 #pragma once
 #include <Core/Core.h>
 #include <Core/Memory/FreeListAllocator.hpp>
+#include <Core/Logging/AsyncLogger.hpp>
+#include <Core/Logging/ConsoleSink.hpp>
 namespace NGIN
 {
 
@@ -23,22 +25,23 @@ namespace NGIN
 		// Init Config
 		Config::Init();
 
+		AsyncLogger testLogger;
+		testLogger.AddSink<ConsoleSink>();
+		testLogger.Log(LogLevel::Warning, "Test log message {}", Util::MultArgs(1));
+		testLogger.Log(LogLevel::Error, "Test log mesaddddddddddddddddddddssage {}", Util::MultArgs(1));
+		testLogger.Log(LogLevel::Info, "Test log medddddddddddddddssage {}", Util::MultArgs(1));
 
-		FreeListAllocator alloc(1024);
-
-		void* block1 = alloc.Allocate(512);
-		alloc.Allocate(256);
+		for (int i = 0; i < 1000; ++i)
+			testLogger.Log(LogLevel::Info, "Test: {}", Util::MultArgs(i));
 
 
-		NGIN_INFO("Allocated block1: {0}", alloc.getUsedMemory());
-
-		NGIN_ASSERT(false, "test");
 
 		// Initialize SDL and log the initialization process
 		NGIN_WARNING("Initializing SDL...");
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
 		{
-			NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
+			//NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
+
 			return 1;
 		}
 		NGIN_INFO("SDL initialized");

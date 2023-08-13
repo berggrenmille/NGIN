@@ -7,7 +7,7 @@
 #include <utility>
 
 #include <string>
-#include <Detail/LoggingHelper.hpp>
+#include <Utils/TupleHelper.hpp>
 #include <fmt/format.h>
 
 
@@ -103,9 +103,9 @@ namespace NGIN
 		inline static void Log_impl(std::tuple<Args...> args, Verbosity verbosity, const std::source_location& location)
 		{
 
-			Detail::Apply(args, [&](auto&&... args) {
+			Util::Apply(args, [&](auto&&... args) {
 				loguru::log(static_cast<int>(verbosity), location.file_name(), location.line(), std::forward<decltype(args)>(args)...);
-						  });
+						});
 		}
 
 
@@ -113,7 +113,7 @@ namespace NGIN
 		template <class... Args>
 		inline static void Log(const std::source_location& location = std::source_location::current(), Verbosity verbosity = Verbosity::INFO, const char* msg = "", Args... args)
 		{
-			Log_impl(Detail::FORMAT_TO_TUPLE(msg, args...), verbosity, location);
+			Log_impl(Util::FORMAT_TO_TUPLE(msg, args...), verbosity, location);
 		}
 
 	};

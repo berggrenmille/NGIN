@@ -14,6 +14,7 @@ add_library(NGIN SHARED
   "src/Core/Memory/FreeListAllocator.cpp"
   "src/Precompiled/PCH.cpp"
   "src/Core/Logging/ConsoleSink.cpp"
+  "src/Core/Logging/AsyncLogger.cpp"
 )
 # Setup precompiled header
 target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
@@ -42,6 +43,7 @@ target_include_directories(NGIN PRIVATE
 # Link Thirdparty
 
 target_link_libraries(NGIN PUBLIC loguru)
+target_link_libraries(NGIN PUBLIC fmt::fmt)
 target_link_libraries(NGIN PUBLIC SDL2::SDL2-static SDL2::SDL2main)
 target_link_libraries(NGIN PRIVATE dylib)
 target_link_libraries(NGIN PUBLIC nlohmann_json::nlohmann_json)

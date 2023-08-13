@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 namespace NGIN
@@ -35,7 +36,7 @@ namespace NGIN
 	 * Sinks are responsible for handling log messages and outputting them to the appropriate
 	 *
 	 */
-	class LogSink
+	class NGIN_API LogSink
 	{
 	public:
 		/**
@@ -67,7 +68,7 @@ namespace NGIN
 		/**
 		 * @brief Flushes the sink and ensures all pending messages are outputted.
 		 */
-		virtual void Flush() {};
+		virtual void Flush() = 0;
 
 
 

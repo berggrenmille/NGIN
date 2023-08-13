@@ -3,6 +3,7 @@ namespace NGIN
 {
 	namespace Util
 	{
+		namespace
 		{
 			/**
 			 * @brief Implementation of Apply()
@@ -14,7 +15,7 @@ namespace NGIN
 			 * @tparam I The tuple indices.
 			 */
 			template <class Tuple, class F, std::size_t... I>
-			constexpr void Apply_impl(Tuple && t, F && f, std::index_sequence<I...>)
+			constexpr void Apply_impl(Tuple&& t, F&& f, std::index_sequence<I...>)
 			{
 				std::forward<F>(f)(std::get<I>(std::forward<Tuple>(t))...);
 			}
@@ -48,6 +49,12 @@ namespace NGIN
 		std::tuple<const char*, Args...> FORMAT_TO_TUPLE(const char* first, Args&&... args)
 		{
 			return std::tuple<const char*, Args...>(first, args...);
+		}
+
+		template <class... Args>
+		std::tuple<Args...> MultArgs(Args&&... args)
+		{
+			return std::tuple<Args...>(args...);
 		}
 
 	}

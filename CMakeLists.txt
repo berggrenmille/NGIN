@@ -7,7 +7,7 @@ project ("NGIN" VERSION 0.1)
 enable_language(C CXX)
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")

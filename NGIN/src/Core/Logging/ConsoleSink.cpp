@@ -14,8 +14,13 @@ namespace NGIN
 	void ConsoleSink::Log(LogLevel level, const std::string& message)
 	{
 		SetColor(level);
-		std::cerr << message << "\n";
+		std::cout << message << "\n";
 		ResetColor();
+	}
+
+	void ConsoleSink::Flush()
+	{
+		std::cout.flush();
 	}
 
 #ifdef _WIN32

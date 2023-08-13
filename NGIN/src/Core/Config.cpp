@@ -21,7 +21,9 @@ namespace
 	{
 		NGIN_WARNING("Creating config file: {}", ConfigPath.c_str());
 		std::ofstream file(ConfigPath, std::ios::out | std::ios::app);
-		NGIN_ASSERT(file.good(), "Failed to create config file: {}, {}", ConfigPath.c_str(), strerror(errno));
+		char buf[256];
+		strerror_s(buf, sizeof(buf), errno);
+		NGIN_ASSERT(file.good(), "Failed to create config file: {}, {}", ConfigPath.c_str(), buf);
 		file << defaultConfigJSON.dump(4);
 		file.close();
 	}
@@ -37,7 +39,9 @@ namespace NGIN
 		std::ifstream file(ConfigPath);
 		if (!file.is_open())
 		{
-			NGIN_WARNING("Error loading Config file at path: {} : {}", ConfigPath, strerror(errno));
+			char buf[256];
+			strerror_s(buf, sizeof(buf), errno);
+			NGIN_WARNING("Error loading Config file at path: {} : {}", ConfigPath, buf);
 			CreateConfigFile();
 			file.open(ConfigPath);
 			NGIN_ASSERT(file.is_open(), "Failed to read config file: {}", ConfigPath);
