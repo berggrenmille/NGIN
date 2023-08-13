@@ -37,8 +37,9 @@ namespace NGIN
 
 
 			const char* file = strrchr(location.file_name(), '/') + 1;
+			auto time = fmt::localtime(timeNow);
 
-			auto args = fmt::make_format_args(fmt::localtime(timeNow), file, location.line(), LogLevelToString(level), test);
+			auto args = fmt::make_format_args(time, file, location.line(), LogLevelToString(level), test);
 
 			std::string formattedMessage = fmt::vformat("{:%Y-%m-%d %H:%M:%S} | {:>20}:{:<5} | {:<8} | {}", args);
 
