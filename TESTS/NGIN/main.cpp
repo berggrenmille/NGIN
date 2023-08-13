@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Core/Logger.h>
+#include <NGIN/Logger.h>
 
 class CustomTestListener : public ::testing::EmptyTestEventListener
 {

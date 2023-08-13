@@ -3,19 +3,19 @@ project(NGIN)
 # Add all your source files here
 add_library(NGIN SHARED
 
-  "src/Core/App.cpp"
-  "src/Core/Config.cpp"
-  "src/Core/Layer.cpp"
-  "src/Core/LayerStack.cpp"
-  "src/Core/SDLWindow.cpp"
-  "src/Core/Memory/Allocator.cpp"
-  "src/Core/Memory/LinearAllocator.cpp"
-  "src/Core/Memory/StackAllocator.cpp"
-  "src/Core/Memory/FreeListAllocator.cpp"
+  "src/NGIN/App.cpp"
+  "src/NGIN/Config.cpp"
+  "src/NGIN/Layer.cpp"
+  "src/NGIN/LayerStack.cpp"
+  "src/NGIN/SDLWindow.cpp"
+  "src/NGIN/Memory/Allocator.cpp"
+  "src/NGIN/Memory/LinearAllocator.cpp"
+  "src/NGIN/Memory/StackAllocator.cpp"
+  "src/NGIN/Memory/FreeListAllocator.cpp"
   "src/Precompiled/PCH.cpp"
-  "src/Core/Logging/ConsoleSink.cpp"
-  "src/Core/Logging/AsyncLogger.cpp"
-)
+  "src/NGIN/Logging/ConsoleSink.cpp"
+  "src/NGIN/Logging/AsyncLogger.cpp"
+ "src/NGIN/Logging/FileSink.cpp")
 # Setup precompiled header
 target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
   

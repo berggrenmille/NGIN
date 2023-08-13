@@ -1,6 +1,6 @@
-#include <Core/Core.h>
-#include <Core/Logger.h>
-#include <Core/Config.h>
+#include <NGIN/Core.h>
+#include <NGIN/Logger.h>
+#include <NGIN/Config.h>
 
 #include <iostream>
 #include <vector>
