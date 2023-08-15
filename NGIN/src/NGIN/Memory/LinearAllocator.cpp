@@ -27,7 +27,8 @@ namespace NGIN
 
 		if (usedMemory + adjustment + size > this->size)
 		{
-			Logger::Log(location, Logger::Verbosity::ERROR, "LinearAllocator is out of memory");
+			NGIN_LOG_SRC(location, Logging::Level::Error, "Allocator reached it's capacity\n NOTE: Some engine provided allocators supports configurable size in Config.json");
+
 			return nullptr;  // Out of memory
 		}
 		uintptr_t alignedAddress = (uintptr_t)currentPtr + adjustment;

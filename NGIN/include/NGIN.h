@@ -7,8 +7,8 @@
 #include <NGIN/App.h>
 
 #include <NGIN/Layer.h>
-#include <NGIN/EventBus.h>
-#include <NGIN/Logger.h>
+#include <NGIN/EventBus.hpp>
+#include <NGIN/Logging.hpp>
 #include <NGIN/Config.h>
 #include <NGIN/EntryPoint.hpp>
 

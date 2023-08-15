@@ -14,8 +14,6 @@
 namespace NGIN
 {
 
-
-
 	/**
 	 * @brief Template function to initialize an NGIN application.
 	 *
@@ -31,7 +29,7 @@ namespace NGIN
 
 		std::cout << "\033]0;" << "NGIN" << "\007";
 
-
+		NGIN_WARNING("TEST {}", 1);
 		// Init Config
 		Config::Init();
 		Time::Timer<Time::Milliseconds> timer;
@@ -43,7 +41,7 @@ namespace NGIN
 
 
 		// Initialize SDL and log the initialization process
-		NGIN_WARNING("Initializing SDL...");
+		NGIN_WARNING("Initializing SDL... ");
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
 		{
 			//NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());

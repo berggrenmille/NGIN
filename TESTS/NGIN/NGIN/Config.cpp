@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 #include <NGIN/Config.h>
-
+#include <NGIN/Logging.hpp>
 using namespace NGIN;
+
 
 class ConfigTest : public ::testing::Test
 {
@@ -10,8 +11,10 @@ protected:
 	// This function runs before every test case.
 	virtual void SetUp() override
 	{
+
 		// Initialize the configuration before each test
 		Config::Init();
+
 	}
 
 	// This function runs after every test case.

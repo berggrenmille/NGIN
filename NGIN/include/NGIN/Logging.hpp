@@ -31,7 +31,6 @@ namespace NGIN::Logging
     do { \
         if (!(condition)) { \
             ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Error, msg, ::NGIN::Util::MultArgs(__VA_ARGS__)); \
-            std::this_thread::sleep_for(std::chrono::milliseconds(50)); \
             std::abort(); \
         } \
     } while (0)
@@ -40,7 +39,6 @@ namespace NGIN::Logging
     do { \
         if (!(condition)) { \
             ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Error, msg, ::NGIN::Util::MultArgs(__VA_ARGS__), src); \
-            std::this_thread::sleep_for(std::chrono::milliseconds(50)); \
             std::abort(); \
         } \
     } while (0)

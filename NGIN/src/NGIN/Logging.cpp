@@ -3,8 +3,8 @@
 
 namespace
 {
-	NGIN::Logging::AsyncLogger* engineLogger;
-	NGIN::Logging::AsyncLogger* clientLogger;
+	NGIN::Logging::BaseLogger* engineLogger;
+	NGIN::Logging::BaseLogger* clientLogger;
 }
 
 namespace NGIN::Logging
@@ -12,11 +12,12 @@ namespace NGIN::Logging
 	void Init()
 	{
 		engineLogger = new AsyncLogger(std::chrono::milliseconds(16));
+		clientLogger = new AsyncLogger(std::chrono::milliseconds(16));
+#ifndef NGIN_TESTING
 		engineLogger->AddSink<FileSink>("NGIN.log").Init();
 		engineLogger->AddSink<ConsoleSink>().Init();
-		clientLogger = new AsyncLogger(std::chrono::milliseconds(16));
 		engineLogger->AddSink<FileSink>("Client.log").Init();
-
+#endif
 	}
 
 	void Shutdown()

@@ -13,7 +13,7 @@ namespace
 	const std::string ConfigPath = "NGIN_CONFIG.json";
 
 	nlohmann::json defaultConfigJSON = {
-		{"TEST", "TEST"},
+		{"TEST", 1},
 		{"TEST2", "TEST"}
 	};
 
@@ -21,10 +21,10 @@ namespace
 	{
 		NGIN_WARNING("Creating config file: {}", ConfigPath.c_str());
 		std::ofstream file(ConfigPath, std::ios::out | std::ios::app);
-		char buf[256];
-		strerror_s(buf, sizeof(buf), errno);
-		NGIN_ASSERT(file.good(), "Failed to create config file: {}, {}", ConfigPath.c_str(), buf);
+
+		NGIN_ASSERT(file.good(), "Failed to create config file: {}, {}", ConfigPath.c_str(), strerror(errno));
 		file << defaultConfigJSON.dump(4);
+
 		file.close();
 	}
 }
@@ -39,9 +39,7 @@ namespace NGIN
 		std::ifstream file(ConfigPath);
 		if (!file.is_open())
 		{
-			char buf[256];
-			strerror_s(buf, sizeof(buf), errno);
-			NGIN_WARNING("Error loading Config file at path: {} : {}", ConfigPath, buf);
+			NGIN_WARNING("Error loading Config file at path: {} : {}", ConfigPath, strerror(errno));
 			CreateConfigFile();
 			file.open(ConfigPath);
 			NGIN_ASSERT(file.is_open(), "Failed to read config file: {}", ConfigPath);

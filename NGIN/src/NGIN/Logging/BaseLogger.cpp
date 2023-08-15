@@ -1,5 +1,6 @@
 #include <NGIN/Logging/BaseLogger.hpp>
 
+#include <HideWarnings/fmt.hpp>
 namespace NGIN::Logging
 {
 	std::string BaseLogger::FormatLogMessage(Level level, const std::string& message, const std::source_location& location)

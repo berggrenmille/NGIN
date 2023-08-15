@@ -1,6 +1,6 @@
 #include <PCH.h>
 #include <NGIN/Memory/Allocator.hpp>
-#include <NGIN/Logger.h>
+#include <NGIN/Logging.hpp>
 namespace NGIN
 {
 #ifdef NGIN_DEBUG
@@ -34,8 +34,8 @@ namespace NGIN
 		{
 			if (handle.ptr)
 			{
-				Logger::Log(handle.location, Logger::Verbosity::ERROR,
-							"Object of type {} never got destroyed at {}", handle.typeName, handle.ptr);  // updated to show type name
+				NGIN_LOG_SRC(handle.location, Logging::Level::Error, "Memory leak detected! Type: {}", handle.typeName);
+
 			}
 		}
 		delete debugImpl;

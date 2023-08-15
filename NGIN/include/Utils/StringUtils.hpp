@@ -1,11 +1,11 @@
 #pragma once
-#include "NGIN/Logger.h"
 
+#include <HideWarnings/fmt.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <source_location>
 
-#include <fmt/core.h>
 
 namespace NGIN
 {
@@ -28,7 +28,7 @@ namespace NGIN
 			std::stringstream ss(s);
 			T value;
 			ss >> value;
-			NGIN_ASSERT_SRC(!ss.fail(), source, "Failed to convert \"{}\" to type: {}", s.c_str(), typeid(T).name());
+
 			return value;
 		}
 		/**

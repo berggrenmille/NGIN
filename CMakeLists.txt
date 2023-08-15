@@ -72,16 +72,6 @@ SET(SDL_TEST_ENABLED_BY_DEFAULT OFF)
 SET(SDL_TEST OFF)
 SET(SDL_VULKAN ON)
 FetchContent_MakeAvailable(SDL)
-
-# LOGURU
-FetchContent_Declare(
-    LOGURU
-    GIT_REPOSITORY "https://github.com/emilk/loguru"
-    GIT_TAG        "master"
-)
-SET(LOGURU_USE_FMTLIB TRUE)
-FetchContent_MakeAvailable(LOGURU)
-
 # GLM
 FetchContent_Declare(
     glm

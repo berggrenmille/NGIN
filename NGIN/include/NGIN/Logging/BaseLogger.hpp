@@ -4,9 +4,6 @@
 #include <Utils/StringUtils.hpp>
 #include <Utils/TimeUtils.hpp>
 
-#include <fmt/format.h>
-
-
 #include <vector>
 #include <memory>
 #include <string>
@@ -14,9 +11,10 @@
 #include <iomanip>
 #include <string_view>
 #include <chrono>
-#include <fmt/chrono.h>
+
 namespace NGIN::Logging
 {
+
 	class BaseLogger
 	{
 	public:
@@ -67,10 +65,11 @@ namespace NGIN::Logging
 
 
 	};
-
+	/*
 	template<>
 	inline void BaseLogger::Log(Level level, const std::string& message, std::tuple<> formatArgs, const std::source_location& location)
 	{
 		Log(level, message, location);
 	}
+	*/
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EventBus.h" 
+
 namespace NGIN
 {
 	class Layer

@@ -1,6 +1,6 @@
 #include <PCH.h>
 #include <NGIN/Memory/StackAllocator.hpp>
-#include <NGIN/Logger.h>
+
 
 namespace NGIN
 {

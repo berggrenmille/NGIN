@@ -1,6 +1,6 @@
 #pragma once
-#include "NGIN/Logger.h"
 
+#include <NGIN/Logging.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>

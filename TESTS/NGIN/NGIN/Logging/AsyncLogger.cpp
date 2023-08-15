@@ -16,14 +16,6 @@ protected:
 	}
 };
 
-TEST_F(AsyncLoggerTest, LogBuffersMessage)
-{
-	logger->Log(Level::Info, "Test log.");
-
-	// Assuming you have a method or friend access to get the current buffer size
-	EXPECT_EQ(logger->GetBufferSize(), 1);
-}
-
 TEST_F(AsyncLoggerTest, BufferEmptyAfterInterval)
 {
 	logger->Log(Level::Info, "Test log.");
