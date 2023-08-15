@@ -1,5 +1,7 @@
 #pragma once
 #include <utility>
+#include <tuple>
+#include <type_traits>
 namespace NGIN
 {
 	namespace Util
