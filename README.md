@@ -1,4 +1,5 @@
 # NGIN: A C++ Game Engine
+![Build and Test Status](https://github.com/berggrenmille/NGIN/actions/workflows/cmake.yml/badge.svg)
 
 NGIN is an experimental game engine built with performance in mind. This project is a personal endeavor to understand the intricacies of game engine design and to implement data-oriented techniques. While it's currently in its early stages, NGIN aims to provide a comprehensive suite of tools for game development.
 
