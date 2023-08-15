@@ -11,6 +11,8 @@ namespace NGIN
 {
 	namespace Logging
 	{
+
+
 		/**
 		 * @class AsyncLogger
 		 * @brief Asynchronous logger implementation.
@@ -26,7 +28,7 @@ namespace NGIN
 		 *
 		 * @see BaseLogger
 		 */
-		class NGIN_API AsyncLogger : public BaseLogger
+		class AsyncLogger : public BaseLogger
 		{
 		public:
 			/**
@@ -38,14 +40,16 @@ namespace NGIN
 			 * @param flushInterval The time interval at which the buffer should be flushed.
 			 *                      Default is 5 milliseconds.
 			 */
-			AsyncLogger(std::chrono::milliseconds flushInterval = std::chrono::milliseconds(5));
+			NGIN_API AsyncLogger(std::chrono::milliseconds flushInterval = std::chrono::milliseconds(5));
 
 			/**
 			 * @brief Destructor.
 			 *
 			 * Ensures that all buffered log messages are flushed and cleans up the resources.
 			 */
-			~AsyncLogger();
+			NGIN_API ~AsyncLogger();
+
+			NGIN_API size_t GetBufferSize();
 
 		protected:
 			/**
@@ -58,7 +62,7 @@ namespace NGIN
 			 * @param level The log level of the message.
 			 * @param message The log message to be processed.
 			 */
-			void LogInternal(Level level, const std::string& message) override;
+			NGIN_API void LogInternal(Level level, const std::string& message) override;
 
 		private:
 			/**
@@ -66,14 +70,15 @@ namespace NGIN
 			 *
 			 * Periodically invoked to process log messages buffered for asynchronous writing.
 			 */
-			void ProcessQueue();
+			NGIN_API void ProcessQueue();
 
 			/**
 			 * @brief Flush the log buffer to the sinks.
 			 *
 			 * Sends all the buffered log messages to the attached sinks.
 			 */
-			void Flush();
+			NGIN_API void Flush();
+
 
 			std::vector<Entry> logBuffer;           ///< Buffer for storing log messages.
 			std::condition_variable condVar;        ///< Condition variable for signaling the worker thread.

@@ -23,7 +23,6 @@ namespace NGIN
 	namespace Logger {}
 
 	/**
-	 * @namespace Logging
 	 * @brief Provides functionalities related to the logging process.
 	 *
 	 * This namespace encompasses all the utilities, handlers, formatters, and other components

@@ -40,7 +40,7 @@ namespace NGIN
 		 * @return The input string.
 		 */
 		template <>
-		std::string FromString<std::string>(const std::string& s, const std::source_location& source)
+		inline std::string FromString<std::string>(const std::string& s, const std::source_location& source)
 		{
 			return s;
 		}
@@ -55,7 +55,7 @@ namespace NGIN
 		 * @param fullPath The full path string from which the file name should be extracted.
 		 * @return A pointer to the character where the file name starts within the fullPath.
 		 */
-		const char* ExtractFileName(const char* fullPath)
+		inline const char* ExtractFileName(const char* fullPath)
 		{
 			// Find the last backslash, diffrent OS can use diffrent slashes
 			const char* fromSlash = strrchr(fullPath, '/');

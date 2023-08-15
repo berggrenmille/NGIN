@@ -4,6 +4,8 @@
 namespace NGIN::Logging
 {
 
+
+
 	AsyncLogger::AsyncLogger(std::chrono::milliseconds flushInterval)
 		: flushInterval(flushInterval), exitFlag(false), workerThread([this]() { ProcessQueue(); })
 	{}
@@ -20,6 +22,12 @@ namespace NGIN::Logging
 			logBuffer.push_back({ level, message });
 		}
 		condVar.notify_one();
+	}
+
+	size_t AsyncLogger::GetBufferSize()
+	{
+		std::lock_guard<std::mutex> lock(bufferMutex);
+		return logBuffer.size();
 	}
 
 	void AsyncLogger::Flush()

@@ -1,7 +1,7 @@
 #include <PCH.h>
 #include <NGIN/Memory/FreeListAllocator.hpp>
 #include <cassert>
-#include <NGIN/Logger.h>
+#include <NGIN/Logging.hpp>
 namespace NGIN
 {
 	FreeListAllocator::FreeListAllocator(size_t size)
@@ -16,6 +16,7 @@ namespace NGIN
 		// Might be able to handle this error more gracefully, like throwing an exception or falling back to another allocator
 		// Very unlikely, soooo... TODO
 		NGIN_ASSERT(freeBlocks != nullptr, "FreeListAllocator failed to allocate memory at contruction");
+
 
 		freeBlocks->size = size;
 		freeBlocks->previous = nullptr;
@@ -36,7 +37,7 @@ namespace NGIN
 		// If no suitable block is found, log the error and return nullptr.
 		if (foundBlock == nullptr) [[unlikely]]
 		{
-			Logger::Log(location, Logger::Verbosity::ERROR, "Allocator reached it's capacity\n NOTE: Some engine provided allocators supports configurable size in Config.json ");
+			NGIN_LOG_SRC(location, Logging::Level::Error, "Allocator reached it's capacity\n NOTE: Some engine provided allocators supports configurable size in Config.json");
 			return nullptr;
 		}
 

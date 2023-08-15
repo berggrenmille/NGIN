@@ -17,34 +17,28 @@
 #include <fmt/chrono.h>
 namespace NGIN::Logging
 {
-	class NGIN_API BaseLogger
+	class BaseLogger
 	{
 	public:
-		BaseLogger() = default;
-		virtual ~BaseLogger() = default;
+		NGIN_API BaseLogger() = default;
+		NGIN_API virtual ~BaseLogger() = default;
 		// Delete copy operations
-		BaseLogger(const BaseLogger&) = delete;
-		BaseLogger& operator=(const BaseLogger&) = delete;
+		NGIN_API BaseLogger(const BaseLogger&) = delete;
+		NGIN_API BaseLogger& operator=(const BaseLogger&) = delete;
 
 		template <typename... Args>
-		void Log(Level level, const std::string& message, std::tuple<Args...> formatArgs = std::make_tuple(), const std::source_location& location = std::source_location::current())
+		void Log(Level level, const std::string& message, std::tuple<Args...> formatArgs, const std::source_location& location = std::source_location::current())
 		{
 			//Format message 
 			std::string messageFmt = Util::RuntimeFormat(message, formatArgs);
+			LogInternal(level, FormatLogMessage(level, messageFmt, location));
+		}
 
-			//Get other information
-			auto file = Util::ExtractFileName(location.file_name());
-			auto timeNow = Util::GetCurrentTime();
+		template <typename... Args>
+		void Log(Level level, const std::string& message, const std::source_location& location = std::source_location::current())
+		{
 
-			//format log output
-			std::string finalMessage = Util::Format("{:%Y-%m-%d %H:%M:%S} | {:>20}:{:<5} | {:<8} | {}",
-													fmt::localtime(timeNow),
-													file,
-													location.line(),
-													LogLevelToString(level),
-													messageFmt);
-			//Send formated message to implementation
-			LogInternal(level, finalMessage);
+			LogInternal(level, FormatLogMessage(level, message, location));
 		}
 
 		template<typename T, typename... Args>
@@ -66,10 +60,17 @@ namespace NGIN::Logging
 
 	protected:
 		// To be implemented by derived loggers.
-		virtual void LogInternal(Level level, const std::string& message) = 0;
+		NGIN_API virtual void LogInternal(Level level, const std::string& message) = 0;
+		NGIN_API virtual std::string FormatLogMessage(Level level, const std::string& message, const std::source_location& location);
 
 		std::vector<std::unique_ptr<BaseSink>> sinks;
 
 
 	};
+
+	template<>
+	inline void BaseLogger::Log(Level level, const std::string& message, std::tuple<> formatArgs, const std::source_location& location)
+	{
+		Log(level, message, location);
+	}
 }

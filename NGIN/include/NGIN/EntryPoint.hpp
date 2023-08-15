@@ -4,8 +4,17 @@
 #include <NGIN/Logging/AsyncLogger.hpp>
 #include <NGIN/Logging/ConsoleSink.hpp>
 #include <NGIN/Time/Time.hpp>
+#include <NGIN/Logging/FileSink.hpp>
+#include <NGIN/Logging.hpp>
+
+#include <SDL2/SDL.h>
+
+
+
 namespace NGIN
 {
+
+
 
 	/**
 	 * @brief Template function to initialize an NGIN application.
@@ -18,21 +27,18 @@ namespace NGIN
 	template<NGIN::is_app T>
 	int Init(int argc, char* argv[])
 	{
+		Logging::Init();
+
 		std::cout << "\033]0;" << "NGIN" << "\007";
-		// Initialize logger
-		Logger::Init(argc, argv);
-		NGIN_INFO("Logger initialized");
+
 
 		// Init Config
 		Config::Init();
 		Time::Timer<Time::Milliseconds> timer;
 
-		Logging::AsyncLogger testLogger;
-		testLogger.AddSink<Logging::ConsoleSink>();
 
 
-		for (int i = 0; i < 100; ++i)
-			testLogger.Log(Logging::Level::Info, "Test: {}", Util::MultArgs(timer.Elapsed()));
+
 
 
 

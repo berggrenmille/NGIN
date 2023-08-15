@@ -3,11 +3,7 @@
 #include <iostream>
 #include <string>
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>  // for isatty()
-#endif
+
 
 namespace NGIN::Logging
 {
@@ -35,7 +31,7 @@ namespace NGIN::Logging
 
 	private:
 #ifdef _WIN32
-		HANDLE hConsole;
+		void* hConsole;
 #else
 		bool isTerminal;
 #endif

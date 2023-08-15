@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Memory/FreeListAllocator.h>
+#include <NGIN/Memory/FreeListAllocator.hpp>
 
 using namespace NGIN;
 

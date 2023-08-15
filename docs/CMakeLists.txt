@@ -4,6 +4,7 @@
  # Add an option to control the building of documentation
 
     find_package(Doxygen)
+
     if(DOXYGEN_FOUND)
 
         # log doc build/install paths
@@ -12,7 +13,7 @@
 
         message(STATUS "Documentation will be built in ${DOXYGEN_OUT}")
 
-        #set input and output files
+        #set input and output filesd
         set(DOXYGEN_PROJECT_NAME, ${PROJECT_NAME})
         set(DOXYGEN_PROJECT_BRIEF,  ${PROJECT_DESCRIPTION})
         set(DOXYGEN_PROJECT_NUMBER, ${PROJECT_VERSION})
@@ -28,8 +29,6 @@
         doxygen_add_docs( DOCS ALL
             ${NGIN_SOURCE_DIR}/include
             ${NGIN_SOURCE_DIR}/src
-            ${NGIN_EDITOR_SOURCE_DIR}/include
-            ${NGIN_EDITOR_SOURCE_DIR}/src
           COMMENT
             "HTML documentation"
           )

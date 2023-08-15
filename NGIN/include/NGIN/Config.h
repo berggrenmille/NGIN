@@ -2,6 +2,7 @@
 
 #include <NGIN/Core.h>
 #include <Detail/ConfigHelper.hpp>
+#include <NGIN/Logging.hpp>
 
 #include <string>
 #include <mutex>
@@ -60,6 +61,7 @@ namespace NGIN
 			if (!value.empty())
 				return Detail::FromString<T>(value, source);
 			NGIN_ASSERT_SRC(false, source, "Config value not found for key: {}", key.c_str());
+
 		}
 
 	}

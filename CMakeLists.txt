@@ -112,6 +112,14 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
+# vulkan-hpp
+FetchContent_Declare(vulkanHpp
+    GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers
+    GIT_TAG main
+)
+set(VULKAN_HPP_NO_EXCEPTIONS ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(vulkanHpp)
+
 
 
 

@@ -109,7 +109,7 @@
       "displayName": "Build Documentation",
       "description": "Builds the API documentation into HTML format",
       "configurePreset": "x64-release-final",
-      "targets": "docs"
+      "targets": "DOCS"
     },
     {
       "name": "buildTests",

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Memory/LinearAllocator.h>
+#include <NGIN/Memory/LinearAllocator.hpp>
 
 using namespace NGIN;
 

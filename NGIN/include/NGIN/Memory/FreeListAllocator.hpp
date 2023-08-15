@@ -2,7 +2,7 @@
 #include "Allocator.hpp"
 #include <cstddef>
 #include <new>
-
+#include <algorithm>
 namespace NGIN
 {
 	/**

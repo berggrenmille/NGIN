@@ -1,10 +1,16 @@
 #include <NGIN/Logging/ConsoleSink.hpp>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>  // for isatty()
+#endif
 namespace NGIN::Logging
 {
 	ConsoleSink::ConsoleSink()
 	{
 #ifdef _WIN32
-		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		hConsole = (void*)GetStdHandle(STD_OUTPUT_HANDLE);
 #else
 		isTerminal = isatty(fileno(stdout));
 #endif

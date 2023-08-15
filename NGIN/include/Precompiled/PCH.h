@@ -8,6 +8,8 @@
 #include <string>
 #include <algorithm>
 #include <memory>
+#include <fstream>
+#include <array>
 
 
 #include <glm/glm.hpp>
