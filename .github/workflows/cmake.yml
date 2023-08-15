@@ -20,12 +20,15 @@ jobs:
     - name: Setup Doxygen
       run: sudo apt-get install doxygen
 
-    - name: Install Vulkan SDK
-      run: |
-        sudo apt install vulkan-sdk
-
     - name: Setup CMake, Ninja, and GCC
       uses: lukka/get-cmake@latest
+
+    - name: Install Vulkan SDK
+      uses: humbletim/install-vulkan-sdk@v1.1.1
+      with:
+        version: latest
+        cache: true
+        quiet: true
       
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNGIN_BUILD_TESTS=OFF -DBUILD_DOCUMENTATION=ON
@@ -45,10 +48,12 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Install Vulkan SDK
-      run: |
-        sudo apt install vulkan-sdk
-
-           
+      uses: humbletim/install-vulkan-sdk@v1.1.1
+      with:
+        version: latest
+        cache: true
+        quiet: true
+        
     - name: Setup CMake, Ninja, and GCC
       uses: lukka/get-cmake@latest
 
