@@ -1,19 +1,18 @@
 #pragma once
 
 // Includes required for the NGIN game engine
-#include <Core/Core.h>
+#include <NGIN/Core.h>
 
 // Additional NGIN includes
-#include <Core/App.h>
-#include <Core/SDLWindow.h>
-#include <Core/Layer.h>
-#include <Core/EventBus.h>
-#include <Core/Logger.h>
-#include <Core/Config.h>
-#include <Core/EntryPoint.hpp>
+#include <NGIN/App.h>
 
-// Includes for the SDL2 library
-#include <SDL2/SDL.h>
+#include <NGIN/Layer.h>
+#include <NGIN/EventBus.hpp>
+#include <NGIN/Logging.hpp>
+#include <NGIN/Config.h>
+#include <NGIN/EntryPoint.hpp>
+
+
 
 // Standard includes
 #include <iostream>

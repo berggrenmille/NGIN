@@ -7,7 +7,7 @@ project ("NGIN" VERSION 0.1)
 enable_language(C CXX)
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
@@ -72,16 +72,6 @@ SET(SDL_TEST_ENABLED_BY_DEFAULT OFF)
 SET(SDL_TEST OFF)
 SET(SDL_VULKAN ON)
 FetchContent_MakeAvailable(SDL)
-
-# LOGURU
-FetchContent_Declare(
-    LOGURU
-    GIT_REPOSITORY "https://github.com/emilk/loguru"
-    GIT_TAG        "master"
-)
-SET(LOGURU_USE_FMTLIB TRUE)
-FetchContent_MakeAvailable(LOGURU)
-
 # GLM
 FetchContent_Declare(
     glm
@@ -111,6 +101,14 @@ set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
+
+# vulkan-hpp
+FetchContent_Declare(vulkanHpp
+    GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers
+    GIT_TAG main
+)
+set(VULKAN_HPP_NO_EXCEPTIONS ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(vulkanHpp)
 
 
 

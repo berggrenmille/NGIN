@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Logger.h"
 
+#include <NGIN/Logging.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -30,7 +30,7 @@ namespace NGIN
 			return value;
 		}
 		/**
-		 * @brief Specialization of the from_string function for std::string.
+		 * @brief Specialization of the FromString function for std::string.
 		 *
 		 * Since the target type is already a string, this function returns the input string directly.
 		 *

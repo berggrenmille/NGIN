@@ -1,17 +1,17 @@
 #include <gtest/gtest.h>
-#include <Core/Logger.h>
+#include <NGIN/Logging.hpp>
 
 class CustomTestListener : public ::testing::EmptyTestEventListener
 {
 public:
 	virtual void OnTestStart(const ::testing::TestInfo& test_info) override
 	{
-		NGIN::Logger::setupLoggingForTests();
+
 	}
 
 	virtual void OnTestEnd(const ::testing::TestInfo& test_info) override
 	{
-		NGIN::Logger::cleanupLoggingForTests();
+
 	}
 
 
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	// Adds a listener to the end. Google Test takes the ownership.
 	listeners.Append(new CustomTestListener());
 
-	std::cout << "Red ERR outputs are ok. Usually it's an expected assert." << std::endl;
 
+	NGIN::Logging::Init();
 	return RUN_ALL_TESTS();
 }

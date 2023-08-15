@@ -3,29 +3,23 @@ project(NGIN)
 # Add all your source files here
 add_library(NGIN SHARED
 
-  "include/Core/Layer.h"
-  "include/Core/EventBus.h"
-  "include/Core/LayerStack.h"
-  "src/Core/Layer.cpp"
-  "src/Core/LayerStack.cpp"
-  "include/Core/Window.h"
-  "src/Core/SDLWindow.cpp"
-  "include/Core/Core.h"
-  "include/Core/App.h"
-  "include/NGIN.h"
-  "include/Memory/Allocator.h"
-  "include/Memory/LinearAllocator.h"
-  "include/Core/Logger.h"
-  "src/Core/App.cpp"
-  
-  "src/Memory/LinearAllocator.cpp"
-  "src/Memory/Allocator.cpp"
-  
-  "include/Core/Config.h"
-  "src/Core/Config.cpp" "include/Docs/Docs.h" "include/PCH.h" "src/PCH.cpp" "include/Memory/StackAllocator.h" "src/Memory/StackAllocator.cpp" "include/Memory/FreeListAllocator.h" "src/Memory/FreeListAllocator.cpp")
-
+  "src/NGIN/App.cpp"
+  "src/NGIN/Config.cpp"
+  "src/NGIN/Layer.cpp"
+  "src/NGIN/LayerStack.cpp"
+  "src/NGIN/Memory/Allocator.cpp"
+  "src/NGIN/Memory/LinearAllocator.cpp"
+  "src/NGIN/Memory/StackAllocator.cpp"
+  "src/NGIN/Memory/FreeListAllocator.cpp"
+  "src/Precompiled/PCH.cpp"
+  "src/NGIN/Logging/ConsoleSink.cpp"
+  "src/NGIN/Logging/AsyncLogger.cpp"
+  "src/NGIN/Logging/FileSink.cpp"
+  "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
+  "src/NGIN/Graphics/Vulkan/VulkanWindow.cpp"
+  "src/NGIN/Graphics/Window.cpp" "src/NGIN/Logging.cpp" "src/NGIN/Logging/BaseLogger.cpp"  "src/Utils/JSON.cpp")
 # Setup precompiled header
-target_precompile_headers(NGIN PRIVATE include/PCH.h)
+target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
   
  if (MSVC)
     # Set /MD flag for Release configurations
@@ -44,13 +38,26 @@ target_compile_definitions(NGIN PRIVATE NGIN_EXPORTS)
 target_include_directories(NGIN PUBLIC 
     ${PROJECT_SOURCE_DIR}/include
 )
+
+target_include_directories(NGIN PRIVATE 
+    ${PROJECT_SOURCE_DIR}/include/Precompiled
+)
 # Link Thirdparty
 
-target_link_libraries(NGIN PUBLIC loguru)
+
+
+
+target_link_libraries(NGIN PUBLIC fmt::fmt)
 target_link_libraries(NGIN PUBLIC SDL2::SDL2-static SDL2::SDL2main)
 target_link_libraries(NGIN PRIVATE dylib)
 target_link_libraries(NGIN PUBLIC nlohmann_json::nlohmann_json)
 target_link_libraries(NGIN PUBLIC glm)
+
+find_package(Vulkan REQUIRED)
+target_include_directories(NGIN PUBLIC ${Vulkan_INCLUDE_DIRS})
+
+target_link_libraries(NGIN PRIVATE Vulkan::Vulkan)
+target_link_libraries(NGIN PRIVATE Vulkan::Headers)
 
 
 
