@@ -36,7 +36,7 @@ namespace NGIN
 
 
 
-
+		NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
 
 
 
