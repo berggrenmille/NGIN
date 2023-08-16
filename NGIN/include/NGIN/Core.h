@@ -1,9 +1,15 @@
 #pragma once
 
-
-#ifdef NGIN_EXPORTS
-#define NGIN_API __declspec(dllexport)
+#if defined(_MSC_VER)
+    #ifdef NGIN_EXPORTS
+    #define NGIN_API __declspec(dllexport)
+    #else
+    #define NGIN_API __declspec(dllimport)
+    #endif
 #else
-#define NGIN_API __declspec(dllimport)
+    #ifdef NGIN_EXPORTS
+    #define NGIN_API __attribute__((visibility("default")))
+    #else
+    #define NGIN_API 
+    #endif
 #endif
-

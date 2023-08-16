@@ -18,6 +18,7 @@ message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
 # avoid the DLL having a "lib" prefix
 if(WINDOWS)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
+
 endif()
 
 #---------------------------------------------------------------------------------------------------------
