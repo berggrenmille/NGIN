@@ -1,5 +1,7 @@
 project(NGIN)
-
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# Include Dependencies 
+include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeDependencies.cmake)
 # Add all your source files here
 add_library(NGIN SHARED
 
@@ -48,18 +50,18 @@ target_include_directories(NGIN PRIVATE
 
 
 
+# Link to third-party libraries
+target_link_libraries(NGIN PUBLIC 
+    fmt::fmt 
+    SDL2::SDL2 
+    SDL2::SDL2main 
+    nlohmann_json::nlohmann_json
+    glm
+    Vulkan::Vulkan
+    Vulkan::Headers
+)
 
-target_link_libraries(NGIN PUBLIC fmt::fmt)
-target_link_libraries(NGIN PUBLIC SDL2::SDL2 SDL2::SDL2main)
 target_link_libraries(NGIN PRIVATE dylib)
-target_link_libraries(NGIN PUBLIC nlohmann_json::nlohmann_json)
-target_link_libraries(NGIN PUBLIC glm)
-
-find_package(Vulkan REQUIRED)
-target_include_directories(NGIN PUBLIC ${Vulkan_INCLUDE_DIRS})
-
-target_link_libraries(NGIN PRIVATE Vulkan::Vulkan)
-target_link_libraries(NGIN PRIVATE Vulkan::Headers)
 
 
 
