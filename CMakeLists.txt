@@ -13,11 +13,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
 option(NGIN_BUILD_DOCUMENTATION "Build NGIN documentation" OFF)
-message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
+message(STATUS "Build documentation: ${NGIN_BUILD_DOCUMENTATION}")
 
 # When building shared lib for Windows with MinGW,
 # avoid the DLL having a "lib" prefix
-if(WINDOWS)
+if(WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 endif()
@@ -44,6 +44,9 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "Dist")
         add_compile_definitions(NDEBUG)
     endif()
 endif()
+
+
+
 
 
 
