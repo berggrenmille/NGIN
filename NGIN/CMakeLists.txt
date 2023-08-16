@@ -18,6 +18,8 @@ add_library(NGIN SHARED
   "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
   "src/NGIN/Graphics/Vulkan/VulkanWindow.cpp"
   "src/NGIN/Graphics/Window.cpp" "src/NGIN/Logging.cpp" "src/NGIN/Logging/BaseLogger.cpp"  "src/Utils/JSON.cpp")
+
+
 # Setup precompiled header
 target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
   
@@ -48,7 +50,7 @@ target_include_directories(NGIN PRIVATE
 
 
 target_link_libraries(NGIN PUBLIC fmt::fmt)
-target_link_libraries(NGIN PUBLIC SDL2::SDL2-static SDL2::SDL2main)
+target_link_libraries(NGIN PUBLIC SDL2::SDL2 SDL2::SDL2main)
 target_link_libraries(NGIN PRIVATE dylib)
 target_link_libraries(NGIN PUBLIC nlohmann_json::nlohmann_json)
 target_link_libraries(NGIN PUBLIC glm)

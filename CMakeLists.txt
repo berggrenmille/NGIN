@@ -9,6 +9,7 @@ enable_language(C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
 option(NGIN_BUILD_DOCUMENTATION "Build NGIN documentation" OFF)
@@ -16,7 +17,7 @@ message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
 
 # When building shared lib for Windows with MinGW,
 # avoid the DLL having a "lib" prefix
-if(WINDOWS)
+if(NOT WINDOWS)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 endif()
@@ -72,6 +73,8 @@ FetchContent_Declare(
 SET(SDL_TEST_ENABLED_BY_DEFAULT OFF)
 SET(SDL_TEST OFF)
 SET(SDL_VULKAN ON)
+
+
 FetchContent_MakeAvailable(SDL)
 # GLM
 FetchContent_Declare(
