@@ -61,11 +61,11 @@ namespace NGIN::Logging
 		const char* colorCode;
 		switch (level)
 		{
-		case LogLevel::WARNING:
+		case Level::Warning:
 			colorCode = "\033[93m";  // Bright Yellow
 			break;
-		case LogLevel::ERROR:
-		case LogLevel::FATAL:
+		case Level::Error:
+		case Level::Critical:
 			colorCode = "\033[91m";  // Bright Red
 			break;
 		default:

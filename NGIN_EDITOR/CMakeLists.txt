@@ -16,8 +16,10 @@ target_include_directories(NGIN_EDITOR PUBLIC
 # Link the executable to the NGIN library 
 target_link_libraries(NGIN_EDITOR PUBLIC NGIN)
 
-# Copy dll from NGIN
+# Copy all dlls from NGIN
 add_custom_command(TARGET NGIN_EDITOR POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                   $<TARGET_FILE:NGIN>
-                   $<TARGET_FILE_DIR:NGIN_EDITOR>)
+    COMMAND ${CMAKE_COMMAND}
+    -DDST_DIR="$<TARGET_FILE_DIR:NGIN_EDITOR>"
+    -DSRC_DIR="$<TARGET_FILE_DIR:NGIN>"
+    -P ${CMAKE_SOURCE_DIR}/CMakeCopyDll.cmake
+)
