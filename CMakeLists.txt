@@ -9,14 +9,15 @@ enable_language(C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
 option(NGIN_BUILD_DOCUMENTATION "Build NGIN documentation" OFF)
-message(STATUS "Build documentation: ${BUILD_DOCUMENTATION}")
+message(STATUS "Build documentation: ${NGIN_BUILD_DOCUMENTATION}")
 
 # When building shared lib for Windows with MinGW,
 # avoid the DLL having a "lib" prefix
-if(WINDOWS)
+if(WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 endif()
@@ -44,72 +45,8 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "Dist")
     endif()
 endif()
 
-#---------------------------------------------------------------------------------
-# Third party libraries
-include(FetchContent)
-#fmtlib
-FetchContent_Declare(
-    fmt
-    GIT_REPOSITORY "https://github.com/fmtlib/fmt"
-    GIT_TAG "10.0.0"
-)
-FetchContent_MakeAvailable(fmt)
 
-# DYLIB
-FetchContent_Declare(
-    DYLIB
-    GIT_REPOSITORY "https://github.com/martin-olivier/dylib"
-    GIT_TAG        "v2.1.0"
-)
-FetchContent_MakeAvailable(DYLIB)
 
-# SDL2
-FetchContent_Declare(
-    SDL
-    GIT_REPOSITORY "https://github.com/libsdl-org/SDL"
-    GIT_TAG        "release-2.28.1"
-)
-SET(SDL_TEST_ENABLED_BY_DEFAULT OFF)
-SET(SDL_TEST OFF)
-SET(SDL_VULKAN ON)
-FetchContent_MakeAvailable(SDL)
-# GLM
-FetchContent_Declare(
-    glm
-    GIT_REPOSITORY https://github.com/g-truc/glm
-    GIT_TAG 0.9.9.8  # replace with the version you want
-)
-
-FetchContent_MakeAvailable(glm)
-
-# JSON
-FetchContent_Declare(json
-    GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG v3.11.2
-)
-set(JSON_BuildTests OFF CACHE INTERNAL "")
-FetchContent_MakeAvailable(json)
-
-# Google Test
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest
-    GIT_TAG main
-)
-set(BUILD_GTEST ON CACHE BOOL "" FORCE)
-set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
-set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-FetchContent_MakeAvailable(googletest)
-
-# vulkan-hpp
-FetchContent_Declare(vulkanHpp
-    GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers
-    GIT_TAG main
-)
-set(VULKAN_HPP_NO_EXCEPTIONS ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(vulkanHpp)
 
 
 

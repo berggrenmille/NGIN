@@ -13,7 +13,7 @@ namespace
 	const std::string ConfigPath = "NGIN_CONFIG.json";
 
 	nlohmann::json defaultConfigJSON = {
-		{"TEST", 1},
+		{"TEST", "TEST"},
 		{"TEST2", "TEST"}
 	};
 
@@ -37,9 +37,10 @@ namespace NGIN
 		std::lock_guard<std::mutex> lock(configMutex);
 
 		std::ifstream file(ConfigPath);
-		if (!file.is_open())
+		if (file.fail())
 		{
 			NGIN_WARNING("Error loading Config file at path: {} : {}", ConfigPath, strerror(errno));
+			file.close();
 			CreateConfigFile();
 			file.open(ConfigPath);
 			NGIN_ASSERT(file.is_open(), "Failed to read config file: {}", ConfigPath);

@@ -194,7 +194,9 @@ namespace NGIN
 	template<class T>
 	inline void Allocator::Delete(const std::source_location& location, T* object)
 	{
+		#ifdef NGIN_DEBUG
 		RemoveDebugAllocation(static_cast<void*>(object));
+		#endif
 		object->~T();
 		Deallocate(object);
 	}

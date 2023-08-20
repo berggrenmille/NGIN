@@ -34,7 +34,11 @@ jobs:
       run: cmake -S . -B build --preset=buildDocs
       
     - name: Build Documentation
-      run: cmake --build ${{github.workspace}}/build --preset buildDocs
+      run: cmake --build build --preset=buildDocs
+
+    - name: List directory contents
+      run: |
+        ls -R ${{github.workspace}}/build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3

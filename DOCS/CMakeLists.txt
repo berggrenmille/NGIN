@@ -7,33 +7,26 @@
 
     if(DOXYGEN_FOUND)
 
-        # log doc build/install paths
-        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.out)
+
+        set(DOXYGEN_CSS "${CMAKE_SOURCE_DIR}/DOCS/doxygen-awesome.css")
+        set(DOXYGEN_OUT "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
         set(DOXYGEN_IN "${CMAKE_SOURCE_DIR}/DOCS/Doxyfile.in")
+        set(DOXYGEN_INPUT_DIRS "${NGIN_SOURCE_DIR}")
 
         message(STATUS "Documentation will be built in ${DOXYGEN_OUT}")
-
-        #set input and output filesd
-        set(DOXYGEN_PROJECT_NAME, ${PROJECT_NAME})
-        set(DOXYGEN_PROJECT_BRIEF,  ${PROJECT_DESCRIPTION})
-        set(DOXYGEN_PROJECT_NUMBER, ${PROJECT_VERSION})
-        set(DOXYGEN_GENERATE_HTML YES)
-        set(DOXYGEN_HIDE_UNDOC_RELATIONS NO)
-        set(DOXYGEN_TEMPLATE_RELATIONS YES)
-        set(DOXYGEN_BUILTIN_STL_SUPPORT YES)
-
-
-
-        #request to configure the file
+        
+        configure_file(${DOXYGEN_CSS} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
         configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-        doxygen_add_docs( DOCS ALL
-            ${NGIN_SOURCE_DIR}/include
-            ${NGIN_SOURCE_DIR}/src
-          COMMENT
-            "HTML documentation"
-          )
+
+        add_custom_target( DOCS ALL
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM )
+
+
 
   
     else()
-        message("Doxygen need to be installed to generate the API documentation")
+      message(WARNING "Doxygen not found. Documentation will not be generated.")
     endif()
