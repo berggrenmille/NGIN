@@ -31,16 +31,25 @@ jobs:
         quiet: true
       
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNGIN_BUILD_TESTS=OFF -DBUILD_DOCUMENTATION=ON
+      run: cmake -S . --preset x64-release-final
+    
+    - name: List directory contents after configuration
+      run: |
+        ls -R ${{github.workspace}}/build
+
       
     - name: Build Documentation
-      run: cmake --build ${{github.workspace}}/build --preset buildDocs
+      run: cmake --build --preset buildDocs
+
+    - name: List directory contents
+      run: |
+        ls -R ${{github.workspace}}/build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{github.workspace}}/build/x64-release-final/DOCS/html
+        publish_dir: ${{github.workspace}}/build/DOCS
   build_and_test:
     runs-on: ubuntu-latest
 
