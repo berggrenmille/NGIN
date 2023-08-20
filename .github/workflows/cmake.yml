@@ -31,7 +31,7 @@ jobs:
         quiet: true
       
     - name: Configure CMake
-      run: cmake -S . -B build --preset=x64-release-final
+      run: cmake -S . --preset x64-release-final
     
     - name: List directory contents after configuration
       run: |
@@ -39,7 +39,7 @@ jobs:
 
       
     - name: Build Documentation
-      run: cmake --build build --preset=buildDocs
+      run: cmake --build --preset buildDocs
 
     - name: List directory contents
       run: |
@@ -49,7 +49,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{github.workspace}}/build/DOCS/html
+        publish_dir: ${{github.workspace}}/build/DOCS
   build_and_test:
     runs-on: ubuntu-latest
 
