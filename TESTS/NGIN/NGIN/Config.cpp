@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <NGIN/Config.h>
 #include <NGIN/Logging.hpp>
+
 using namespace NGIN;
 
 
