@@ -32,10 +32,6 @@ jobs:
       
     - name: Configure CMake
       run: cmake -S . --preset x64-release-final
-    
-    - name: List directory contents after configuration
-      run: |
-        ls -R ${{github.workspace}}/build
 
       
     - name: Build Documentation
@@ -45,11 +41,14 @@ jobs:
       run: |
         ls -R ${{github.workspace}}/build
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
+    - name: Pages Deployment
+    uses: peaceiris/actions-gh-pages@v3
+    with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{github.workspace}}/build/DOCS
+        publish_dir: ./docs/html/
+        enable_jekyll: false
+        allow_empty_commit: false
+        force_orphan: true
   build_and_test:
     runs-on: ubuntu-latest
 
