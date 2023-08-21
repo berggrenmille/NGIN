@@ -12,8 +12,8 @@ if(DOXYGEN_FOUND)
     set(DOXYGEN_INPUT_DIRS "${NGIN_SOURCE_DIR}")
 
     # Define paths for custom Doxygen CSS and Markdown files
-    set(DOXYGEN_CSS "doxygen-awesome.css")
-    set(DOXYGEN_MD "${DOXYGEN_OUT_HTML}/index.md")
+    set(DOXYGEN_CSS "./doxygen-awesome.css")
+    set(DOXYGEN_MD "./index.md")
     
     # Display a message indicating where the documentation will be built
     message(STATUS "Documentation will be built in ${DOXYGEN_OUT}")
@@ -22,7 +22,7 @@ if(DOXYGEN_FOUND)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${DOXYGEN_CSS}" "${DOXYGEN_OUT_HTML}/${DOXYGEN_CSS}" COPYONLY)
 
     # Copy custom Markdown to the HTML output folder
-    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/index.md" "${DOXYGEN_MD}" @ONLY)
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/index.md" "${DOXYGEN_OUT_HTML}/${DOXYGEN_MD}" @ONLY)
 
     # Configure the Doxyfile (Doxygen configuration file) using the provided template
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
