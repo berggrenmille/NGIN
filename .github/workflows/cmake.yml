@@ -1,4 +1,4 @@
-name: CMake and Documentation
+name: Build and test
 
 on:
   push:
@@ -6,50 +6,15 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
+ # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 env:
   BUILD_TYPE: Release
   CONFIG: x64-release
 
-jobs:
-  build_documentation:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Doxygen
-      run: sudo apt-get install doxygen
-
-    - name: Setup CMake, Ninja, and GCC
-      uses: lukka/get-cmake@latest
-
-    - name: Install Vulkan SDK
-      uses: humbletim/install-vulkan-sdk@v1.1.1
-      with:
-        version: latest
-        cache: true
-        quiet: true
-      
-    - name: Configure CMake
-      run: cmake -S . --preset x64-release-final
-
-      
-    - name: Build Documentation
-      run: cmake --build --preset buildDocs
-
-    - name: List directory contents
-      run: |
-        ls -R ${{github.workspace}}/build
-
-    - name: Pages Deployment
-    uses: peaceiris/actions-gh-pages@v3
-    with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/html/
-        enable_jekyll: false
-        allow_empty_commit: false
-        force_orphan: true
-        
+jobs:   
   build_and_test:
     runs-on: ubuntu-latest
 
