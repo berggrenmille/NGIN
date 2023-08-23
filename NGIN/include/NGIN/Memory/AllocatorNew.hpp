@@ -38,10 +38,6 @@ namespace NGIN::Memory
     class Allocator
     {
     public:
-        using AllocateFn = void *(*)(void *, size_t, size_t, const std::source_location &);
-        using DeallocateFn = void (*)(void *, void *);
-        using DeallocateAllFn = void (*)(void *);
-
         /**
          * @brief Constructs the Allocator using a specific allocator type.
          *
@@ -159,14 +155,15 @@ namespace NGIN::Memory
                 allocator.DeallocateAll();
             }
 
-            // Extend this if you have more methods.
-
         private:
             AllocatorT allocator; ///< Underlying instance of the wrapped allocator.
         };
 
         std::unique_ptr<void, Deleter> pimpl; ///< Underlying instance of the wrapped allocator.
 
+        using AllocateFn = void *(*)(void *, size_t, size_t, const std::source_location &);
+        using DeallocateFn = void (*)(void *, void *);
+        using DeallocateAllFn = void (*)(void *);
         AllocateFn allocateFn;           ///< Function pointer for allocate operation using MVD.
         DeallocateFn deallocateFn;       ///< Function pointer for deallocate operation using MVD.
         DeallocateAllFn deallocateAllFn; ///< Function pointer for deallocateAll operation using MVD.

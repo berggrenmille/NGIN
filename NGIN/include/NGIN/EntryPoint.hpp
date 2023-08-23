@@ -26,8 +26,7 @@ namespace NGIN
 	{
 		std::cout << "\nUsage of LinearAllocator through type-erased Allocator:\n";
 
-		NGIN::Memory::LinearAllocator linearAlloc(1024);			  // 1KB
-		NGIN::Memory::Allocator genericAlloc(std::move(linearAlloc)); // Wrapping LinearAllocator in generic Allocator
+		NGIN::Memory::Allocator genericAlloc(std::move(NGIN::Memory::LinearAllocator(1024))); // Wrapping LinearAllocator in generic Allocator
 
 		int *a = static_cast<int *>(genericAlloc.Allocate(sizeof(int)));
 		int *b = static_cast<int *>(genericAlloc.Allocate(sizeof(int)));

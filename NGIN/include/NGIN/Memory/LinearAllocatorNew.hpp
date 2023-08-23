@@ -1,4 +1,7 @@
 #pragma once
+#include <NGIN/Core.h>
+#include "Internal/Alignment.hpp"
+
 #include <memory>
 #include <cstddef>
 #include <source_location>
@@ -18,18 +21,14 @@ namespace NGIN::Memory
          * @param size Size of the pre-allocated buffer.
          */
         LinearAllocator(size_t size)
-            : m_buffer(std::make_unique<char[]>(size)), m_currentPos(m_buffer.get()), m_end(m_buffer.get() + size)
-        {
-        }
+            : buffer(std::make_unique<std::byte[]>(size)), currentPos(buffer.get()), end(buffer.get() + size) {}
 
         // Move constructor
         LinearAllocator(LinearAllocator &&other) noexcept
-            : m_buffer(std::move(other.m_buffer)),
-              m_currentPos(other.m_currentPos),
-              m_end(other.m_end)
+            : buffer(std::move(other.buffer)), currentPos(other.currentPos), end(other.end)
         {
-            other.m_currentPos = nullptr;
-            other.m_end = nullptr;
+            other.currentPos = nullptr;
+            other.end = nullptr;
         }
 
         // Move assignment operator
@@ -37,12 +36,12 @@ namespace NGIN::Memory
         {
             if (this != &other)
             {
-                m_buffer = std::move(other.m_buffer);
-                m_currentPos = other.m_currentPos;
-                m_end = other.m_end;
+                buffer = std::move(other.buffer);
+                currentPos = other.currentPos;
+                end = other.end;
 
-                other.m_currentPos = nullptr;
-                other.m_end = nullptr;
+                other.currentPos = nullptr;
+                other.end = nullptr;
             }
             return *this;
         }
@@ -59,13 +58,12 @@ namespace NGIN::Memory
          */
         void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t), const std::source_location &location = std::source_location::current())
         {
-            void *ptr = m_currentPos;
-            size_t ptr2 = m_end - m_currentPos;
-            char *alignedPos = reinterpret_cast<char *>(std::align(alignment, size, ptr, ptr2));
-            if (!alignedPos)
+            const size_t padding = Internal::GetAlignmentPadding(currentPos, alignment);
+            if (currentPos + padding + size > end)
                 return nullptr; // not enough space
 
-            m_currentPos = alignedPos + size;
+            char *alignedPos = currentPos + padding;
+            currentPos = alignedPos + size;
             return alignedPos;
         }
 
@@ -78,7 +76,7 @@ namespace NGIN::Memory
          */
         void Deallocate(void *ptr)
         {
-            // No-op: individual deallocation is not supported
+            // No-op: LinearAllocator doesn't support individual deallocation
         }
 
         /**
@@ -88,13 +86,13 @@ namespace NGIN::Memory
          */
         void DeallocateAll()
         {
-            m_currentPos = m_buffer.get();
+            currentPos = buffer.get();
         }
 
     private:
-        std::unique_ptr<char[]> m_buffer; ///< The pre-allocated buffer from which memory is allocated.
-        char *m_currentPos;               ///< Current position in the buffer. Next allocation starts here.
-        char *m_end;                      ///< Points to one past the last byte of the buffer.
+        std::unique_ptr<char[]> buffer; ///< The pre-allocated buffer from which memory is allocated.
+        char *currentPos;               ///< Current position in the buffer. Next allocation starts here.
+        char *end;                      ///< Points to one past the last byte of the buffer.
     };
 
 } // namespace NGIN::Memory
