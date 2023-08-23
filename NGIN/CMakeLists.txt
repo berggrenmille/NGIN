@@ -65,31 +65,24 @@ target_link_libraries(NGIN PUBLIC
 target_link_libraries(NGIN PRIVATE dylib)
 
 
-if(SDL2_FOUND AND (WIN32 OR WIN64)) # Check if we are on Windows
+if(WIN32) # Check if we are on Windows
 
-    # Depending on the configuration (Debug/Release), the DLL's name might differ
-    if(CMAKE_BUILD_TYPE MATCHES Debug)
-        set(SDL2_DLL_NAME "SDL2d.dll")
-    else()
-        set(SDL2_DLL_NAME "SDL2.dll")
-    endif()
 
-    # Get the path to the SDL2 build directory, which is typically where the DLL resides
-    get_target_property(SDL2_BUILD_DIR SDL2::SDL2 LOCATION)
+    # Get the path to the SDL2 binary
+    set(SDL2_DLL_PATH $<TARGET_FILE:SDL2::SDL2>)
 
-    # Extract the directory from the full path
-    get_filename_component(SDL2_DIR ${SDL2_BUILD_DIR} DIRECTORY)
+    message(STATUS "SDL2.dll path: ${SDL2_DLL_PATH}")
 
-    # Combine to form the full path to SDL2.dll
-    set(SDL2_DLL_PATH "${SDL2_DIR}/${SDL2_DLL_NAME}")
-
-    # Copy SDL2.dll after build
+    # Copy SDL2.dll after build if it's different
     add_custom_command(TARGET NGIN POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${SDL2_DLL_PATH}"
         $<TARGET_FILE_DIR:NGIN>
     )
+
 endif()
+
+
 
 
 

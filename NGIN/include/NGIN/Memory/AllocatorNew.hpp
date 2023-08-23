@@ -10,11 +10,9 @@
 
 namespace NGIN::Memory
 {
+
     /**
      * @brief Checks if a type satisfies the required interface for an allocator.
-     *
-     * This concept ensures any given type provides methods for allocation,
-     * deallocation, and bulk deallocation.
      */
     template <typename T>
     concept AllocatorConcept = requires(T alloc, size_t size, size_t alignment, const std::source_location &location, void *ptr) {
@@ -27,7 +25,6 @@ namespace NGIN::Memory
         {
             alloc.DeallocateAll()
         } -> std::same_as<void>;
-        // Extend this if you have more methods.
     };
 
     /**
@@ -55,7 +52,8 @@ namespace NGIN::Memory
          */
         template <AllocatorConcept AllocatorT>
         Allocator(AllocatorT &&alloc)
-            : pimpl(std::make_unique<Model<AllocatorT>>(std::forward<AllocatorT>(alloc)))
+            : pimpl(new Model<AllocatorT>(std::move(alloc)), Deleter(pimpl.get()))
+
         {
             allocateFn = [](void *self, size_t size, size_t alignment, const std::source_location &location)
             {
@@ -109,6 +107,30 @@ namespace NGIN::Memory
 
     private:
         /**
+         * @brief A structure responsible for providing custom deletion for the type-erased allocator.
+         */
+        struct Deleter
+        {
+            void (*deleterFn)(void *) = nullptr;
+
+            template <typename T>
+            Deleter(T *)
+            {
+                deleterFn = [](void *ptr)
+                {
+                    delete static_cast<T *>(ptr);
+                };
+            }
+
+            void operator()(void *ptr) const
+            {
+                if (deleterFn)
+                {
+                    deleterFn(ptr);
+                }
+            }
+        };
+        /**
          * @brief Wrapper around a specific allocator type.
          *
          * This struct holds an instance of the wrapped allocator and provides the required
@@ -120,21 +142,19 @@ namespace NGIN::Memory
         struct Model
         {
             explicit Model(AllocatorT allocator)
-                : allocator(std::move(allocator))
-            {
-            }
+                : allocator(std::move(allocator)) {}
 
-            void *Allocate(size_t size, size_t alignment, const std::source_location &location) const
+            void *Allocate(size_t size, size_t alignment, const std::source_location &location)
             {
                 return allocator.Allocate(size, alignment, location);
             }
 
-            void Deallocate(void *ptr) const
+            void Deallocate(void *ptr)
             {
                 allocator.Deallocate(ptr);
             }
 
-            void DeallocateAll() const
+            void DeallocateAll()
             {
                 allocator.DeallocateAll();
             }
@@ -145,7 +165,7 @@ namespace NGIN::Memory
             AllocatorT allocator; ///< Underlying instance of the wrapped allocator.
         };
 
-        std::unique_ptr<void> pimpl; ///< Underlying instance of the wrapped allocator.
+        std::unique_ptr<void, Deleter> pimpl; ///< Underlying instance of the wrapped allocator.
 
         AllocateFn allocateFn;           ///< Function pointer for allocate operation using MVD.
         DeallocateFn deallocateFn;       ///< Function pointer for deallocate operation using MVD.
