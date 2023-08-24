@@ -60,6 +60,34 @@ namespace NGIN::Memory
             };
         }
 
+        
+        Allocator(Allocator&& other) noexcept
+            : pimpl(std::move(other.pimpl)), 
+              allocateFn(std::move(other.allocateFn)),
+              deallocateFn(std::move(other.deallocateFn)),
+              deallocateAllFn(std::move(other.deallocateAllFn))
+        {
+            other.allocateFn = nullptr;
+            other.deallocateFn = nullptr;
+            other.deallocateAllFn = nullptr;
+        }
+
+        // Move Assignment Operator
+        Allocator& operator=(Allocator&& other) noexcept
+        {
+            if (this != &other) {
+                pimpl = std::move(other.pimpl);
+                allocateFn = std::move(other.allocateFn);
+                deallocateFn = std::move(other.deallocateFn);
+                deallocateAllFn = std::move(other.deallocateAllFn);
+                
+                other.allocateFn = nullptr;
+                other.deallocateFn = nullptr;
+                other.deallocateAllFn = nullptr;
+            }
+            return *this;
+        }
+
         /**
          * @brief Allocates memory using the wrapped allocator.
          *

@@ -1,9 +1,10 @@
 #pragma once
-#include "Allocator.hpp"
+#include <NGIN/Core.h>
+#include <source_location>
 #include <cstddef>
 #include <new>
 #include <algorithm>
-namespace NGIN
+namespace NGIN::Memory
 {
 	/**
 	 * @class FreeListAllocator
@@ -16,10 +17,9 @@ namespace NGIN
 	 * @note that there is an overhead for each allocation due to the AllocationHeader,
 	 * which means that the actual memory consumed might be slightly more than the requested size.
 	 */
-	class NGIN_API FreeListAllocator : public Allocator
+	class NGIN_API FreeListAllocator
 	{
 	public:
-
 		/**
 		 * @brief Constructor to initialize the allocator with the specified total size.
 		 *
@@ -33,6 +33,13 @@ namespace NGIN
 		~FreeListAllocator();
 
 		/**
+		 * @brief Move constructor to transfer ownership from another allocator.
+		 *
+		 * @param other The other allocator to move from.
+		 */
+		FreeListAllocator(FreeListAllocator &&other) noexcept;
+
+		/**
 		 * @brief Allocates memory of the requested size, ensuring proper alignment.
 		 *
 		 * @param size Size of the memory block to allocate.
@@ -40,23 +47,22 @@ namespace NGIN
 		 * @param location Source code location for logging/debugging purposes. Defaults to the current location.
 		 * @return Pointer to the allocated memory block, or nullptr if the allocation fails.
 		 */
-		virtual void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
-							   const std::source_location& location = std::source_location::current()) override;
+		void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
+					   const std::source_location &location = std::source_location::current());
 
 		/**
 		 * @brief Deallocates the provided memory block and returns it to the free list.
 		 *
 		 * @param ptr Pointer to the memory block to be deallocated.
 		 */
-		virtual void Deallocate(void* ptr = nullptr) override;
+		void Deallocate(void *ptr = nullptr);
 
 		/**
 		 * @brief Deallocates all managed memory blocks and resets the allocator.
 		 */
-		virtual void DeallocateAll() override;
+		void DeallocateAll();
 
 	private:
-
 		/**
 		 * @brief Structure for the header information of each allocation.
 		 *
@@ -64,12 +70,13 @@ namespace NGIN
 		 */
 		struct AllocationHeader
 		{
-			size_t size;          ///< The size of the allocated memory.
-			size_t adjustment;    ///< Adjustment for alignment.
+			size_t size;	   ///< The size of the allocated memory.
+			size_t adjustment; ///< Adjustment for alignment.
 
 			AllocationHeader(size_t size = 0, size_t adjustment = 0)
 				: size(size), adjustment(adjustment)
-			{}
+			{
+			}
 		};
 
 		/**
@@ -80,13 +87,14 @@ namespace NGIN
 		 */
 		struct FreeBlock
 		{
-			size_t size;          ///< Size of the free memory block.
-			FreeBlock* previous;  ///< Pointer to the previous free block.
-			FreeBlock* next;      ///< Pointer to the next free block.
+			size_t size;		 ///< Size of the free memory block.
+			FreeBlock *previous; ///< Pointer to the previous free block.
+			FreeBlock *next;	 ///< Pointer to the next free block.
 
-			FreeBlock(size_t block_size = 0, FreeBlock* prev = nullptr, FreeBlock* next = nullptr)
+			FreeBlock(size_t block_size = 0, FreeBlock *prev = nullptr, FreeBlock *next = nullptr)
 				: size(block_size), previous(prev), next(next)
-			{}
+			{
+			}
 		};
 
 		/// Minimum size of a block accounting for the largest of either a FreeBlock or an AllocationHeader plus one byte.
@@ -100,21 +108,21 @@ namespace NGIN
 		 *
 		 * @param block Pointer to the block to be added to the free list.
 		 */
-		void AddBlockToFreeList(FreeBlock* block);
+		void AddBlockToFreeList(FreeBlock *block);
 
 		/**
 		 * @brief Removes a free memory block from the free list.
 		 *
 		 * @param block Pointer to the block to be removed from the free list.
 		 */
-		void RemoveBlockFromFreeList(FreeBlock* block);
+		void RemoveBlockFromFreeList(FreeBlock *block);
 
 		/**
 		 * @brief Merges adjacent free blocks to form larger contiguous free blocks.
 		 *
 		 * @param block The block to start coalescing from.
 		 */
-		void CoalesceBlock(FreeBlock* block);
+		void CoalesceBlock(FreeBlock *block);
 
 		/**
 		 * @brief Finds a free block that satisfies the memory size and alignment requirements.
@@ -123,10 +131,13 @@ namespace NGIN
 		 * @param alignment Memory alignment requirement.
 		 * @return Pair containing a pointer to the found free block and the alignment adjustment required.
 		 */
-		std::pair<FreeBlock*, size_t> FindFreeBlock(size_t size, size_t alignment);
+		std::pair<FreeBlock *, size_t> FindFreeBlock(size_t size, size_t alignment);
 
-		void* start;              ///< Start pointer of the memory managed by this allocator.
-		FreeBlock* freeBlocks;    ///< Pointer to the start of the linked list of free blocks.
+		void *start;		   ///< Start pointer of the memory managed by this allocator.
+		size_t size = 0;	   ///< Total size of the memory managed by this allocator.
+		size_t usedMemory = 0; ///< Total memory used by this allocator.
+
+		FreeBlock *freeBlocks; ///< Pointer to the start of the linked list of free blocks.
 	};
 
 } // namespace NGIN

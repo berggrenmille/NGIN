@@ -17,7 +17,7 @@
       }
     },
     {
-      "name": "x64-debug",
+      "name": "debug",
       "inherits": "base",
       "displayName": "Debug",
       "description": "Debug build for x64 architecture",
@@ -26,9 +26,9 @@
       }
     },
     {
-      "name": "x64-debug-with-tests",
+      "name": "debug-with-tests",
       "inherits": "base",
-      "displayName": "DebugWithTests",
+      "displayName": "Debug With Tests",
       "description": "Debug build for x64 architecture",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
@@ -36,7 +36,7 @@
       }
     },
     {
-      "name": "x64-release",
+      "name": "release",
       "inherits": "base",
       "displayName": "Release",
       "description": "Release build for x64 architecture",
@@ -45,18 +45,9 @@
       }
     },
     {
-      "name": "x64-dist",
+      "name": "release-with-tests",
       "inherits": "base",
-      "displayName": "Dist",
-      "description": "Distribution build for x64 architecture",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Dist"
-      }
-    },
-    {
-      "name": "x64-release-with-tests",
-      "inherits": "base",
-      "displayName": "ReleaseWithTests",
+      "displayName": "Release With Tests",
       "description": "Release build for x64 architecture with tests",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
@@ -64,14 +55,26 @@
       }
     },
     {
-      "name": "x64-release-final",
+      "name": "release-with-tests-and-docs",
       "inherits": "base",
-      "displayName": "x64 Release Final",
+      "displayName": "Release With Tests and Docs",
       "description": "Release build for x64 architecture, with tests and documentation",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "NGIN_BUILD_DOCUMENTATION": "ON",
         "NGIN_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "docs",
+      "inherits": "base",
+      "displayName": "only docs",
+      "description": "Does not build any executable only generates documentation",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "NGIN_BUILD_DOCUMENTATION": "ON",
+        "NGIN_BUILD_ONLY_DOCUMENTATION": "ON",
+        "NGIN_BUILD_TESTS": "OFF"
       }
     }
   ],
@@ -85,7 +88,7 @@
     },
     {
       "name": "buildDebugWithTests",
-      "displayName": "DebugWithTests",
+      "displayName": "Debug With Tests",
       "description": "Builds all projects in Debug mode, including tests",
       "configurePreset": "x64-debug-with-tests",
       "targets": "all"
@@ -98,31 +101,24 @@
       "targets": "all"
     },
     {
-      "name": "buildDist",
-      "displayName": "Dist",
-      "description": "Builds all projects in Distribution mode",
-      "configurePreset": "x64-dist",
-      "targets": "all"
-    },
-    {
       "name": "buildDocs",
       "displayName": "Build Documentation",
       "description": "Builds the API documentation into HTML format",
-      "configurePreset": "x64-release-final",
+      "configurePreset": "docs",
       "targets": "DOCS"
     },
     {
       "name": "buildTests",
       "displayName": "Test",
-      "description": "Builds the tests for NGIN",
-      "configurePreset": "x64-release-with-tests",
+      "description": "Builds the tests for NGIN in release mode",
+      "configurePreset": "release-with-tests",
       "targets": "NGIN_TESTS"
     },
     {
-      "name": "buildFinal",
-      "displayName": "Final (Release)",
+      "name": "buildReleaseWithTestsAndDocs",
+      "displayName": "Release With Tests And Docs",
       "description": "Builds all targets, including documentation and tests in release mode",
-      "configurePreset": "x64-release-final",
+      "configurePreset": "release-with-tests-and-docs",
       "targets": "all"
     }
   ]

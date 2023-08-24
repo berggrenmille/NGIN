@@ -2,8 +2,16 @@
 namespace NGIN::Util
 {
     /**
-     * @brief A structure responsible for providing custom deletion for the type-erased allocator.
-     *        Mainly used for std::unique_ptr.
+     * @brief A custom deleter for the type-erased classes
+     *
+     * This structure facilitates deletion of type-erased objects. It is intended
+     * to be used with `std::unique_ptr` to handle custom deallocation scenarios.
+     *
+     * Example usage:
+     *
+     * ```cpp
+     * std::unique_ptr<void, Deleter> myPointer(myRawPointer, Deleter(myRawPointer));
+     * ```
      */
     struct Deleter
     {
