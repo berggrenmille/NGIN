@@ -10,7 +10,6 @@ add_library(NGIN SHARED
   "src/NGIN/Config.cpp"
   "src/NGIN/Layer.cpp"
   "src/NGIN/LayerStack.cpp"
-  "src/NGIN/Memory/Allocator.cpp"
   "src/NGIN/Memory/LinearAllocator.cpp"
   "src/NGIN/Memory/StackAllocator.cpp"
   "src/NGIN/Memory/FreeListAllocator.cpp"
@@ -20,7 +19,10 @@ add_library(NGIN SHARED
   "src/NGIN/Logging/FileSink.cpp"
   "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
   "src/NGIN/Graphics/Vulkan/VulkanWindow.cpp"
-  "src/NGIN/Graphics/Window.cpp" "src/NGIN/Logging.cpp" "src/NGIN/Logging/BaseLogger.cpp"  "src/Utils/JSON.cpp")
+  "src/NGIN/Graphics/Window.cpp" 
+  "src/NGIN/Logging.cpp" 
+  "src/NGIN/Logging/BaseLogger.cpp"  
+  "src/Utils/JSON.cpp")
 
 
 # Setup precompiled header

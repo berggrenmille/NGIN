@@ -6,8 +6,8 @@
 #include <NGIN/Time/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
-#include <NGIN/Memory/LinearAllocator.hpp>
-#include <NGIN/Memory/AllocatorNew.hpp>
+#include <NGIN/Memory/StackAllocator.hpp>
+#include <NGIN/Memory/Allocator.hpp>
 #include <SDL2/SDL.h>
 
 namespace NGIN
@@ -26,7 +26,7 @@ namespace NGIN
 	{
 		std::cout << "\nUsage of LinearAllocator through type-erased Allocator:\n";
 
-		NGIN::Memory::Allocator genericAlloc(std::move(NGIN::Memory::FreeListAllocator(1024))); // Wrapping LinearAllocator in generic Allocator
+		NGIN::Memory::Allocator genericAlloc(std::move(NGIN::Memory::StackAllocator(1024))); // Wrapping LinearAllocator in generic Allocator
 
 		int *a = static_cast<int *>(genericAlloc.Allocate(sizeof(int)));
 		int *b = static_cast<int *>(genericAlloc.Allocate(sizeof(int)));
@@ -35,6 +35,8 @@ namespace NGIN
 		new (b) int(20);
 
 		std::cout << "a: " << *a << "\nb: " << *b << "\n";
+		NGIN::Memory::Allocator testa(std::move(NGIN::Memory::StackAllocator(1024)));
+		std::cout << reinterpret_cast<uintptr_t>(testa.Allocate(500, 8)) - reinterpret_cast<uintptr_t>(testa.Allocate(500, 8)) << "\n";
 
 		Logging::Init();
 

@@ -2,7 +2,7 @@
 
 #include <NGIN/Memory/Allocator.hpp>
 
-namespace NGIN
+namespace NGIN::Memory
 {
 
 	/**
@@ -12,7 +12,7 @@ namespace NGIN
 	 * The StackAllocator reserves a block of memory and allows for fast allocations by simply moving a marker.
 	 * It's efficient but only allows deallocations in a reverse order.
 	 */
-	class NGIN_API StackAllocator : public Allocator
+	class NGIN_API StackAllocator
 	{
 	public:
 		/**
@@ -25,10 +25,14 @@ namespace NGIN
 		/**
 		 * @brief Default destructor.
 		 */
-		virtual ~StackAllocator();
+		~StackAllocator();
 
-		virtual void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
-							   const std::source_location& location = std::source_location::current()) override;
+		StackAllocator(const StackAllocator &) = delete;
+
+		StackAllocator(StackAllocator &&other) noexcept;
+
+		void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
+					   const std::source_location &location = std::source_location::current());
 
 		/**
 		 * @brief Deallocates the most recent block of memory.
@@ -39,14 +43,15 @@ namespace NGIN
 		 *
 		 * @param ptr The pointer to the memory block to be deallocated.
 		 */
-		virtual void Deallocate(void* ptr = nullptr) override;
+		void Deallocate(void *ptr = nullptr);
 
-		virtual void DeallocateAll() override;
+		void DeallocateAll();
 
 	private:
-		void* startPtr;          ///< Pointer to the start of the memory block.
-		void* currentTop;     ///< Current position or "top" of the stack.
+		void *startPtr;	   ///< Pointer to the start of the memory block.
+		void *currentTop;  ///< Current position or "top" of the stack.
+		size_t usedMemory; ///< The amount of memory currently used.
+		size_t size;	   ///< The total size of the memory block.
 	};
 
 } // namespace NGIN
-
