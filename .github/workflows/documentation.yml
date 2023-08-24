@@ -35,7 +35,7 @@ jobs:
         quiet: true
       
     - name: Configure CMake
-      run: cmake -S . --preset x64-release-final
+      run: cmake -S . --preset docs
 
       
     - name: Build Documentation
@@ -45,7 +45,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{github.workspace}}/build/x64-release-final/DOCS/html
+        publish_dir: ${{github.workspace}}/build/docs/DOCS/html
         enable_jekyll: false
         allow_empty_commit: false
         force_orphan: true

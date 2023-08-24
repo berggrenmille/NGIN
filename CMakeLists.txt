@@ -14,7 +14,7 @@ option(NGIN_BUILD_TESTS "Build NGIN tests" OFF)
 message(STATUS "Build NGIN tests: ${NGIN_BUILD_TESTS}")
 option(NGIN_BUILD_DOCUMENTATION "Build NGIN documentation" OFF)
 message(STATUS "Build documentation: ${NGIN_BUILD_DOCUMENTATION}")
-option(NGIN_BUILD_ONLY_DOCS "Build only documentation" OFF)
+option(NGIN_BUILD_ONLY_DOCUMENTATION "Build only documentation" OFF)
 message(STATUS "Build only documentation: ${NGIN_BUILD_ONLY_DOCS}")
 option(NIGN_TEST_ON_BUILD "Run tests on build" OFF)
 message(STATUS "Run tests on build: ${NIGN_TEST_ON_BUILD}")
@@ -54,7 +54,7 @@ endif()
 
 
 
-if(NOT NGIN_BUILD_ONLY_DOCS)
+if(NOT NGIN_BUILD_ONLY_DOCUMENTATION)
     # Include sub-projects.
     add_subdirectory("NGIN")
     add_subdirectory ("NGIN_EDITOR")

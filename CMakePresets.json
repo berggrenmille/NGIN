@@ -115,6 +115,13 @@
       "targets": "NGIN_TESTS"
     },
     {
+      "name": "buildTests",
+      "displayName": "Test",
+      "description": "Builds the tests for NGIN in debug mode",
+      "configurePreset": "debug-with-tests",
+      "targets": "NGIN_TESTS"
+    },
+    {
       "name": "buildReleaseWithTestsAndDocs",
       "displayName": "Release With Tests And Docs",
       "description": "Builds all targets, including documentation and tests in release mode",
