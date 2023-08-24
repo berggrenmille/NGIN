@@ -1,6 +1,6 @@
 #pragma once
 #include <NGIN/Core.h>
-#include <NGIN/Utils/TypeErasure.hpp>
+#include <NGIN/Util/TypeErasure.hpp>
 
 #include <cstddef>
 #include <type_traits>

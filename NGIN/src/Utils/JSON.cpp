@@ -1,24 +1,21 @@
-#include <Utils/JSON.hpp>
+#include <NGIN/Util/JSON.hpp>
 namespace NGIN::Util
 {
 
-
 	JSON::JSON() {}
 
-	JSON::JSON(const std::string& jsonString)
+	JSON::JSON(const std::string &jsonString)
 	{
 		Parse(jsonString);
 	}
 
-	bool JSON::Parse(const std::string& jsonString)
+	bool JSON::Parse(const std::string &jsonString)
 	{
 		data = nlohmann::json::parse(jsonString, nullptr, false);
 		return !data.is_discarded();
 	}
 
-
-
-	JSON JSON::GetObject(const std::string& key) const
+	JSON JSON::GetObject(const std::string &key) const
 	{
 		if (data.contains(key) && data[key].is_object())
 		{
@@ -27,12 +24,12 @@ namespace NGIN::Util
 		return JSON();
 	}
 
-	void JSON::Set(const std::string& key, const std::string& value)
+	void JSON::Set(const std::string &key, const std::string &value)
 	{
 		data[key] = value;
 	}
 
-	void JSON::SetObject(const std::string& key, const JSON& value)
+	void JSON::SetObject(const std::string &key, const JSON &value)
 	{
 		data[key] = nlohmann::json::parse(value.Dump());
 	}

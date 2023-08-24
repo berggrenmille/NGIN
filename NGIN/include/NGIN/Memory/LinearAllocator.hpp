@@ -9,22 +9,22 @@
 namespace NGIN::Memory
 {
 
-    class NGIN_API LinearAllocator
+    class LinearAllocator
     {
     public:
-        LinearAllocator(size_t size);
+        NGIN_API LinearAllocator(size_t size);
 
-        LinearAllocator(LinearAllocator &&other) noexcept;
+        NGIN_API LinearAllocator(LinearAllocator &&other) noexcept;
 
-        LinearAllocator &operator=(LinearAllocator &&other) noexcept;
+        NGIN_API LinearAllocator &operator=(LinearAllocator &&other) noexcept;
 
-        void *Allocate(size_t size,
-                       size_t alignment = alignof(std::max_align_t),
-                       const std::source_location &location = std::source_location::current());
+        NGIN_API void *Allocate(size_t size,
+                                size_t alignment = alignof(std::max_align_t),
+                                const std::source_location &location = std::source_location::current());
 
-        void Deallocate(void *ptr);
+        NGIN_API void Deallocate(void *ptr);
 
-        void DeallocateAll();
+        NGIN_API void DeallocateAll();
 
     private:
         std::unique_ptr<std::byte[]> buffer;
