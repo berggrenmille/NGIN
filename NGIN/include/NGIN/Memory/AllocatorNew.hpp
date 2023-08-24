@@ -15,16 +15,8 @@ namespace NGIN::Memory
      * @brief Checks if a type satisfies the required interface for an allocator.
      */
     template <typename T>
-    concept AllocatorConcept = requires(T alloc, size_t size, size_t alignment, const std::source_location &location, void *ptr) {
-        {
-            alloc.Allocate(size, alignment, location)
-        } -> std::same_as<void *>;
-        {
-            alloc.Deallocate(ptr)
-        } -> std::same_as<void>;
-        {
-            alloc.DeallocateAll()
-        } -> std::same_as<void>;
+    concept AllocatorConcept = requires(T alloc, size_t size, size_t alignment, const std::source_location &location) {
+        alloc.Allocate(size, alignment, location);
     };
 
     /**
@@ -168,5 +160,4 @@ namespace NGIN::Memory
         DeallocateFn deallocateFn;       ///< Function pointer for deallocate operation using MVD.
         DeallocateAllFn deallocateAllFn; ///< Function pointer for deallocateAll operation using MVD.
     };
-
 }

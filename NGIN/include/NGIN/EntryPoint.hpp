@@ -59,15 +59,7 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
-		// alloc1.Deallocate(ptrs[19]);
-		// NGIN_INFO("{} : {}", 0, alloc1.getUsedMemory());
-		// for (int i = 0; i < 100; i++)
-		//{
-		//	alloc1.Delete<int>((int*)ptrs[i]);
-		//	NGIN_INFO("{} : {}", i, alloc1.getUsedMemory());
-		// }
-
-		// Initialize App
+			// Initialize App
 		NGIN_WARNING("Initializing App...");
 		NGIN::App *app = new T();
 		app->Init();
