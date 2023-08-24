@@ -6,7 +6,7 @@
 #include <NGIN/Time/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
-#include <NGIN/Memory/LinearAllocatorNew.hpp>
+#include <NGIN/Memory/LinearAllocator.hpp>
 #include <NGIN/Memory/AllocatorNew.hpp>
 #include <SDL2/SDL.h>
 
@@ -59,7 +59,7 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
-			// Initialize App
+		// Initialize App
 		NGIN_WARNING("Initializing App...");
 		NGIN::App *app = new T();
 		app->Init();

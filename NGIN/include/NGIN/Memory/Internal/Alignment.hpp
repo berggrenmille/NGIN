@@ -10,7 +10,7 @@ namespace NGIN::Memory::Internal
      * @param alignment The alignment to use.
      * @return The aligned pointer.
      */
-    inline void *AlignPtr(void *ptr, size_t alignment)
+    [[nodiscard]] inline void *AlignPtr(void *ptr, size_t alignment)
     {
         return reinterpret_cast<void *>((reinterpret_cast<size_t>(ptr) + (alignment - 1)) & ~(alignment - 1));
     }
@@ -22,7 +22,7 @@ namespace NGIN::Memory::Internal
      * @param alignment The alignment to check.
      * @return True if the pointer is aligned, false otherwise.
      */
-    inline bool IsPtrAligned(void *ptr, size_t alignment)
+    [[nodiscard]] inline bool IsPtrAligned(void *ptr, size_t alignment)
     {
         return reinterpret_cast<size_t>(ptr) % alignment == 0;
     }
@@ -34,7 +34,7 @@ namespace NGIN::Memory::Internal
      * @param alignment The alignment to use.
      * @return The number of bytes required to align the pointer.
      */
-    inline size_t GetAlignmentPadding(void *ptr, size_t alignment)
+    [[nodiscard]] inline size_t GetAlignmentPadding(void *ptr, size_t alignment)
     {
         return (alignment - (reinterpret_cast<size_t>(ptr) % alignment)) % alignment;
     }

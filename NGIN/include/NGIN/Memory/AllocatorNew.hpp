@@ -1,5 +1,6 @@
 #pragma once
 #include <NGIN/Core.h>
+#include <NGIN/Utils/TypeErasure.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -40,7 +41,7 @@ namespace NGIN::Memory
          */
         template <AllocatorConcept AllocatorT>
         Allocator(AllocatorT &&alloc)
-            : pimpl(new Model<AllocatorT>(std::move(alloc)), Deleter(pimpl.get()))
+            : pimpl(new Model<AllocatorT>(std::move(alloc)), NGIN::Util::Deleter(pimpl.get()))
 
         {
             allocateFn = [](void *self, size_t size, size_t alignment, const std::source_location &location)
@@ -95,30 +96,6 @@ namespace NGIN::Memory
 
     private:
         /**
-         * @brief A structure responsible for providing custom deletion for the type-erased allocator.
-         */
-        struct Deleter
-        {
-            void (*deleterFn)(void *) = nullptr;
-
-            template <typename T>
-            Deleter(T *)
-            {
-                deleterFn = [](void *ptr)
-                {
-                    delete static_cast<T *>(ptr);
-                };
-            }
-
-            void operator()(void *ptr) const
-            {
-                if (deleterFn)
-                {
-                    deleterFn(ptr);
-                }
-            }
-        };
-        /**
          * @brief Wrapper around a specific allocator type.
          *
          * This struct holds an instance of the wrapped allocator and provides the required
@@ -151,7 +128,7 @@ namespace NGIN::Memory
             AllocatorT allocator; ///< Underlying instance of the wrapped allocator.
         };
 
-        std::unique_ptr<void, Deleter> pimpl; ///< Underlying instance of the wrapped allocator.
+        std::unique_ptr<void, NGIN::Util::Deleter> pimpl; ///< Underlying instance of the wrapped allocator.
 
         using AllocateFn = void *(*)(void *, size_t, size_t, const std::source_location &);
         using DeallocateFn = void (*)(void *, void *);
