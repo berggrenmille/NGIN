@@ -62,11 +62,5 @@ namespace NGIN::Logging
 
 		std::vector<std::unique_ptr<BaseSink>> sinks;
 	};
-	/*
-	template<>
-	inline void BaseLogger::Log(Level level, const std::string& message, std::tuple<> formatArgs, const std::source_location& location)
-	{
-		Log(level, message, location);
-	}
-	*/
+
 }
