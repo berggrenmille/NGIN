@@ -27,9 +27,13 @@ namespace NGIN
 	int Init(int argc, char *argv[])
 	{
 
-		std::cout << "\033]0;"
-				  << "NGIN"
-				  << "\007";
+		{
+			NGIN::Layer layer(std::move(NGIN::MockLayer()));
+		}
+		std::cout
+			<< "\033]0;"
+			<< "NGIN"
+			<< "\007";
 		Logging::Init();
 
 		NGIN_WARNING("TEST {}", 1);

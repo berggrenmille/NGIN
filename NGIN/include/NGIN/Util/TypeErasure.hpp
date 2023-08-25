@@ -34,4 +34,5 @@ namespace NGIN::Util
             }
         }
     };
+
 }

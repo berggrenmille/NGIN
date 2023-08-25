@@ -1,16 +1,24 @@
 #pragma once
-#include <NGIN/Util/TypeErasure.hpp>
 
+#include <NGIN/Util/TypeErasure.hpp>
 #include <memory>
 #include <type_traits>
 #include <utility>
 #include <concepts>
+
 namespace NGIN
 {
+
+	/**
+	 * @namespace Internal
+	 * @brief Contains internal concepts to check for expected behaviors.
+	 */
 	namespace Internal
 	{
+
 		/**
-		 * @brief Concept to check for the presence of OnAttach() method.
+		 * @brief Checks if the given type has an OnAttach() method.
+		 * @tparam T Type to check.
 		 */
 		template <typename T>
 		concept HasOnAttach = requires(T a) {
@@ -20,7 +28,8 @@ namespace NGIN
 		};
 
 		/**
-		 * @brief Concept to check for the presence of OnDetach() method.
+		 * @brief Checks if the given type has an OnDetach() method.
+		 * @tparam T Type to check.
 		 */
 		template <typename T>
 		concept HasOnDetach = requires(T a) {
@@ -30,7 +39,8 @@ namespace NGIN
 		};
 
 		/**
-		 * @brief Concept to check for the presence of OnUpdate() method.
+		 * @brief Checks if the given type has an OnUpdate() method.
+		 * @tparam T Type to check.
 		 */
 		template <typename T>
 		concept HasOnUpdate = requires(T a) {
@@ -38,70 +48,77 @@ namespace NGIN
 				a.OnUpdate()
 			} -> std::same_as<void>;
 		};
-	}
+
+	} // namespace Internal
 
 	/**
 	 * @class Layer
 	 * @brief Represents a generic layer within the NGIN game engine.
 	 *
-	 * This class is type-erased and can handle any object that conforms to the expected
-	 * interface (OnAttach, OnDetach, OnUpdate). It provides a dynamic dispatch mechanism
-	 * without relying on virtual functions, using manual vtable pointers.
+	 * This class can manage any object that matches the expected interface (OnAttach, OnDetach, OnUpdate).
+	 * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
 	 */
 	class Layer
 	{
 	public:
 		/**
-		 * @brief Default constructor.
+		 * @brief Construct a new Layer object.
+		 *
+		 * @tparam T Type of the layer object.
+		 * @param layer The layer object.
 		 */
 		template <typename T>
 		Layer(T &&layer)
-			: pimpl(new T(std::move(layer)), NGIN::Util::Deleter(pimpl.get()))
+			: pimpl(new T(std::forward<T>(layer)), NGIN::Util::Deleter(pimpl.get()))
 		{
 			SetupFunctionPointers<T>();
 		}
 
 		/**
-		 * @brief Invokes the OnAttach method of the stored object.
+		 * @brief Invoke the OnAttach method of the stored object.
 		 */
-		void OnAttach() { onAttach(&pimpl); }
+		void OnAttach() { onAttach(pimpl.get()); }
+
 		/**
-		 * @brief Invokes the OnDetach method of the stored object.
+		 * @brief Invoke the OnDetach method of the stored object.
 		 */
-		void OnDetach() { onDetach(&pimpl); }
+		void OnDetach() { onDetach(pimpl.get()); }
+
 		/**
-		 * @brief Invokes the OnUpdate method of the stored object.
+		 * @brief Invoke the OnUpdate method of the stored object.
 		 */
-		void OnUpdate() { onUpdate(&pimpl); }
+		void OnUpdate() { onUpdate(pimpl.get()); }
 
 	private:
 		/**
-		 * @brief Unique pointer that manages the dynamic pimpl of the object.
+		 * @brief A unique pointer that manages the dynamic pimpl of the object.
 		 *
-		 * It utilizes a custom deleter to properly destroy the type-erased object.
+		 * Utilizes a custom deleter to ensure the correct destruction of the type-erased object.
 		 */
 		std::unique_ptr<void, NGIN::Util::Deleter> pimpl;
 
 		/**
-		 * @brief Pointer to a function that invokes the OnAttach method of the stored object.
+		 * @brief Function pointer that triggers the OnAttach method of the stored object.
 		 */
 		void (*onAttach)(void *) = nullptr;
+
 		/**
-		 * @brief Pointer to a function that invokes the OnDetach method of the stored object.
+		 * @brief Function pointer that triggers the OnDetach method of the stored object.
 		 */
 		void (*onDetach)(void *) = nullptr;
+
 		/**
-		 * @brief Pointer to a function that invokes the OnUpdate method of the stored object.
+		 * @brief Function pointer that triggers the OnUpdate method of the stored object.
 		 */
 		void (*onUpdate)(void *) = nullptr;
 
 		/**
-		 * @brief Sets up the function pointers based on the type provided.
+		 * @brief Initialize function pointers based on the provided type.
 		 *
-		 * This method uses the type provided to instantiate the correct lambda functions
-		 * that will be used for manual dispatch of the interface methods.
+		 * This method determines the correct lambda functions for the manual dispatch
+		 * of the interface methods based on the type provided.
 		 *
-		 * @tparam T The type of the object being stored in this layer.
+		 * @tparam T The type of the object managed by this layer.
 		 */
 		template <typename T>
 		void SetupFunctionPointers()
@@ -131,4 +148,5 @@ namespace NGIN
 			};
 		}
 	};
-}
+
+} // namespace NGIN
