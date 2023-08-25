@@ -1,11 +1,13 @@
 #pragma once
+#include <NGIN/Util/TypeErasure.hpp>
+
 #include <memory>
 #include <type_traits>
 #include <utility>
 #include <concepts>
 namespace NGIN
 {
-	namespace detail
+	namespace Internal
 	{
 		/**
 		 * @brief Concept to check for the presence of OnAttach() method.
@@ -52,56 +54,33 @@ namespace NGIN
 		/**
 		 * @brief Default constructor.
 		 */
-		Layer() = default;
-
-		/**
-		 * @brief Copy constructor that accepts an instance of any conforming type.
-		 *
-		 * @param instance The object to be copied into the layer.
-		 */
 		template <typename T>
-		explicit Layer(const T &instance) // For lvalues and const objects
+		Layer(T &&layer)
+			: pimpl(new T(std::move(layer)), NGIN::Util::Deleter(pimpl.get()))
 		{
-			T *object = new T(instance); // copy
-			setupFunctionPointers<T>();
-			storage = std::unique_ptr<void, void (*)(void *)>(object, [](void *ptr)
-															  { delete static_cast<T *>(ptr); });
-		}
-
-		/**
-		 * @brief Move constructor that accepts an instance of any conforming type.
-		 *
-		 * @param instance The object to be moved into the layer.
-		 */
-		template <typename T>
-		explicit Layer(T &&instance) // For rvalues (temporary objects or std::move)
-		{
-			T *object = new T(std::move(instance)); // move
-			setupFunctionPointers<T>();
-			storage = std::unique_ptr<void, void (*)(void *)>(object, [](void *ptr)
-															  { delete static_cast<T *>(ptr); });
+			SetupFunctionPointers<T>();
 		}
 
 		/**
 		 * @brief Invokes the OnAttach method of the stored object.
 		 */
-		void OnAttach() { onAttach(&storage); }
+		void OnAttach() { onAttach(&pimpl); }
 		/**
 		 * @brief Invokes the OnDetach method of the stored object.
 		 */
-		void OnDetach() { onDetach(&storage); }
+		void OnDetach() { onDetach(&pimpl); }
 		/**
 		 * @brief Invokes the OnUpdate method of the stored object.
 		 */
-		void OnUpdate() { onUpdate(&storage); }
+		void OnUpdate() { onUpdate(&pimpl); }
 
 	private:
 		/**
-		 * @brief Unique pointer that manages the dynamic storage of the object.
+		 * @brief Unique pointer that manages the dynamic pimpl of the object.
 		 *
 		 * It utilizes a custom deleter to properly destroy the type-erased object.
 		 */
-		std::unique_ptr<void, void (*)(void *)> storage;
+		std::unique_ptr<void, NGIN::Util::Deleter> pimpl;
 
 		/**
 		 * @brief Pointer to a function that invokes the OnAttach method of the stored object.
@@ -129,7 +108,7 @@ namespace NGIN
 		{
 			onAttach = [](void *obj)
 			{
-				if constexpr (detail::HasOnAttach<T>)
+				if constexpr (Internal::HasOnAttach<T>)
 				{
 					reinterpret_cast<T *>(obj)->OnAttach();
 				}
@@ -137,7 +116,7 @@ namespace NGIN
 
 			onDetach = [](void *obj)
 			{
-				if constexpr (detail::HasOnDetach<T>)
+				if constexpr (Internal::HasOnDetach<T>)
 				{
 					reinterpret_cast<T *>(obj)->OnDetach();
 				}
@@ -145,7 +124,7 @@ namespace NGIN
 
 			onUpdate = [](void *obj)
 			{
-				if constexpr (detail::HasOnUpdate<T>)
+				if constexpr (Internal::HasOnUpdate<T>)
 				{
 					reinterpret_cast<T *>(obj)->OnUpdate();
 				}

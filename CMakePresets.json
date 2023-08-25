@@ -28,7 +28,7 @@
     {
       "name": "debug-with-tests",
       "inherits": "base",
-      "displayName": "Debug With Tests",
+      "displayName": "Tests Debug",
       "description": "Debug build for x64 architecture",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
@@ -47,7 +47,7 @@
     {
       "name": "release-with-tests",
       "inherits": "base",
-      "displayName": "Release With Tests",
+      "displayName": "Tests Release",
       "description": "Release build for x64 architecture with tests",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
@@ -87,13 +87,6 @@
       "targets": "all"
     },
     {
-      "name": "buildDebugWithTests",
-      "displayName": "Debug With Tests",
-      "description": "Builds all projects in Debug mode, including tests",
-      "configurePreset": "debug-with-tests",
-      "targets": "all"
-    },
-    {
       "name": "buildRelease",
       "displayName": "Release",
       "description": "Builds all projects in Release mode",
@@ -108,15 +101,15 @@
       "targets": "DOCS"
     },
     {
-      "name": "buildTests",
-      "displayName": "Test",
+      "name": "buildTestsRelease",
+      "displayName": "Tests",
       "description": "Builds the tests for NGIN in release mode",
       "configurePreset": "release-with-tests",
       "targets": "NGIN_TESTS"
     },
     {
-      "name": "buildTests",
-      "displayName": "Test",
+      "name": "buildTestsDebug",
+      "displayName": "Tests",
       "description": "Builds the tests for NGIN in debug mode",
       "configurePreset": "debug-with-tests",
       "targets": "NGIN_TESTS"

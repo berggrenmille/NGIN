@@ -8,6 +8,8 @@
 #include <NGIN/Logging.hpp>
 #include <NGIN/Memory/StackAllocator.hpp>
 #include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Layer.h>
+#include <NGIN/MockLayer.hpp>
 #include <SDL2/SDL.h>
 
 namespace NGIN
@@ -24,25 +26,11 @@ namespace NGIN
 	template <NGIN::is_app T>
 	int Init(int argc, char *argv[])
 	{
-		std::cout << "\nUsage of LinearAllocator through type-erased Allocator:\n";
-
-		NGIN::Memory::Allocator genericAlloc(std::move(NGIN::Memory::StackAllocator(1024))); // Wrapping LinearAllocator in generic Allocator
-
-		int *a = static_cast<int *>(genericAlloc.Allocate(sizeof(int)));
-		int *b = static_cast<int *>(genericAlloc.Allocate(sizeof(int)));
-
-		new (a) int(15);
-		new (b) int(20);
-
-		std::cout << "a: " << *a << "\nb: " << *b << "\n";
-		NGIN::Memory::Allocator testa(std::move(NGIN::Memory::StackAllocator(1024)));
-		std::cout << reinterpret_cast<uintptr_t>(testa.Allocate(500, 8)) - reinterpret_cast<uintptr_t>(testa.Allocate(500, 8)) << "\n";
-
-		Logging::Init();
 
 		std::cout << "\033]0;"
 				  << "NGIN"
 				  << "\007";
+		Logging::Init();
 
 		NGIN_WARNING("TEST {}", 1);
 		// Init Config
@@ -63,6 +51,7 @@ namespace NGIN
 
 		// Initialize App
 		NGIN_WARNING("Initializing App...");
+		std::cout << "Initializing App..." << std::endl;
 		NGIN::App *app = new T();
 		app->Init();
 		// Free memory after app initialization is done
