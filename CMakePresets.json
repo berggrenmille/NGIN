@@ -83,21 +83,21 @@
       "name": "buildDebug",
       "displayName": "Debug",
       "description": "Builds all projects in Debug mode",
-      "configurePreset": "x64-debug",
+      "configurePreset": "debug",
       "targets": "all"
     },
     {
       "name": "buildDebugWithTests",
       "displayName": "Debug With Tests",
       "description": "Builds all projects in Debug mode, including tests",
-      "configurePreset": "x64-debug-with-tests",
+      "configurePreset": "debug-with-tests",
       "targets": "all"
     },
     {
       "name": "buildRelease",
       "displayName": "Release",
       "description": "Builds all projects in Release mode",
-      "configurePreset": "x64-release",
+      "configurePreset": "release",
       "targets": "all"
     },
     {

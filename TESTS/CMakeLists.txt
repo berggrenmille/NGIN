@@ -25,8 +25,8 @@ add_custom_command(TARGET NGIN_TESTS POST_BUILD
     -P ${CMAKE_SOURCE_DIR}/CMakeCopyDll.cmake
 )
 
+    #run test automatically and show in output
 if(NIGN_TEST_ON_BUILD)
-    #If debug run test automatically, useful for in editor view
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_custom_command(TARGET NGIN_TESTS
                         POST_BUILD

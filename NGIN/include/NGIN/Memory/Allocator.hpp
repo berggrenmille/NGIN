@@ -60,9 +60,8 @@ namespace NGIN::Memory
             };
         }
 
-        
-        Allocator(Allocator&& other) noexcept
-            : pimpl(std::move(other.pimpl)), 
+        Allocator(Allocator &&other) noexcept
+            : pimpl(std::move(other.pimpl)),
               allocateFn(std::move(other.allocateFn)),
               deallocateFn(std::move(other.deallocateFn)),
               deallocateAllFn(std::move(other.deallocateAllFn))
@@ -73,14 +72,15 @@ namespace NGIN::Memory
         }
 
         // Move Assignment Operator
-        Allocator& operator=(Allocator&& other) noexcept
+        Allocator &operator=(Allocator &&other) noexcept
         {
-            if (this != &other) {
+            if (this != &other)
+            {
                 pimpl = std::move(other.pimpl);
                 allocateFn = std::move(other.allocateFn);
                 deallocateFn = std::move(other.deallocateFn);
                 deallocateAllFn = std::move(other.deallocateAllFn);
-                
+
                 other.allocateFn = nullptr;
                 other.deallocateFn = nullptr;
                 other.deallocateAllFn = nullptr;
@@ -120,7 +120,52 @@ namespace NGIN::Memory
             deallocateAllFn(pimpl.get());
         }
 
-        // Extend this if you have more methods.
+        /**
+         * @brief Allocates memory for an object of type T from the provided allocator and constructs it.
+         *
+         * Uses the allocator to reserve memory for an object of type T, and then constructs the object
+         * in-place using the provided arguments.
+         *
+         * @tparam T The type of the object to allocate and construct.
+         * @tparam Alloc The type of the allocator. Should satisfy the AllocatorConcept.
+         * @tparam Args Variadic template for the arguments required to construct the object of type T.
+         * @param allocator Reference to the allocator instance.
+         * @param loc Source location information for potential debugging purposes.
+         * @param args Arguments forwarded to the constructor of T.
+         * @return Pointer to the constructed object, or nullptr if allocation fails.
+         */
+        template <typename T, typename... Args>
+        T *New(const std::source_location &loc = std::source_location::current(), Args &&...args)
+        {
+            void *memory = Allocate(sizeof(T), alignof(T), loc);
+            if (!memory)
+            {
+                // Handle allocation failure.
+                return nullptr;
+            }
+            return new (memory) T(std::forward<Args>(args)...);
+        }
+
+        /**
+         * @brief Deallocates an object of type T using the provided allocator and calls its destructor.
+         *
+         * Calls the destructor of the object pointed to by the provided pointer and then
+         * deallocates its memory using the allocator.
+         *
+         * @tparam T The type of the object to destroy and deallocate.
+         * @tparam Alloc The type of the allocator. Should satisfy the AllocatorConcept.
+         * @param allocator Reference to the allocator instance.
+         * @param obj Pointer to the object to destroy and deallocate.
+         */
+        template <typename T>
+        void Delete(T *obj)
+        {
+            if (obj) [[likely]]
+            {
+                obj->~T();
+                Deallocate(obj);
+            }
+        }
 
     private:
         /**

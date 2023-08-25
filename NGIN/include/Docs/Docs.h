@@ -44,4 +44,11 @@ namespace NGIN
 	namespace Memory
 	{
 	}
+
+	/**
+	 *  @brief The namespace encapsulates the Time functions of the NGIN.
+	 */
+	namespace Time
+	{
+	}
 }

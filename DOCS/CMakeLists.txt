@@ -9,7 +9,7 @@ if(DOXYGEN_FOUND)
     set(DOXYGEN_OUT "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
     set(DOXYGEN_OUT_HTML "${CMAKE_CURRENT_BINARY_DIR}/html")
     set(DOXYGEN_IN "${CMAKE_SOURCE_DIR}/DOCS/Doxyfile.in")
-    set(DOXYGEN_INPUT_DIRS "${NGIN_SOURCE_DIR}")
+    set(DOXYGEN_INPUT_DIRS "${CMAKE_SOURCE_DIR}/NGIN/include")
 
     # Define paths for custom Doxygen CSS and Markdown files
     set(DOXYGEN_CSS "doxygen-awesome.css")
