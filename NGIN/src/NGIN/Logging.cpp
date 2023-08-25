@@ -12,10 +12,11 @@ namespace NGIN::Logging
 	{
 		engineLogger = new AsyncLogger(std::chrono::milliseconds(16));
 		clientLogger = new AsyncLogger(std::chrono::milliseconds(16));
-
+#ifndef NGIN_TESTING
 		engineLogger->AddSink<FileSink>("NGIN.log").Init();
 		engineLogger->AddSink<ConsoleSink>().Init();
 		engineLogger->AddSink<FileSink>("Client.log").Init();
+#endif
 	}
 
 	void Shutdown()

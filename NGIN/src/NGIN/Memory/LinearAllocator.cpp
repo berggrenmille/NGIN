@@ -40,11 +40,6 @@ namespace NGIN::Memory
         return alignedPos;
     }
 
-    void LinearAllocator::Deallocate(void *ptr)
-    {
-        // No-op: LinearAllocator doesn't support individual deallocation
-    }
-
     void LinearAllocator::DeallocateAll()
     {
         currentPos = buffer.get();

@@ -1,3 +1,4 @@
+
 #pragma once
 #include <NGIN/Core.h>
 #include <NGIN/Util/TypeErasure.hpp>
@@ -13,83 +14,93 @@ namespace NGIN::Memory
 {
 
     /**
-     * @brief Checks if a type satisfies the required interface for an allocator.
+     * @namespace Internal
+     * @brief Contains internal concepts to check for expected behaviors.
      */
-    template <typename T>
-    concept AllocatorConcept = requires(T alloc, size_t size, size_t alignment, const std::source_location &location) {
-        alloc.Allocate(size, alignment, location);
-    };
+    namespace Internal
+    {
+
+        template <typename T>
+        concept HasAllocate = requires(T a, size_t size, size_t alignment, const std::source_location &location) {
+            {
+                a.Allocate(size, alignment, location)
+            } -> std::same_as<void *>;
+        };
+
+        template <typename T>
+        concept HasDeallocate = requires(T a, void *ptr) {
+            {
+                a.Deallocate(ptr)
+            } -> std::same_as<void>;
+        };
+
+        template <typename T>
+        concept HasDeallocateAll = requires(T a) {
+            {
+                a.DeallocateAll()
+            } -> std::same_as<void>;
+        };
+
+    } // namespace Internal
 
     /**
-     * @brief A type-erased allocator class that abstracts different allocator types behind a common interface.
+     * @class Allocator
+     * @brief Represents a generic memory allocator.
      *
-     * The Allocator class utilizes type erasure and manual virtual dispatch (MVD) to achieve
-     * polymorphic behavior without the typical overhead of virtual function tables.
-     *
-     * \todo Implement Small Buffer Optimization (SBO).
+     * This class can manage any object that matches the expected interface (Allocate, Deallocate, DeallocateAll).
+     * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
      */
     class Allocator
     {
     public:
         /**
-         * @brief Constructs the Allocator using a specific allocator type.
+         * @brief Construct a new Allocator object.
          *
-         * The given allocator type is wrapped using type erasure. Manual virtual dispatch is employed
-         * by setting up function pointers for each operation.
-         *
-         * @param alloc The allocator instance to be wrapped.
+         * @tparam T Type of the allocator object.
+         * @param alloc The allocator object.
          */
-        template <AllocatorConcept AllocatorT>
-        Allocator(AllocatorT &&alloc)
-            : pimpl(new Model<AllocatorT>(std::move(alloc)), NGIN::Util::Deleter(pimpl.get()))
-
+        template <Internal::HasAllocate T>
+        Allocator(T &&alloc)
+            : pimpl(new T(std::forward<T>(alloc)), NGIN::Util::Deleter(pimpl.get()))
         {
-            allocateFn = [](void *self, size_t size, size_t alignment, const std::source_location &location)
-            {
-                return static_cast<Model<AllocatorT> *>(self)->Allocate(size, alignment, location);
-            };
-
-            deallocateFn = [](void *self, void *ptr)
-            {
-                return static_cast<Model<AllocatorT> *>(self)->Deallocate(ptr);
-            };
-
-            deallocateAllFn = [](void *self)
-            {
-                return static_cast<Model<AllocatorT> *>(self)->DeallocateAll();
-            };
+            SetupFunctionPointers<T>();
         }
 
         /**
-         * @brief Allocates memory using the wrapped allocator.
+         * @brief Allocate memory with given size and alignment.
          *
-         * @param size Size of the memory block to allocate.
-         * @param alignment Memory alignment requirement (default to max alignment).
-         * @param location Source location for potential debugging purposes.
-         * @return Pointer to the allocated block.
+         * @param size The size of the memory to allocate.
+         * @param alignment The alignment of the memory.
+         * @param location The source location from where the allocation is requested.
+         * @return void* Pointer to the allocated memory, or nullptr if allocation fails.
          */
         void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t), const std::source_location &location = std::source_location::current()) const
         {
-            return allocateFn(pimpl.get(), size, alignment, location);
+            return allocateFn ? allocateFn(pimpl.get(), size, alignment, location) : nullptr;
         }
 
         /**
-         * @brief Deallocates a memory block using the wrapped allocator.
+         * @brief Deallocate the given memory.
          *
-         * @param ptr Pointer to the memory block to deallocate.
+         * @param ptr Pointer to the memory to deallocate.
          */
-
         void Deallocate(void *ptr) const
         {
-            deallocateFn(pimpl.get(), ptr);
+            if (deallocateFn)
+            {
+                deallocateFn(pimpl.get(), ptr);
+            }
         }
 
         /**
-         * @brief Deallocates all memory blocks managed by the wrapped allocator.
+         * @brief Deallocate all managed memory.
          */
         void DeallocateAll() const
         {
-            deallocateAllFn(pimpl.get());
+            if (deallocateAllFn)
+            {
+                deallocateAllFn(pimpl.get());
+            }
         }
 
         /**
@@ -140,46 +151,44 @@ namespace NGIN::Memory
         }
 
     private:
-        /**
-         * @brief Wrapper around a specific allocator type.
-         *
-         * This struct holds an instance of the wrapped allocator and provides the required
-         * interface using member functions.
-         *
-         * @tparam AllocatorT Type of the allocator being wrapped.
-         */
-        template <AllocatorConcept AllocatorT>
-        struct Model
-        {
-            explicit Model(AllocatorT allocator)
-                : allocator(std::move(allocator)) {}
-
-            void *Allocate(size_t size, size_t alignment, const std::source_location &location)
-            {
-                return allocator.Allocate(size, alignment, location);
-            }
-
-            void Deallocate(void *ptr)
-            {
-                allocator.Deallocate(ptr);
-            }
-
-            void DeallocateAll()
-            {
-                allocator.DeallocateAll();
-            }
-
-        private:
-            AllocatorT allocator; ///< Underlying instance of the wrapped allocator.
-        };
-
-        std::unique_ptr<void, NGIN::Util::Deleter> pimpl; ///< Underlying instance of the wrapped allocator.
+        std::unique_ptr<void, NGIN::Util::Deleter> pimpl;
 
         using AllocateFn = void *(*)(void *, size_t, size_t, const std::source_location &);
         using DeallocateFn = void (*)(void *, void *);
         using DeallocateAllFn = void (*)(void *);
-        AllocateFn allocateFn;           ///< Function pointer for allocate operation using MVD.
-        DeallocateFn deallocateFn;       ///< Function pointer for deallocate operation using MVD.
-        DeallocateAllFn deallocateAllFn; ///< Function pointer for deallocateAll operation using MVD.
+
+        AllocateFn allocateFn = nullptr;
+        DeallocateFn deallocateFn = nullptr;
+        DeallocateAllFn deallocateAllFn = nullptr;
+
+        template <typename T>
+        void SetupFunctionPointers()
+        {
+            allocateFn = [](void *obj, size_t size, size_t alignment, const std::source_location &location) -> void *
+            {
+                if constexpr (Internal::HasAllocate<T>)
+                {
+                    return reinterpret_cast<T *>(obj)->Allocate(size, alignment, location);
+                }
+                return nullptr;
+            };
+
+            deallocateFn = [](void *obj, void *ptr)
+            {
+                if constexpr (Internal::HasDeallocate<T>)
+                {
+                    reinterpret_cast<T *>(obj)->Deallocate(ptr);
+                }
+            };
+
+            deallocateAllFn = [](void *obj)
+            {
+                if constexpr (Internal::HasDeallocateAll<T>)
+                {
+                    reinterpret_cast<T *>(obj)->DeallocateAll();
+                }
+            };
+        }
     };
-}
+
+} // namespace NGIN::Memory

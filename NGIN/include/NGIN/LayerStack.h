@@ -4,23 +4,24 @@
 #include "Layer.h"
 namespace NGIN
 {
+	using LayerT = NGIN::Layer<>;
 	class LayerStack
 	{
 	public:
 		LayerStack() = default;
 		~LayerStack();
 
-		void PushLayer(Layer* layer);
-		void PopLayer(Layer* layer);
+		void PushLayer(LayerT *layer);
+		void PopLayer(LayerT *layer);
 
-		void PushOverlay(Layer* overlay);
-		void PopOverlay(Layer* overlay);
+		void PushOverlay(LayerT *overlay);
+		void PopOverlay(LayerT *overlay);
 
 		void OnUpdate();
 
-		std::vector<Layer*>::iterator begin() {}
+		std::vector<LayerT *>::iterator begin() {}
 
 	private:
-		std::vector<Layer*> layers;
+		std::vector<LayerT *> layers;
 	};
 }

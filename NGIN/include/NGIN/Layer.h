@@ -6,6 +6,12 @@
 #include <utility>
 #include <concepts>
 
+// Forward declaration
+namespace NGIN::Memory
+{
+	class Allocator;
+}
+
 namespace NGIN
 {
 
@@ -58,6 +64,7 @@ namespace NGIN
 	 * This class can manage any object that matches the expected interface (OnAttach, OnDetach, OnUpdate).
 	 * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
 	 */
+	template <typename StoragePolicy = Util::DynamicStoragePolicy>
 	class Layer
 	{
 	public:
@@ -69,7 +76,14 @@ namespace NGIN
 		 */
 		template <typename T>
 		Layer(T &&layer)
-			: pimpl(new T(std::forward<T>(layer)), NGIN::Util::Deleter(pimpl.get()))
+			: pimpl(std::move(layer))
+		{
+			SetupFunctionPointers<T>();
+		}
+
+		template <typename T>
+		Layer(T &&layer, Memory::Allocator &allocator)
+			: pimpl(std::move(layer), allocator)
 		{
 			SetupFunctionPointers<T>();
 		}
@@ -95,7 +109,7 @@ namespace NGIN
 		 *
 		 * Utilizes a custom deleter to ensure the correct destruction of the type-erased object.
 		 */
-		std::unique_ptr<void, NGIN::Util::Deleter> pimpl;
+		StoragePolicy pimpl;
 
 		/**
 		 * @brief Function pointer that triggers the OnAttach method of the stored object.

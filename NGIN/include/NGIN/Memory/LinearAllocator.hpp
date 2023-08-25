@@ -22,8 +22,6 @@ namespace NGIN::Memory
                                 size_t alignment = alignof(std::max_align_t),
                                 const std::source_location &location = std::source_location::current());
 
-        NGIN_API void Deallocate(void *ptr);
-
         NGIN_API void DeallocateAll();
 
     private:
