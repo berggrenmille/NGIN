@@ -45,4 +45,12 @@ namespace NGIN::Memory
         currentPos = buffer.get();
     }
 
+    bool LinearAllocator::Owns(void *ptr) const
+    {
+        uintptr_t startAddress = reinterpret_cast<uintptr_t>(buffer.get());
+        uintptr_t endAddress = reinterpret_cast<uintptr_t>(end);
+        uintptr_t targetAddress = reinterpret_cast<uintptr_t>(ptr);
+
+        return targetAddress >= startAddress && targetAddress < endAddress;
+    }
 } // namespace NGIN::Memory

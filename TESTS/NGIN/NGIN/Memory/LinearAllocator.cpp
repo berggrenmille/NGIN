@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/LinearAllocator.hpp>
-
+#include <NGIN/Memory/Allocator.hpp>
+#include <utility>
 using namespace NGIN::Memory;
 
 class LinearAllocatorTest : public ::testing::Test
@@ -43,4 +44,22 @@ TEST_F(LinearAllocatorTest, DeallocateAll)
 
 	void *block = allocator.Allocate(1024);
 	EXPECT_NE(block, nullptr); // We should be able to allocate the entire block after a deallocate all
+}
+
+TEST_F(LinearAllocatorTest, TypeErase)
+{
+	NGIN::Memory::Allocator<> typeErasedAllocator(std::move(allocator));
+	SUCCEED(); // If we get here, the test passed
+}
+
+TEST_F(LinearAllocatorTest, Owns)
+{
+	void *block1 = allocator.Allocate(200);
+	EXPECT_TRUE(allocator.Owns(block1));
+
+	void *outsideBlock = malloc(200);
+	EXPECT_FALSE(allocator.Owns(outsideBlock));
+	free(outsideBlock);
+
+	SUCCEED(); // If we get here, the test passed
 }

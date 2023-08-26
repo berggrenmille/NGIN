@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Core.h>
 
 namespace NGIN::Memory
 {
@@ -46,6 +46,8 @@ namespace NGIN::Memory
 		void Deallocate(void *ptr = nullptr);
 
 		void DeallocateAll();
+
+		bool Owns(void *ptr) const;
 
 	private:
 		void *startPtr;	   ///< Pointer to the start of the memory block.

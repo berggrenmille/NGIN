@@ -116,6 +116,17 @@ namespace NGIN::Memory
 		usedMemory = 0;
 	}
 
+	bool FreeListAllocator::Owns(void *ptr) const
+	{
+		// Convert the void pointers to uintptr_t for arithmetic
+		uintptr_t startAddress = reinterpret_cast<uintptr_t>(start);
+		uintptr_t endAddress = startAddress + size;
+		uintptr_t targetAddress = reinterpret_cast<uintptr_t>(ptr);
+
+		// Check if the targetAddress is within the range [startAddress, endAddress)
+		return targetAddress >= startAddress && targetAddress < endAddress;
+	}
+
 	void FreeListAllocator::AddBlockToFreeList(FreeBlock *block)
 	{
 

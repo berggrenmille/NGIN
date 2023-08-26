@@ -13,6 +13,7 @@ add_library(NGIN SHARED
   "src/NGIN/Memory/LinearAllocator.cpp"
   "src/NGIN/Memory/StackAllocator.cpp"
   "src/NGIN/Memory/FreeListAllocator.cpp"
+  "src/NGIN/Memory/Mallocator.cpp"
   "src/Precompiled/PCH.cpp"
   "src/NGIN/Logging/ConsoleSink.cpp"
   "src/NGIN/Logging/AsyncLogger.cpp"
