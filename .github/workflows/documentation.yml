@@ -26,17 +26,9 @@ jobs:
 
     - name: Setup CMake, Ninja, and GCC
       uses: lukka/get-cmake@latest
-
-    - name: Install Vulkan SDK
-      uses: humbletim/install-vulkan-sdk@v1.1.1
-      with:
-        version: latest
-        cache: true
-        quiet: true
       
     - name: Configure CMake
       run: cmake -S . --preset docs
-
       
     - name: Build Documentation
       run: cmake --build --preset buildDocs

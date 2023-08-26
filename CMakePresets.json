@@ -178,5 +178,13 @@
       "configurePreset": "rel-with-deb-info-with-tests",
       "targets": "NGIN_TESTS"
     }
+  ],
+  "testPresets": [
+    {
+      "name": "test",
+      "description": "",
+      "displayName": "",
+      "configurePreset": "release-with-tests"
+    }
   ]
 }
