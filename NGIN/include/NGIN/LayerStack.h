@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Layer.h"
+#include "Layer.hpp"
 namespace NGIN
 {
 	using LayerT = NGIN::Layer<>;

@@ -41,6 +41,15 @@ namespace NGIN::Memory
             } -> std::same_as<void>;
         };
 
+        template <typename T>
+        concept HasOwns = requires(T a, void *ptr) {
+            {
+                a.Owns(ptr)
+            } -> std::same_as<bool>;
+        };
+
+        template <typename T>
+        concept IsAllocator = HasAllocate<T> && HasOwns<T>;
     } // namespace Internal
 
     /**
@@ -50,18 +59,22 @@ namespace NGIN::Memory
      * This class can manage any object that matches the expected interface (Allocate, Deallocate, DeallocateAll).
      * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
      */
+    template <typename StoragePolicy = Util::DynamicStoragePolicy>
     class Allocator
     {
     public:
+        Allocator() = delete;
+        Allocator(const Allocator &) = delete;
+
         /**
          * @brief Construct a new Allocator object.
          *
          * @tparam T Type of the allocator object.
          * @param alloc The allocator object.
          */
-        template <Internal::HasAllocate T>
+        template <Internal::IsAllocator T>
         Allocator(T &&alloc)
-            : pimpl(new T(std::forward<T>(alloc)), NGIN::Util::Deleter(pimpl.get()))
+            : pimpl(std::move(alloc))
         {
             SetupFunctionPointers<T>();
         }
@@ -76,7 +89,7 @@ namespace NGIN::Memory
          */
         void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t), const std::source_location &location = std::source_location::current()) const
         {
-            return allocateFn ? allocateFn(pimpl.get(), size, alignment, location) : nullptr;
+            return allocateFn(pimpl.get(), size, alignment, location);
         }
 
         /**
@@ -86,10 +99,8 @@ namespace NGIN::Memory
          */
         void Deallocate(void *ptr) const
         {
-            if (deallocateFn)
-            {
-                deallocateFn(pimpl.get(), ptr);
-            }
+
+            deallocateFn(pimpl.get(), ptr);
         }
 
         /**
@@ -97,10 +108,13 @@ namespace NGIN::Memory
          */
         void DeallocateAll() const
         {
-            if (deallocateAllFn)
-            {
-                deallocateAllFn(pimpl.get());
-            }
+
+            deallocateAllFn(pimpl.get());
+        }
+
+        bool Owns(void *ptr) const
+        {
+            return ownsFn(pimpl.get(), ptr);
         }
 
         /**
@@ -151,15 +165,17 @@ namespace NGIN::Memory
         }
 
     private:
-        std::unique_ptr<void, NGIN::Util::Deleter> pimpl;
+        StoragePolicy pimpl;
 
         using AllocateFn = void *(*)(void *, size_t, size_t, const std::source_location &);
         using DeallocateFn = void (*)(void *, void *);
         using DeallocateAllFn = void (*)(void *);
+        using OwnsFn = bool (*)(void *, void *);
 
         AllocateFn allocateFn = nullptr;
         DeallocateFn deallocateFn = nullptr;
         DeallocateAllFn deallocateAllFn = nullptr;
+        OwnsFn ownsFn = nullptr;
 
         template <typename T>
         void SetupFunctionPointers()
@@ -187,6 +203,15 @@ namespace NGIN::Memory
                 {
                     reinterpret_cast<T *>(obj)->DeallocateAll();
                 }
+            };
+
+            ownsFn = [](void *obj, void *ptr)
+            {
+                if constexpr (Internal::HasOwns<T>)
+                {
+                    return reinterpret_cast<T *>(obj)->Owns(ptr);
+                }
+                return false;
             };
         }
     };
