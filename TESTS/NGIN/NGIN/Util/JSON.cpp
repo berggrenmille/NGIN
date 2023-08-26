@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Utils/JSON.hpp>
+#include <NGIN/Util/JSON.hpp>
 
 using namespace NGIN::Util;
 

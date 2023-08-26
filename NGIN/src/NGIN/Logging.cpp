@@ -1,10 +1,9 @@
 #include <NGIN/Logging.hpp>
 
-
 namespace
 {
-	NGIN::Logging::BaseLogger* engineLogger;
-	NGIN::Logging::BaseLogger* clientLogger;
+	NGIN::Logging::BaseLogger *engineLogger;
+	NGIN::Logging::BaseLogger *clientLogger;
 }
 
 namespace NGIN::Logging
@@ -26,13 +25,12 @@ namespace NGIN::Logging
 		delete clientLogger;
 	}
 
-	BaseLogger& GetEngineLogger()
+	BaseLogger &GetEngineLogger()
 	{
 		return *engineLogger;
 	}
-	BaseLogger& GetClientLogger()
+	BaseLogger &GetClientLogger()
 	{
 		return *clientLogger;
 	}
 }
-

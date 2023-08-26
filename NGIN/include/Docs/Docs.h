@@ -11,7 +11,9 @@ namespace NGIN
 	 *
 	 *  Contains very specialized code, so use externally at own risk.
 	 */
-	namespace Util {}
+	namespace Util
+	{
+	}
 
 	/**
 	 * @brief The namespace encapsulates the Logging functions of the NGIN.
@@ -20,7 +22,9 @@ namespace NGIN
 	 *
 	 * @deprecated Will be removed and be replaced by @see Logging
 	 */
-	namespace Logger {}
+	namespace Logger
+	{
+	}
 
 	/**
 	 * @brief Provides functionalities related to the logging process.
@@ -29,5 +33,22 @@ namespace NGIN
 	 * that are essential for the logging process within the system. It offers a holistic approach
 	 * to capture, format, and manage log entries for various applications.
 	 */
-	namespace Logging {}
+	namespace Logging
+	{
+	}
+
+	/**
+	 * @brief The namespace encapsulates the Memory functions of the NGIN.
+	 *
+	 */
+	namespace Memory
+	{
+	}
+
+	/**
+	 *  @brief The namespace encapsulates the Time functions of the NGIN.
+	 */
+	namespace Time
+	{
+	}
 }

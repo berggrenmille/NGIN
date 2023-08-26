@@ -6,10 +6,11 @@
 #include <NGIN/Time/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
-
+#include <NGIN/Memory/StackAllocator.hpp>
+#include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Layer.h>
+#include <NGIN/MockLayer.hpp>
 #include <SDL2/SDL.h>
-
-
 
 namespace NGIN
 {
@@ -22,45 +23,40 @@ namespace NGIN
 	 * @param argv The argument values from the command line.
 	 * @return int 0 if initialization was successful, 1 otherwise.
 	 */
-	template<NGIN::is_app T>
-	int Init(int argc, char* argv[])
+	template <NGIN::is_app T>
+	int Init(int argc, char *argv[])
 	{
-		Logging::Init();
 
-		std::cout << "\033]0;" << "NGIN" << "\007";
+		{
+			NGIN::Layer layer(std::move(NGIN::MockLayer()));
+		}
+		std::cout
+			<< "\033]0;"
+			<< "NGIN"
+			<< "\007";
+		Logging::Init();
 
 		NGIN_WARNING("TEST {}", 1);
 		// Init Config
 		Config::Init();
 		Time::Timer<Time::Milliseconds> timer;
 
-
-
 		NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
-
-
 
 		// Initialize SDL and log the initialization process
 		NGIN_WARNING("Initializing SDL... ");
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
 		{
-			//NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
+			// NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
 
 			return 1;
 		}
 		NGIN_INFO("SDL initialized");
 
-		//alloc1.Deallocate(ptrs[19]);
-		//NGIN_INFO("{} : {}", 0, alloc1.getUsedMemory());
-		//for (int i = 0; i < 100; i++)
-		//{
-		//	alloc1.Delete<int>((int*)ptrs[i]);
-		//	NGIN_INFO("{} : {}", i, alloc1.getUsedMemory());
-		//}
-
 		// Initialize App
 		NGIN_WARNING("Initializing App...");
-		NGIN::App* app = new T();
+		std::cout << "Initializing App..." << std::endl;
+		NGIN::App *app = new T();
 		app->Init();
 		// Free memory after app initialization is done
 		delete app;

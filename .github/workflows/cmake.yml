@@ -11,8 +11,9 @@ on:
   workflow_dispatch:
 
 env:
-  BUILD_TYPE: Release
-  CONFIG: x64-release
+  CONFIG_PRESET: release-with-tests
+  BUILD_PRESET: buildTestsRelease
+  TEST_PRESET: test
 
 jobs:   
   build_and_test:
@@ -32,12 +33,11 @@ jobs:
       uses: lukka/get-cmake@latest
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNGIN_BUILD_TESTS=ON -DBUILD_DOCUMENTATION=OFF
+      run: cmake -S . --preset ${{env.CONFIG_PRESET}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.CONFIG}}
+      run: cmake --build --preset ${{env.BUILD_PRESET}}
 
     - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest --preset ${{env.TEST_PRESET}}
 

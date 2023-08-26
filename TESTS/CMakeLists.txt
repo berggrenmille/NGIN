@@ -1,4 +1,4 @@
-enable_testing()
+
 
 # Include Dependencies 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeDependencies.cmake)
@@ -11,9 +11,9 @@ add_executable(NGIN_TESTS ${NGIN_TEST_SOURCES})
 target_compile_definitions(NGIN PRIVATE -DNGIN_TESTING)
 target_link_libraries(NGIN_TESTS PRIVATE gtest_main NGIN)
 
-
 # Register tests
-add_test(NAME NGIN_TESTS COMMAND NGIN_TESTS)
+add_test(NAME NGIN_TESTS 
+         COMMAND NGIN_TESTS)
 
 
 
@@ -25,10 +25,11 @@ add_custom_command(TARGET NGIN_TESTS POST_BUILD
     -P ${CMAKE_SOURCE_DIR}/CMakeCopyDll.cmake
 )
 
-
-#If debug run test automatically, useful for in editor view
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_custom_command(TARGET NGIN_TESTS
-                       POST_BUILD
-                       COMMAND $<TARGET_FILE:NGIN_TESTS>)
+    #run test automatically and show in output
+if(NIGN_TEST_ON_BUILD)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_custom_command(TARGET NGIN_TESTS
+                        POST_BUILD
+                        COMMAND $<TARGET_FILE:NGIN_TESTS>)
+    endif()
 endif()

@@ -1,213 +1,194 @@
+
 #pragma once
 #include <NGIN/Core.h>
+#include <NGIN/Util/TypeErasure.hpp>
 
-#include <iostream>
 #include <cstddef>
-#include <cstdint>
 #include <type_traits>
 #include <utility>
 #include <concepts>
 #include <source_location>
-#include <vector>
-namespace NGIN
+#include <memory>
+
+namespace NGIN::Memory
 {
 
-	/**
-	 * @class Allocator
-	 * @brief A base class for custom memory allocation.
-	 *
-	 * This class provides an interface for memory allocation and deallocation, and allows
-	 * derived classes to provide custom allocation strategies. It also provides debug information
-	 * for detecting memory leaks.
-	 */
-	class NGIN_API Allocator
-	{
-#ifdef NGIN_DEBUG
-	protected:
-		struct DebugAllocationHandle;
-		struct DebugImpl;
-		DebugImpl* debugImpl;
+    /**
+     * @namespace Internal
+     * @brief Contains internal concepts to check for expected behaviors.
+     */
+    namespace Internal
+    {
 
-		void AddDebugAllocation(void* ptr, const std::string& typeName, const std::source_location& location = std::source_location::current());
-		void RemoveDebugAllocation(void* ptr);
-		void ClearDebugAllocations();
-#endif // DEBUG
-	public:
-		/// Default constructor.
-		Allocator();
+        template <typename T>
+        concept HasAllocate = requires(T a, size_t size, size_t alignment, const std::source_location &location) {
+            {
+                a.Allocate(size, alignment, location)
+            } -> std::same_as<void *>;
+        };
 
-		/**
-		* @brief Copy constructor marked as delete to prevent copying.
-		*
-		* This is done because memory allocated by one instance of the allocator
-		* should not be shared or managed by another instance.
-		*/
-		Allocator(const Allocator&) = delete;
+        template <typename T>
+        concept HasDeallocate = requires(T a, void *ptr) {
+            {
+                a.Deallocate(ptr)
+            } -> std::same_as<void>;
+        };
 
-		/**
-		 * @brief Assignment operator marked as delete to prevent assignment.
-		 *
-		 * This is done because memory allocated by one instance of the allocator
-		 * should not be shared or managed by another instance.
-		 */
-		Allocator& operator=(const Allocator&) = delete;
+        template <typename T>
+        concept HasDeallocateAll = requires(T a) {
+            {
+                a.DeallocateAll()
+            } -> std::same_as<void>;
+        };
 
-		///destructor
-		virtual ~Allocator();
+    } // namespace Internal
 
-		/**
-		 * @brief Allocates a block of memory.
-		 *
-		 * Allocates a block of memory of the specified size, with the specified alignment. The actual
-		 * allocation strategy is provided by the derived classes.
-		 *
-		 * @param size Size of memory to allocate.
-		 * @param alignment Alignment of the allocated memory. Default is max alignment.
-		 * @return Pointer to the allocated memory.
-		 */
-		virtual void* Allocate(size_t size, size_t alignment = alignof(std::max_align_t),
-							   const std::source_location& location = std::source_location::current()) = 0;
+    /**
+     * @class Allocator
+     * @brief Represents a generic memory allocator.
+     *
+     * This class can manage any object that matches the expected interface (Allocate, Deallocate, DeallocateAll).
+     * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
+     */
+    class Allocator
+    {
+    public:
+        /**
+         * @brief Construct a new Allocator object.
+         *
+         * @tparam T Type of the allocator object.
+         * @param alloc The allocator object.
+         */
+        template <Internal::HasAllocate T>
+        Allocator(T &&alloc)
+            : pimpl(new T(std::forward<T>(alloc)), NGIN::Util::Deleter(pimpl.get()))
+        {
+            SetupFunctionPointers<T>();
+        }
 
-		/**
-		 * @brief Deallocates a block of memory.
-		 *
-		 * Deallocates the block of memory pointed to by the specified pointer. The actual
-		 * deallocation strategy is provided by the derived classes.
-		 *
-		 * @param ptr Pointer to the memory to deallocate. Default is nullptr.
-		 */
-		virtual void Deallocate(void* ptr = nullptr) = 0;
+        /**
+         * @brief Allocate memory with given size and alignment.
+         *
+         * @param size The size of the memory to allocate.
+         * @param alignment The alignment of the memory.
+         * @param location The source location from where the allocation is requested.
+         * @return void* Pointer to the allocated memory, or nullptr if allocation fails.
+         */
+        void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t), const std::source_location &location = std::source_location::current()) const
+        {
+            return allocateFn ? allocateFn(pimpl.get(), size, alignment, location) : nullptr;
+        }
 
-		/**
-		 * @brief Deallocates all blocks of memory
-		 *
-		 * Deallocates all blocks of memory reserved by the allocator. The actual
-		 * deallocation strategy is provided by the derived classes.
-		 *
-		 * @param ptr Pointer to the memory to deallocate. Default is nullptr.
-		 */
-		virtual void DeallocateAll() = 0;
+        /**
+         * @brief Deallocate the given memory.
+         *
+         * @param ptr Pointer to the memory to deallocate.
+         */
+        void Deallocate(void *ptr) const
+        {
+            if (deallocateFn)
+            {
+                deallocateFn(pimpl.get(), ptr);
+            }
+        }
 
-		/**
-		 * @brief Constructs an object in the allocated memory.
-		 *
-		 * Constructs an object of the specified type in the memory allocated by the Allocate method.
-		 * The constructor of the object is called with the specified arguments.
-		 * It is recommended to use the macro NGIN_NEW instead of calling this function directly
-		 * Calling this function directly might lead to confusing logs in debug builds.
-		 *
-		 * @tparam T Type of object to construct.
-		 * @tparam Args Types of constructor arguments.
-		 * @param args Arguments to pass to the constructor of T.
-		 * @return Pointer to the constructed object.
-		 */
-		template<class T, class... Args>
-		T* New(const std::source_location& location = std::source_location::current(), Args&&... args);
+        /**
+         * @brief Deallocate all managed memory.
+         */
+        void DeallocateAll() const
+        {
+            if (deallocateAllFn)
+            {
+                deallocateAllFn(pimpl.get());
+            }
+        }
 
-		/**
-		 * @brief Destroys an object and deallocates its memory.
-		 *
-		 * Calls the destructor of the specified object and then deallocates the memory for the object.
-		 * It is recommended to use the macro NGIN_DELETE instead of calling this function directly
-		 * Calling this function directly might lead to confusing logs in debug builds.
-		 *
-		 * @tparam T Type of the object.
-		 * @param object Reference to the object to destroy.
-		 */
-		template<class T>
-		void Delete(const std::source_location& location = std::source_location::current(), T* object = nullptr);
+        /**
+         * @brief Allocates memory for an object of type T from the provided allocator and constructs it.
+         *
+         * Uses the allocator to reserve memory for an object of type T, and then constructs the object
+         * in-place using the provided arguments.
+         *
+         * @tparam T The type of the object to allocate and construct.
+         * @tparam Alloc The type of the allocator. Should satisfy the AllocatorConcept.
+         * @tparam Args Variadic template for the arguments required to construct the object of type T.
+         * @param allocator Reference to the allocator instance.
+         * @param loc Source location information for potential debugging purposes.
+         * @param args Arguments forwarded to the constructor of T.
+         * @return Pointer to the constructed object, or nullptr if allocation fails.
+         */
+        template <typename T, typename... Args>
+        T *New(const std::source_location &loc = std::source_location::current(), Args &&...args)
+        {
+            void *memory = Allocate(sizeof(T), alignof(T), loc);
+            if (!memory)
+            {
+                // Handle allocation failure.
+                return nullptr;
+            }
+            return new (memory) T(std::forward<Args>(args)...);
+        }
 
-		/**
-		 * @brief Gets the total memory allocated by the allocator since its creation.
-		 *
-		 * @return Total allocated memory in bytes.
-		 */
-		size_t getAllocatedMemory() const { return size; }
+        /**
+         * @brief Deallocates an object of type T using the provided allocator and calls its destructor.
+         *
+         * Calls the destructor of the object pointed to by the provided pointer and then
+         * deallocates its memory using the allocator.
+         *
+         * @tparam T The type of the object to destroy and deallocate.
+         * @tparam Alloc The type of the allocator. Should satisfy the AllocatorConcept.
+         * @param allocator Reference to the allocator instance.
+         * @param obj Pointer to the object to destroy and deallocate.
+         */
+        template <typename T>
+        void Delete(T *obj)
+        {
+            if (obj) [[likely]]
+            {
+                obj->~T();
+                Deallocate(obj);
+            }
+        }
 
-		/**
-		 * @brief Gets the current memory being used by the allocator.
-		 *
-		 * @return Current used memory in bytes.
-		 */
-		size_t getUsedMemory() const { return usedMemory; }
-	protected:
-		using Address = uintptr_t;
+    private:
+        std::unique_ptr<void, NGIN::Util::Deleter> pimpl;
 
-		/**
-		 * @brief Get the alignment offset of a pointer.
-		 *
-		 * Returns the offset from the desired alignment for a given pointer. Assumes
-		 * alignment is a power of 2.
-		 *
-		 * @param alignment Desired alignment. Must be a power of 2.
-		 * @param ptr Pointer to get the offset of.
-		 * @return Offset needed to achieve desired alignment.
-		 */
-		Address GetAlignmentOffset(size_t alignment, const void* const ptr);
+        using AllocateFn = void *(*)(void *, size_t, size_t, const std::source_location &);
+        using DeallocateFn = void (*)(void *, void *);
+        using DeallocateAllFn = void (*)(void *);
 
-		/**
-		 * @brief Get the alignment adjustment of a pointer.
-		 *
-		 * Returns the adjustment needed to align a pointer to the desired alignment. Assumes
-		 * alignment is a power of 2.
-		 *
-		 * @param alignment Desired alignment. Must be a power of 2.
-		 * @param ptr Pointer to get the adjustment of.
-		 * @return Adjustment needed to achieve desired alignment.
-		 */
-		Address GetAlignmentAdjustment(size_t alignment, const void* const ptr);
+        AllocateFn allocateFn = nullptr;
+        DeallocateFn deallocateFn = nullptr;
+        DeallocateAllFn deallocateAllFn = nullptr;
 
-		size_t size; ///< Total size of the block.
-		size_t usedMemory; ///< Amount of memory that has been used.
-	};
+        template <typename T>
+        void SetupFunctionPointers()
+        {
+            allocateFn = [](void *obj, size_t size, size_t alignment, const std::source_location &location) -> void *
+            {
+                if constexpr (Internal::HasAllocate<T>)
+                {
+                    return reinterpret_cast<T *>(obj)->Allocate(size, alignment, location);
+                }
+                return nullptr;
+            };
 
-	/**
-	 * @brief Checks if a type is an allocator.
-	 *
-	 * @tparam T Type to check.
-	 */
-	template<class T>
-	concept is_allocator = std::is_base_of<Allocator, T>::value;
+            deallocateFn = [](void *obj, void *ptr)
+            {
+                if constexpr (Internal::HasDeallocate<T>)
+                {
+                    reinterpret_cast<T *>(obj)->Deallocate(ptr);
+                }
+            };
 
-	/**
-	 * @brief Checks if a type is a pointer to an allocator.
-	 *
-	 * @tparam T Type to check.
-	 */
-	template<typename T>
-	concept is_allocator_ptr = std::is_base_of<Allocator, std::remove_pointer_t<T>>::value;
+            deallocateAllFn = [](void *obj)
+            {
+                if constexpr (Internal::HasDeallocateAll<T>)
+                {
+                    reinterpret_cast<T *>(obj)->DeallocateAll();
+                }
+            };
+        }
+    };
 
-
-	// TEMPLATE DECLARATIONS -------------------------------------------------------
-	template <class T, class... Args>
-	inline T* Allocator::New(const std::source_location& location, Args&&... args)
-	{
-#ifdef NGIN_DEBUG
-		void* ptr = Allocate(sizeof(T), alignof(T), location);
-		AddDebugAllocation(ptr, typeid(T).name(), location);
-		return new (ptr) T(std::forward<Args>(args)...);
-#else
-		return new (Allocate(sizeof(T), alignof(T))) T(std::forward<Args>(args)...);
-#endif
-	}
-
-	template<class T>
-	inline void Allocator::Delete(const std::source_location& location, T* object)
-	{
-		#ifdef NGIN_DEBUG
-		RemoveDebugAllocation(static_cast<void*>(object));
-		#endif
-		object->~T();
-		Deallocate(object);
-	}
-
-
-}
-
-
-
-#define NGIN_NEW(allocator, type, ...) allocator.New<type>(std::source_location::current(), __VA_ARGS__)
-#define NGIN_DELETE(allocator, object) allocator.Delete(std::source_location::current(), object)
-
-
-
+} // namespace NGIN::Memory
