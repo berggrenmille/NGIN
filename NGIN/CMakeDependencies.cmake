@@ -61,7 +61,7 @@ find_package(Vulkan QUIET)
 
 # vulkan-hpp
 #find_package(VulkanHeaders QUIET)
-if(UNIX)
-    set(VULKAN_HPP_NO_EXCEPTIONS ON CACHE BOOL "" FORCE)
-    fetch_dependency(vulkanHpp "https://github.com/KhronosGroup/Vulkan-Headers" "main")
-endif()
+#if(UNIX)
+#    set(VULKAN_HPP_NO_EXCEPTIONS ON CACHE BOOL "" FORCE)
+#    fetch_dependency(vulkanHpp "https://github.com/KhronosGroup/Vulkan-Headers" "main")
+#endif()
