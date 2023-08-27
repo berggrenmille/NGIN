@@ -8,7 +8,7 @@
 #include <NGIN/Logging.hpp>
 #include <NGIN/Memory/StackAllocator.hpp>
 #include <NGIN/Memory/Allocator.hpp>
-#include <NGIN/Layer.h>
+#include <NGIN/Layer.hpp>
 #include <NGIN/MockLayer.hpp>
 #include <SDL2/SDL.h>
 

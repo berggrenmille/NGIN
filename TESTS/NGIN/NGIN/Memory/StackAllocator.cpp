@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/StackAllocator.hpp>
 #include <cstdint>
-
+#include <NGIN/Memory/Allocator.hpp>
+#include <utility>
 using namespace NGIN::Memory;
 
 class StackAllocatorTest : public ::testing::Test
@@ -84,4 +85,16 @@ TEST_F(StackAllocatorTest, DeallocateAll)
 
     void *ptr3 = allocator.Allocate(800); // Should be able to allocate 800 bytes after deallocating all
     ASSERT_NE(ptr3, nullptr);
+}
+
+TEST_F(StackAllocatorTest, Owns)
+{
+    void *block1 = allocator.Allocate(200);
+    EXPECT_TRUE(allocator.Owns(block1));
+
+    void *outsideBlock = malloc(200);
+    EXPECT_FALSE(allocator.Owns(outsideBlock));
+    free(outsideBlock);
+
+    SUCCEED(); // If we get here, the test passed
 }

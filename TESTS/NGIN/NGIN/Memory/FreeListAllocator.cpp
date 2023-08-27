@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/FreeListAllocator.hpp>
+#include <NGIN/Memory/Allocator.hpp>
+#include <utility>
 
 using namespace NGIN;
 
@@ -74,4 +76,22 @@ TEST_F(FreeListAllocatorTest, Fragmentation)
 
 	void *block3 = allocator.Allocate(300); // Should allocate in the space after block2 due to fragmentation
 	EXPECT_NE(block3, nullptr);
+}
+
+TEST_F(FreeListAllocatorTest, TypeErase)
+{
+	NGIN::Memory::Allocator<> typeErasedAllocator(std::move(allocator));
+	SUCCEED(); // If we get here, the test passed
+}
+
+TEST_F(FreeListAllocatorTest, Owns)
+{
+	void *block1 = allocator.Allocate(200);
+	EXPECT_TRUE(allocator.Owns(block1));
+
+	void *outsideBlock = malloc(200);
+	EXPECT_FALSE(allocator.Owns(outsideBlock));
+	free(outsideBlock);
+
+	SUCCEED(); // If we get here, the test passed
 }

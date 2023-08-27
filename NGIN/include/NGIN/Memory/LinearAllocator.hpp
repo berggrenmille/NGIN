@@ -24,6 +24,8 @@ namespace NGIN::Memory
 
         NGIN_API void DeallocateAll();
 
+        NGIN_API bool Owns(void *ptr) const;
+
     private:
         std::unique_ptr<std::byte[]> buffer;
         std::byte *currentPos;

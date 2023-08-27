@@ -6,6 +6,7 @@ using namespace NGIN;
 bool allocateCalled = false;
 bool deallocateCalled = false;
 bool deallocateAllCalled = false;
+bool ownsCalled = false;
 // Define a MockAllocator for testing purposes
 class MockAllocator
 {
@@ -49,13 +50,19 @@ public:
     {
         deallocateAllCalled = true;
     }
+
+    bool Owns(void *ptr) const
+    {
+        ownsCalled = true;
+        return false;
+    }
 };
 
 class AllocatorTest : public ::testing::Test
 {
 protected:
     MockAllocator mockAllocator;
-    Memory::Allocator allocator;
+    Memory::Allocator<> allocator;
 
     AllocatorTest() : allocator(std::move(mockAllocator)) {}
 };
@@ -91,4 +98,12 @@ TEST_F(AllocatorTest, DeleteCalled)
     allocator.Delete(obj);
     delete obj;
     EXPECT_TRUE(deallocateCalled);
+}
+
+TEST_F(AllocatorTest, OwnsCalled)
+{
+    auto obj = new int(0);
+    allocator.Owns(obj);
+    delete obj;
+    EXPECT_TRUE(ownsCalled);
 }

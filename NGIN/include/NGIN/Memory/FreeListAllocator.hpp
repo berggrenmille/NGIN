@@ -62,6 +62,8 @@ namespace NGIN::Memory
 		 */
 		void DeallocateAll();
 
+		bool Owns(void *ptr) const;
+
 	private:
 		/**
 		 * @brief Structure for the header information of each allocation.

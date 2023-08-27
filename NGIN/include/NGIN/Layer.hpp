@@ -1,16 +1,12 @@
 #pragma once
 
 #include <NGIN/Util/TypeErasure.hpp>
+#include <NGIN/Memory/Allocator.hpp>
+
 #include <memory>
 #include <type_traits>
 #include <utility>
 #include <concepts>
-
-// Forward declaration
-namespace NGIN::Memory
-{
-	class Allocator;
-}
 
 namespace NGIN
 {
@@ -82,7 +78,7 @@ namespace NGIN
 		}
 
 		template <typename T>
-		Layer(T &&layer, Memory::Allocator &allocator)
+		Layer(T &&layer, Memory::Allocator<> &allocator)
 			: pimpl(std::move(layer), allocator)
 		{
 			SetupFunctionPointers<T>();
