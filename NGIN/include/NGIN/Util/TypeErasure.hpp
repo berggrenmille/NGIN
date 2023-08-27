@@ -87,7 +87,7 @@ namespace NGIN::Util
             new (buffer) T(std::move(obj));
             destructor = [](void *obj)
             {
-                reinterpret_cast<T *>(buffer)->~T();
+                reinterpret_cast<T *>(obj)->~T();
             };
         }
 
