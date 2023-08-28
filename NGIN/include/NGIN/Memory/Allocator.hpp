@@ -1,7 +1,7 @@
 
 #pragma once
 #include <NGIN/Core.h>
-#include <NGIN/Util/TypeErasure.hpp>
+#include <NGIN/TypeErasure/DynamicStoragePolicy.hpp>
 
 #include "Internal/AllocatorConcepts.hpp"
 
@@ -22,7 +22,7 @@ namespace NGIN::Memory
      * This class can manage any object that matches the expected interface (Allocate, Deallocate, DeallocateAll).
      * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
      */
-    template <typename StoragePolicy = Util::DynamicStoragePolicy>
+    template <typename StoragePolicy = TypeErasure::DynamicStoragePolicy>
     class Allocator
     {
     public:
