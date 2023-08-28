@@ -4,11 +4,9 @@ enum class GraphicsBackend
 {
 	Vulkan,
 	OpenGL,
-	DirectX12,
+	DX12,
 	//... other backends
 };
-
-
 
 class GraphicsContext
 {

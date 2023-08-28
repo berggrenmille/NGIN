@@ -26,22 +26,22 @@ namespace NGIN::Logging
 #define NGIN_ERROR(msg, ...) \
     ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Error, msg, ::NGIN::Util::MultArgs(__VA_ARGS__))
 
-#define NGIN_ASSERT(condition, msg, ...)                                                                                     \
-    do                                                                                                                       \
-    {                                                                                                                        \
-        if (!(condition))                                                                                                    \
-        {                                                                                                                    \
-            ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Error, msg, ::NGIN::Util::MultArgs(__VA_ARGS__)); \
-            std::abort();                                                                                                    \
-        }                                                                                                                    \
+#define NGIN_ASSERT(condition, msg, ...)                                                                                        \
+    do                                                                                                                          \
+    {                                                                                                                           \
+        if (!(condition))                                                                                                       \
+        {                                                                                                                       \
+            ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Critical, msg, ::NGIN::Util::MultArgs(__VA_ARGS__)); \
+            std::abort();                                                                                                       \
+        }                                                                                                                       \
     } while (0)
 
-#define NGIN_ASSERT_SRC(condition, src, msg, ...)                                                                                 \
-    do                                                                                                                            \
-    {                                                                                                                             \
-        if (!(condition))                                                                                                         \
-        {                                                                                                                         \
-            ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Error, msg, ::NGIN::Util::MultArgs(__VA_ARGS__), src); \
-            std::abort();                                                                                                         \
-        }                                                                                                                         \
+#define NGIN_ASSERT_SRC(condition, src, msg, ...)                                                                                    \
+    do                                                                                                                               \
+    {                                                                                                                                \
+        if (!(condition))                                                                                                            \
+        {                                                                                                                            \
+            ::NGIN::Logging::GetEngineLogger().Log(::NGIN::Logging::Level::Critical, msg, ::NGIN::Util::MultArgs(__VA_ARGS__), src); \
+            std::abort();                                                                                                            \
+        }                                                                                                                            \
     } while (0)

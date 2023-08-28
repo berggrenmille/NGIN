@@ -1,4 +1,6 @@
 #pragma once
+
+#include <NGIN/Core.h>
 #include <SDL2/SDL_vulkan.h>
 #include "../Renderer.hpp"
 #include <vulkan/vulkan.hpp>
@@ -10,7 +12,7 @@ namespace NGIN::Graphics
 	class VulkanRenderer : public Renderer
 	{
 	public:
-		NGIN_API VulkanRenderer(VulkanWindow* window);
+		NGIN_API VulkanRenderer(VulkanWindow *window);
 		NGIN_API ~VulkanRenderer();
 
 		NGIN_API virtual bool Initialize() override;
@@ -24,11 +26,13 @@ namespace NGIN::Graphics
 		bool SetupSurface();
 		bool SetupDevice();
 
-		VulkanWindow* vulkanWindow;
-		vk::Instance		vkInstance;
-		vk::SurfaceKHR		vkSurface;
-		vk::PhysicalDevice  vkPhysicalDevice;
-		vk::Device			vkDevice;
+		int RateDeviceSuitability(const vk::PhysicalDevice &device) const;
+
+		VulkanWindow *vulkanWindow;
+		vk::Instance vkInstance;
+		vk::SurfaceKHR vkSurface;
+		vk::PhysicalDevice vkPhysicalDevice;
+		vk::Device vkDevice;
 
 		// ... Other Vulkan-specific resources (e.g., command buffers, pipeline states, etc.)
 	};
