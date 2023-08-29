@@ -4,7 +4,7 @@
 namespace NGIN::TypeErasure
 {
 
-    template <std::size_t Size = 128>
+    template <std::size_t Size = 64>
     class StaticStoragePolicy
     {
     public:

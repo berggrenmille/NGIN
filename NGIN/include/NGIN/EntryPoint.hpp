@@ -9,7 +9,6 @@
 #include <NGIN/Memory/StackAllocator.hpp>
 #include <NGIN/Memory/Allocator.hpp>
 #include <NGIN/Layer.hpp>
-#include <NGIN/MockLayer.hpp>
 #include <SDL2/SDL.h>
 
 namespace NGIN
@@ -27,9 +26,7 @@ namespace NGIN
 	int Init(int argc, char *argv[])
 	{
 
-		{
-			NGIN::Layer layer(std::move(NGIN::MockLayer()));
-		}
+		// Initialize Logging
 		std::cout
 			<< "\033]0;"
 			<< "NGIN"
