@@ -1,5 +1,5 @@
 #include <NGIN/Util/JSON.hpp>
-#include "JSON.hpp"
+
 namespace NGIN::Util
 {
 
