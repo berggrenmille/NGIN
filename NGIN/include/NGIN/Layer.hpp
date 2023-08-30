@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NGIN/Util/TypeErasure.hpp>
+#include <NGIN/TypeErasure/DynamicStoragePolicy.hpp>
 #include <NGIN/Memory/Allocator.hpp>
 
 #include <memory>
@@ -60,7 +60,7 @@ namespace NGIN
 	 * This class can manage any object that matches the expected interface (OnAttach, OnDetach, OnUpdate).
 	 * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
 	 */
-	template <typename StoragePolicy = Util::DynamicStoragePolicy>
+	template <typename StoragePolicy = TypeErasure::DynamicStoragePolicy>
 	class Layer
 	{
 	public:

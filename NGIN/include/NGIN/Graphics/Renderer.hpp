@@ -1,4 +1,5 @@
 #pragma once
+#include <NGIN/Core.h>
 namespace NGIN::Graphics
 {
 
@@ -48,9 +49,6 @@ namespace NGIN::Graphics
 		 * @param a Alpha component of the clear color.
 		 */
 		virtual void Clear(float r, float g, float b, float a) = 0;
-
-
-
 	};
 
 }

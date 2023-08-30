@@ -16,17 +16,6 @@ namespace NGIN
 	}
 
 	/**
-	 * @brief The namespace encapsulates the Logging functions of the NGIN.
-	 *
-	 * Logger contains basically a wrapper around the loguru library. It provides both a functional interface and macros for logging
-	 *
-	 * @deprecated Will be removed and be replaced by @see Logging
-	 */
-	namespace Logger
-	{
-	}
-
-	/**
 	 * @brief Provides functionalities related to the logging process.
 	 *
 	 * This namespace encompasses all the utilities, handlers, formatters, and other components
@@ -49,6 +38,18 @@ namespace NGIN
 	 *  @brief The namespace encapsulates the Time functions of the NGIN.
 	 */
 	namespace Time
+	{
+	}
+
+	/// \namespace NGIN::IO
+	/// \brief Namespace for IO-related classes and functions.
+	namespace IO
+	{
+	}
+
+	/// \namespace NGIN::TypeErasure
+	/// \brief Namespace for NGIN type erasure utilities.
+	namespace NGIN::TypeErasure
 	{
 	}
 }

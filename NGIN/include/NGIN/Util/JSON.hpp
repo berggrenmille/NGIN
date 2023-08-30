@@ -21,14 +21,29 @@ namespace NGIN::Util
 		 * @brief Constructs the JSON object from a string representation.
 		 * @param jsonString A string representation of a JSON object.
 		 */
-		NGIN_API JSON(const std::string& jsonString);
+		NGIN_API JSON(const std::string &jsonString);
 
 		/**
 		 * @brief Parses a string representation into a JSON object.
 		 * @param jsonString The string representation of the JSON.
 		 * @return Returns true if the parse was successful, otherwise false.
 		 */
-		NGIN_API bool Parse(const std::string& jsonString);
+		NGIN_API bool Parse(const std::string &jsonString);
+
+		/**
+		 * @brief Checks if the JSON object contains a given key.
+		 *
+		 * @param key The key to check for.
+		 * @return Returns true if the key is found, otherwise false.
+		 */
+		NGIN_API bool Contains(const std::string &key) const;
+
+		/**
+		 * @brief Checks if the JSON object is empty.
+		 *
+		 * @return Returns true if the JSON object is empty, otherwise false.
+		 */
+		NGIN_API bool IsEmpty() const;
 
 		/**
 		 * @brief Retrieves a value of type T associated with a given key.
@@ -36,53 +51,51 @@ namespace NGIN::Util
 		 * @param value A reference to a variable to store the retrieved value.
 		 * @return Returns true if the key is found and the value is successfully retrieved, otherwise false.
 		 */
-		 // For arithmetic types:
-		template<typename T,
-			typename std::enable_if<std::is_arithmetic<T>::value, int>::type = 0>
-		bool Get(const std::string& key, T& value) const;
+		// For arithmetic types:
+		template <typename T,
+				  typename std::enable_if<std::is_arithmetic<T>::value, int>::type = 0>
+		bool Get(const std::string &key, T &value) const;
 
 		// For string types
-		template<typename T,
-			typename std::enable_if<std::is_same<T, std::string>::value, int>::type = 0>
-		bool Get(const std::string& key, T& value) const;
+		template <typename T,
+				  typename std::enable_if<std::is_same<T, std::string>::value, int>::type = 0>
+		bool Get(const std::string &key, T &value) const;
 
 		// For unknown types:
-		template<typename T,
-			typename std::enable_if<!std::is_arithmetic<T>::value &&
-			!std::is_same<T, std::string>::value, int>::type = 0>
-		bool Get(const std::string& key, T& value) const;
-
-
-
+		template <typename T,
+				  typename std::enable_if<!std::is_arithmetic<T>::value &&
+											  !std::is_same<T, std::string>::value,
+										  int>::type = 0>
+		bool Get(const std::string &key, T &value) const;
 
 		/**
 		 * @brief Retrieves a nested JSON object associated with a given key.
 		 * @param key The key associated with the desired JSON object.
 		 * @return Returns the JSON object if the key is found and it corresponds to an object, otherwise returns an empty JSON object.
 		 */
-		NGIN_API JSON GetObject(const std::string& key) const;
+		NGIN_API JSON GetObject(const std::string &key) const;
 
 		/**
 		 * @brief Sets a key-value pair in the JSON object of a generic type T.
 		 * @param key The key to be associated with the given value.
 		 * @param value The value to be set.
 		 */
-		template<typename T>
-		void Set(const std::string& key, const T& value);
+		template <typename T>
+		void Set(const std::string &key, const T &value);
 
 		/**
 		 * @brief Sets a key-value pair in the JSON object with a string value.
 		 * @param key The key to be associated with the given value.
 		 * @param value The string value to be set.
 		 */
-		NGIN_API void Set(const std::string& key, const std::string& value);
+		NGIN_API void Set(const std::string &key, const std::string &value);
 
 		/**
 		 * @brief Sets a nested JSON object in the current JSON object associated with a given key.
 		 * @param key The key to be associated with the given JSON object.
 		 * @param value The JSON object to be set.
 		 */
-		NGIN_API void SetObject(const std::string& key, const JSON& value);
+		NGIN_API void SetObject(const std::string &key, const JSON &value);
 
 		/**
 		 * @brief Converts the JSON object into its string representation.
@@ -95,9 +108,9 @@ namespace NGIN::Util
 		nlohmann::json data;
 	};
 
-	template<typename T,
-		typename std::enable_if<std::is_arithmetic<T>::value, int>::type>
-	bool JSON::Get(const std::string& key, T& value) const
+	template <typename T,
+			  typename std::enable_if<std::is_arithmetic<T>::value, int>::type>
+	bool JSON::Get(const std::string &key, T &value) const
 	{
 		if (data.contains(key) && data[key].is_number())
 		{
@@ -107,9 +120,9 @@ namespace NGIN::Util
 		return false;
 	}
 
-	template<typename T,
-		typename std::enable_if<std::is_same<T, std::string>::value, int>::type>
-	bool JSON::Get(const std::string& key, T& value) const
+	template <typename T,
+			  typename std::enable_if<std::is_same<T, std::string>::value, int>::type>
+	bool JSON::Get(const std::string &key, T &value) const
 	{
 		if (data.contains(key) && data[key].is_string())
 		{
@@ -119,17 +132,17 @@ namespace NGIN::Util
 		return false;
 	}
 
-
-	template<typename T,
-		typename std::enable_if<!std::is_arithmetic<T>::value &&
-		!std::is_same<T, std::string>::value, int>::type>
-	bool JSON::Get(const std::string& key, T& value) const
+	template <typename T,
+			  typename std::enable_if<!std::is_arithmetic<T>::value &&
+										  !std::is_same<T, std::string>::value,
+									  int>::type>
+	bool JSON::Get(const std::string &key, T &value) const
 	{
 		return false;
 	}
 
-	template<typename T>
-	void JSON::Set(const std::string& key, const T& value)
+	template <typename T>
+	void JSON::Set(const std::string &key, const T &value)
 	{
 		data[key] = value;
 	}

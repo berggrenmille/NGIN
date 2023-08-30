@@ -2,11 +2,13 @@
 #include <NGIN/Memory/Allocator.hpp>
 
 using namespace NGIN;
-
-bool allocateCalled = false;
-bool deallocateCalled = false;
-bool deallocateAllCalled = false;
-bool ownsCalled = false;
+namespace
+{
+    bool allocateCalled = false;
+    bool deallocateCalled = false;
+    bool deallocateAllCalled = false;
+    bool ownsCalled = false;
+}
 // Define a MockAllocator for testing purposes
 class MockAllocator
 {

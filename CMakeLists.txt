@@ -28,35 +28,35 @@ endif()
 
 #---------------------------------------------------------------------------------------------------------
 # Specify different compiler flags and settings based on the build type
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    # Debug-specific settings
-    add_compile_definitions(NGIN_DEBUG)
+ # Debug specific settings
+if(CMAKE_BUILD_TYPE STREQUAL "Debug") 
     if(MSVC)
         add_compile_options(/Zi /Ob0 /Od)
     else()
         add_compile_options(-g)
     endif()
 endif()
-
+ # RelWithDebInfo/Debug specific settings
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     # Debug and RelWithDebInfo-specific settings
     add_compile_definitions(DEBUG)
+    add_compile_definitions(NGIN_DEBUG)
     if(MSVC)
         add_compile_options(/MDd)
     else()
         add_compile_options(-Wall -Wextra -pedantic)
     endif()
 endif()
-
+ # RelWithDebInfo/Release specific settings
 if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     # Release-specific settings
     if(MSVC)
         add_compile_options(/O2)
     else()
-        add_compile_options(-O3)
+        add_compile_options(-O2)
     endif()
 endif()
-
+ # Release specific settings
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_definitions(NDEBUG)
 endif()

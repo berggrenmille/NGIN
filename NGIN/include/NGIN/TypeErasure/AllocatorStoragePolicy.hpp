@@ -1,6 +1,6 @@
 #pragma once
 #include <NGIN/Memory/Allocator.hpp>
-namespace NGIN::Util
+namespace NGIN::TypeErasure
 {
     class AllocatorStoragePolicy
     {

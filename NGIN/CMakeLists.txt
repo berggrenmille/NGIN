@@ -19,7 +19,6 @@ add_library(NGIN SHARED
   "src/NGIN/Logging/AsyncLogger.cpp"
   "src/NGIN/Logging/FileSink.cpp"
   "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
-  "src/NGIN/Graphics/Vulkan/VulkanWindow.cpp"
   "src/NGIN/Graphics/Window.cpp" 
   "src/NGIN/Logging.cpp" 
   "src/NGIN/Logging/BaseLogger.cpp"  

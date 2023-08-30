@@ -1,19 +1,12 @@
 #pragma once
-
-enum class GraphicsBackend
+#include "GraphicsBackend.hpp"
+namespace NGIN::Graphics
 {
-	Vulkan,
-	OpenGL,
-	DirectX12,
-	//... other backends
-};
+	class Context
+	{
+	public:
+		Context(GraphicsBackend backend);
 
-
-
-class GraphicsContext
-{
-public:
-	GraphicsContext(GraphicsBackend backend);
-
-	// ... similarly for other components
-};
+		// ... similarly for other components
+	};
+}
