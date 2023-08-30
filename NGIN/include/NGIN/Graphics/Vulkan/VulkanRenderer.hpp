@@ -1,18 +1,17 @@
 #pragma once
 
 #include <NGIN/Core.h>
-#include <SDL2/SDL_vulkan.h>
-#include "../Renderer.hpp"
+#include <NGIN/Graphics/Renderer.hpp>
 #include <vulkan/vulkan.hpp>
 
 namespace NGIN::Graphics
 {
-	class VulkanWindow;
+	class Window;
 
 	class VulkanRenderer : public Renderer
 	{
 	public:
-		NGIN_API VulkanRenderer(VulkanWindow *window);
+		NGIN_API VulkanRenderer(Window &window);
 		NGIN_API ~VulkanRenderer();
 
 		NGIN_API virtual bool Initialize() override;
@@ -28,7 +27,7 @@ namespace NGIN::Graphics
 
 		int RateDeviceSuitability(const vk::PhysicalDevice &device) const;
 
-		VulkanWindow *vulkanWindow;
+		Window &window;
 		vk::Instance vkInstance;
 		vk::SurfaceKHR vkSurface;
 		vk::PhysicalDevice vkPhysicalDevice;

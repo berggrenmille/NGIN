@@ -1,13 +1,14 @@
 #include <Precompiled/PCH.h>
 #include <NGIN/Graphics/Vulkan/VulkanRenderer.hpp>
-#include <NGIN/Graphics/Vulkan/VulkanWindow.hpp>
+#include <NGIN/Graphics/Window.hpp>
+#include <SDL2/SDL_vulkan.h>
 
 #include <NGIN/Logging.hpp>
 
 namespace NGIN::Graphics
 {
-	VulkanRenderer::VulkanRenderer(VulkanWindow *window)
-		: vulkanWindow(window)
+	VulkanRenderer::VulkanRenderer(Window &window)
+		: window(window)
 	{
 		// Initialize other members as necessary
 	}
@@ -76,9 +77,9 @@ namespace NGIN::Graphics
 
 		// Get the required extensions from SDL and add them to the createInfo
 		unsigned extensionCount;
-		SDL_Vulkan_GetInstanceExtensions(vulkanWindow->GetSDLWindow(), &extensionCount, nullptr);
+		SDL_Vulkan_GetInstanceExtensions(window.GetSDLWindow(), &extensionCount, nullptr);
 		std::vector<const char *> extensions(extensionCount);
-		SDL_Vulkan_GetInstanceExtensions(vulkanWindow->GetSDLWindow(), &extensionCount, extensions.data());
+		SDL_Vulkan_GetInstanceExtensions(window.GetSDLWindow(), &extensionCount, extensions.data());
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 		createInfo.ppEnabledExtensionNames = extensions.data();
 
@@ -211,7 +212,7 @@ namespace NGIN::Graphics
 		VkSurfaceKHR tempSurface;
 
 		// Attempt to create a Vulkan surface using SDL
-		if (!SDL_Vulkan_CreateSurface(vulkanWindow->GetSDLWindow(), static_cast<VkInstance>(vkInstance), &tempSurface))
+		if (!SDL_Vulkan_CreateSurface(window.GetSDLWindow(), static_cast<VkInstance>(vkInstance), &tempSurface))
 		{
 			NGIN_ERROR("Failed to create Vulkan surface. SDL: {}", SDL_GetError());
 			return false;

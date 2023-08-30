@@ -1,7 +1,7 @@
+
 #include <gtest/gtest.h>
 #include <NGIN/TypeErasure/StaticStoragePolicy.hpp> // Replace with the actual path
-
-#include <iostream>
+#include <cstddef>
 
 using namespace NGIN;
 namespace

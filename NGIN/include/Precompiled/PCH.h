@@ -1,4 +1,7 @@
+#pragma once
+
 #include <NGIN/Logging.hpp>
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -8,9 +11,4 @@
 #include <fstream>
 #include <array>
 
-
 #include <glm/glm.hpp>
-
-
-
-
