@@ -1,4 +1,5 @@
 #include <NGIN/Util/JSON.hpp>
+#include "JSON.hpp"
 namespace NGIN::Util
 {
 
@@ -15,6 +16,14 @@ namespace NGIN::Util
 		return !data.is_discarded();
 	}
 
+	bool JSON::Contains(const std::string &key) const
+	{
+		return data.contains(key);
+	}
+	bool JSON::IsEmpty() const
+	{
+		return data.empty();
+	}
 	JSON JSON::GetObject(const std::string &key) const
 	{
 		if (data.contains(key) && data[key].is_object())
