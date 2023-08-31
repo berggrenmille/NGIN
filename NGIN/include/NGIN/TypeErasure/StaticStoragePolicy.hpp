@@ -5,8 +5,16 @@ namespace NGIN::TypeErasure
 {
 
     template <std::size_t Size = 64>
-    class StaticStoragePolicy
+    class
+#ifdef _MSC_VER
+        __declspec(align(16))
+#else
+        alignas(16)
+#endif
+            StaticStoragePolicy
     {
+        static_assert(Size % 16 == 0, "Size must be a multiple of 16.");
+
     public:
         StaticStoragePolicy() = delete;
 
@@ -43,8 +51,8 @@ namespace NGIN::TypeErasure
         void *get() { return &buffer[0]; }
 
     private:
-        alignas(alignof(std::max_align_t)) std::byte buffer[Size];
-
         void (*destructor)(void *) = nullptr;
+
+        std::byte buffer[Size];
     };
 }

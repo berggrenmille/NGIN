@@ -12,8 +12,16 @@ namespace NGIN::TypeErasure
     /// If the object fits within the buffer size specified by Size, it is stored statically.
     /// Otherwise, it is stored dynamically on the heap.
     template <std::size_t Size = 128>
-    class HybridStoragePolicy
+    class
+#ifdef _MSC_VER
+        __declspec(align(16))
+#else
+        alignas(16)
+#endif
+            HybridStoragePolicy
     {
+        static_assert(Size % 16 == 0, "Size must be a multiple of 16.");
+
     public:
         /// \brief Default constructor is deleted to prevent empty initialization.
         HybridStoragePolicy() = delete;
@@ -27,20 +35,17 @@ namespace NGIN::TypeErasure
             if (sizeof(T) <= Size)
             {
                 // Using placement new here
-                new (buffer) T(obj);
-                destructor = [](void *obj)
-                {
-                    reinterpret_cast<T *>(obj)->~T();
-                };
-                ptr = nullptr; // Indicate static storage is used
+                new (&data.buffer[0]) T(obj);
+                SetDestructor([](void *obj)
+                              { reinterpret_cast<T *>(obj)->~T(); },
+                              false);
             }
             else
             {
-                ptr = new T(obj);
-                destructor = [](void *obj)
-                {
-                    delete static_cast<T *>(obj);
-                };
+                data.ptr = new T(obj);
+                SetDestructor([](void *obj)
+                              { delete static_cast<T *>(obj); },
+                              true);
             }
         }
 
@@ -53,20 +58,17 @@ namespace NGIN::TypeErasure
             if (sizeof(T) <= Size)
             {
                 // Using placement new here
-                new (&buffer[0]) T(std::move(obj));
-                destructor = [](void *obj)
-                {
-                    reinterpret_cast<T *>(obj)->~T();
-                };
-                ptr = nullptr; // Indicate static storage is used
+                new (&data.buffer[0]) T(std::move(obj));
+                SetDestructor([](void *obj)
+                              { reinterpret_cast<T *>(obj)->~T(); },
+                              false);
             }
             else
             {
-                ptr = new T(std::move(obj));
-                destructor = [](void *obj)
-                {
-                    delete static_cast<T *>(obj);
-                };
+                data.ptr = new T(std::move(obj));
+                SetDestructor([](void *obj)
+                              { delete static_cast<T *>(obj); },
+                              true);
             }
         }
 
@@ -77,7 +79,8 @@ namespace NGIN::TypeErasure
         {
             if (destructor)
             {
-                destructor(ptr ? ptr : &buffer[0]);
+                void (*actualDestructor)(void *) = reinterpret_cast<void (*)(void *)>(reinterpret_cast<std::uintptr_t>(destructor) & ~std::uintptr_t(1));
+                actualDestructor(UseHeap() ? data.ptr : &data.buffer[0]);
             }
         }
 
@@ -85,22 +88,30 @@ namespace NGIN::TypeErasure
         /// \return A void pointer to the stored object.
         void *get()
         {
-            return ptr ? ptr : &buffer[0];
+            return UseHeap() ? data.ptr : &data.buffer[0];
         }
 
     private:
-        /// \brief A pointer to the dynamically stored object, if used.
-        void *ptr = nullptr;
-
-        /// \brief A buffer for static storage.
-        ///
-        /// Aligning to max_align_t to ensure that the buffer is correctly aligned for any type T.
-        alignas(alignof(std::max_align_t)) std::byte buffer[Size];
-
         /// \brief A function pointer for the destructor of the stored object.
         ///
         /// This function pointer will point to the appropriate destructor based on the type of object stored.
         /// It is used in the destructor to clean up the object.
         void (*destructor)(void *) = nullptr;
+
+        union Data
+        {
+            void *ptr;
+            std::byte buffer[Size];
+        } data;
+
+        void SetDestructor(void (*d)(void *), bool heap)
+        {
+            destructor = reinterpret_cast<void (*)(void *)>((reinterpret_cast<uintptr_t>(d) & ~uintptr_t(1)) | static_cast<uintptr_t>(heap));
+        }
+
+        inline bool UseHeap() const
+        {
+            return reinterpret_cast<uintptr_t>(destructor) & 1;
+        }
     };
 }
