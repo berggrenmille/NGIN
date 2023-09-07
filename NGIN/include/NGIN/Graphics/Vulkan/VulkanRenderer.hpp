@@ -6,8 +6,17 @@
 
 namespace NGIN::Graphics
 {
+	// Forward declaration of the Window class.
 	class Window;
 
+	/**
+	 * @class VulkanRenderer
+	 * @brief A Renderer implementation using the Vulkan Graphics API.
+	 *
+	 * This class provides functionalities for rendering using Vulkan.
+	 * It manages Vulkan resources such as instances, devices, and surfaces, and provides
+	 * core rendering functionalities like viewport setting, frame clearing, and more.
+	 */
 	class VulkanRenderer : public Renderer
 	{
 	public:

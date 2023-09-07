@@ -76,7 +76,7 @@ namespace NGIN::Graphics
 #endif
 
 		// Get the required extensions from SDL and add them to the createInfo
-		unsigned extensionCount;
+		uint32_t extensionCount;
 		SDL_Vulkan_GetInstanceExtensions(window.GetSDLWindow(), &extensionCount, nullptr);
 		std::vector<const char *> extensions(extensionCount);
 		SDL_Vulkan_GetInstanceExtensions(window.GetSDLWindow(), &extensionCount, extensions.data());
@@ -209,6 +209,7 @@ namespace NGIN::Graphics
 
 	bool VulkanRenderer::SetupSurface()
 	{
+		// Create a temporary VkSurfaceKHR handle
 		VkSurfaceKHR tempSurface;
 
 		// Attempt to create a Vulkan surface using SDL
