@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include <NGIN/TypeErasure/StaticStoragePolicy.hpp> // Replace with the actual path
+#include <NGIN/Meta/StaticStoragePolicy.hpp>
 #include <cstddef>
 
 using namespace NGIN;
@@ -38,7 +38,7 @@ class StaticStoragePolicyTest : public ::testing::Test
 
 TEST_F(StaticStoragePolicyTest, HandlesSmallTypeByValue)
 {
-    TypeErasure::StaticStoragePolicy<128> policy{SmallType()};
+    Meta::StaticStoragePolicy<128> policy{SmallType()};
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
 }
@@ -46,7 +46,7 @@ TEST_F(StaticStoragePolicyTest, HandlesSmallTypeByValue)
 TEST_F(StaticStoragePolicyTest, HandlesSmallTypeByMove)
 {
     SmallType small;
-    TypeErasure::StaticStoragePolicy<128> policy(std::move(small));
+    Meta::StaticStoragePolicy<128> policy(std::move(small));
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
 }
@@ -54,7 +54,7 @@ TEST_F(StaticStoragePolicyTest, HandlesSmallTypeByMove)
 TEST_F(StaticStoragePolicyTest, DestructorForSmallType)
 {
     {
-        TypeErasure::StaticStoragePolicy<128> policy{SmallType()};
+        Meta::StaticStoragePolicy<128> policy{SmallType()};
         SmallType *ptr = static_cast<SmallType *>(policy.get());
         EXPECT_EQ(ptr->x, 42);
     }
@@ -68,7 +68,7 @@ TEST_F(StaticStoragePolicyTest, CompileTimeCheckForSize)
 {
     LargeType *ptr;
     {
-        TypeErasure::StaticStoragePolicy<128> policy{LargeType()};
+        Meta::StaticStoragePolicy<128> policy{LargeType()};
         ptr = static_cast<LargeType *>(policy.get());
         EXPECT_EQ(ptr->data[0], 'a');
     }

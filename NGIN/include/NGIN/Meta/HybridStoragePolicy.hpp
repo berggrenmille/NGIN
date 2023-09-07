@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <memory>
 
-namespace NGIN::TypeErasure
+namespace NGIN::Meta
 {
     /// \class HybridStoragePolicy
     /// \tparam Size The size of the static buffer, defaults to 128 bytes.

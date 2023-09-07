@@ -1,6 +1,6 @@
 #pragma once
 
-namespace NGIN::TypeErasure
+namespace NGIN::Meta
 {
     struct Deleter
     {

@@ -1,7 +1,7 @@
 #pragma once
 #include <cstddef>
 
-namespace NGIN::TypeErasure
+namespace NGIN::Meta
 {
 
     template <std::size_t Size = 64>

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace NGIN::TypeErasure
+namespace NGIN::Meta
 {
     /// \class DynamicStoragePolicy
     /// \brief A class for dynamic storage management.
