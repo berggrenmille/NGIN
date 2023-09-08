@@ -1,5 +1,5 @@
 #include <NGIN/Memory/LinearAllocator.hpp>
-
+#include <NGIN/Meta/Reflection/Registration.hpp>
 namespace NGIN::Memory
 {
 
@@ -54,3 +54,9 @@ namespace NGIN::Memory
         return targetAddress >= startAddress && targetAddress < endAddress;
     }
 } // namespace NGIN::Memory
+
+NGIN_REFLECTION_REGISTRATION()
+{
+    using namespace NGIN::Meta::Reflection;
+    RegisterClass<NGIN::Memory::LinearAllocator>();
+}

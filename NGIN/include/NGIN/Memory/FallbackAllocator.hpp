@@ -1,8 +1,8 @@
 #pragma once
-#include "Internal/AllocatorConcepts.hpp"
+#include <NGIN/Memory/Allocator.hpp>
 namespace NGIN::Memory
 {
-    template <Internal::IsAllocator PrimaryT, Internal::IsAllocator FallbackT>
+    template <IsAllocator PrimaryT, IsAllocator FallbackT>
     class FallbackAllocator
     {
     public:
@@ -33,21 +33,21 @@ namespace NGIN::Memory
 
             if (primary.Owns(ptr))
             {
-                if constexpr (Internal::HasDeallocate<PrimaryT>)
+                if constexpr (HasDeallocate<PrimaryT>)
                     primary.Deallocate(ptr);
             }
             else if (fallback.Owns(ptr))
             {
-                if constexpr (Internal::HasDeallocate<FallbackT>)
+                if constexpr (HasDeallocate<FallbackT>)
                     fallback.Deallocate(ptr);
             }
         }
 
         void DeallocateAll()
         {
-            if constexpr (Internal::HasDeallocateAll<PrimaryT>)
+            if constexpr (HasDeallocateAll<PrimaryT>)
                 primary.DeallocateAll();
-            if constexpr (Internal::HasDeallocateAll<FallbackT>)
+            if constexpr (HasDeallocateAll<FallbackT>)
                 fallback.DeallocateAll();
         }
 

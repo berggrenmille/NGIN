@@ -26,6 +26,8 @@ namespace NGIN::Memory
 
         NGIN_API bool Owns(void *ptr) const;
 
+        float test = 32;
+
     private:
         std::unique_ptr<std::byte[]> buffer;
         std::byte *currentPos;
