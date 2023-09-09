@@ -23,7 +23,8 @@ add_library(NGIN SHARED
   "src/NGIN/Logging.cpp" 
   "src/NGIN/Logging/BaseLogger.cpp"  
   "src/Utils/JSON.cpp"
-  "src/NGIN/Meta/UUID.cpp")
+  "src/NGIN/Meta/UUID.cpp"
+  "src/NGIN/Meta/Reflection/Registry.cpp")
 
 
 # Setup precompiled header

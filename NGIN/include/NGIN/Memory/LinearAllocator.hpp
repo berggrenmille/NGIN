@@ -12,7 +12,7 @@ namespace NGIN::Memory
     class LinearAllocator
     {
     public:
-        NGIN_API LinearAllocator(size_t size);
+        NGIN_API LinearAllocator(size_t size = 1024);
 
         NGIN_API LinearAllocator(LinearAllocator &&other) noexcept;
 

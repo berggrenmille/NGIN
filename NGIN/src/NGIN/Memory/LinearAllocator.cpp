@@ -58,5 +58,5 @@ namespace NGIN::Memory
 NGIN_REFLECTION_REGISTRATION()
 {
     using namespace NGIN::Meta::Reflection;
-    RegisterClass<NGIN::Memory::LinearAllocator>();
+    RegisterClass<NGIN::Memory::LinearAllocator>().RegisterMethod("DeallocateAll", &NGIN::Memory::LinearAllocator::DeallocateAll);
 }
