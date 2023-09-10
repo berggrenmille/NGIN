@@ -104,12 +104,14 @@ namespace NGIN::Meta::Reflection
         ClassRegistrar<ClassT> &RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...))
         {
             Function methodData;
+
             methodData.name = methodName;
-            methodData.returnType = TypeName<ReturnType>::value; // Assuming you have this function
-            methodData.isConst = false;                          // Setting isConst to false for now
+
+            methodData.returnType = TypeName<ReturnType>::value;
+            methodData.isConst = false;
 
             // Extract argument types
-            (methodData.argTypes.push_back(TypeName<Args>::value), ...);
+            (methodData.argTypes.push_back(TypeName<Args>::value.data()), ...);
 
             // Create a lambda to wrap the method
             methodData.invoker = [methodPtr](void *instance, std::vector<std::any> &args) -> std::any
@@ -123,46 +125,32 @@ namespace NGIN::Meta::Reflection
             classData.functions.push_back(methodData);
             return *this;
         }
-        /*
-                // Overload for const methods
-                template <typename ReturnType, typename... Args>
-                ClassRegistrar<ClassT> &RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...) const)
-                {
-                    Method methodData;
-                    methodData.name = methodName;
-                    methodData.returnType = TypeName<ReturnType>::value;
-                    methodData.address = reinterpret_cast<void *>(methodPtr);
 
-                    // Set isConst to true since this is the const version of the method
-                    methodData.isConst = true;
+        template <typename ReturnType, typename... Args>
+        ClassRegistrar<ClassT> &RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...) const)
+        {
+            Function methodData;
 
-                    // Extract argument types
-                    (methodData.argTypes.push_back(TypeName<Args>::value), ...);
+            methodData.name = methodName;
 
-                    // Create invoker - similar as above
-                    methodData.invoker = [](void *instance, void *method, ...) -> void
-                    {
-                        va_list args;
-                        va_start(args, method);
+            methodData.returnType = TypeName<ReturnType>::value;
+            methodData.isConst = true;
 
-                        // Extract the arguments
-                        std::tuple<Args...> extractedArgs; // use a tuple to store the extracted arguments
-                        std::apply([&args](auto &...items)
-                                   { ExtractArgs(args, items...); },
-                                   extractedArgs);
+            // Extract argument types
+            (methodData.argTypes.push_back(TypeName<Args>::value.data()), ...);
 
-                        // Call the method
-                        auto typedMethodPtr = reinterpret_cast<ReturnType (ClassT::*)(Args...)>(method);
-                        std::apply([instance, typedMethodPtr](auto &...items)
-                                   { (reinterpret_cast<ClassT *>(instance)->*typedMethodPtr)(items...); },
-                                   extractedArgs);
+            // Create a lambda to wrap the method
+            methodData.invoker = [methodPtr](void *instance, std::vector<std::any> &args) -> std::any
+            {
+                ClassT *classInstance = reinterpret_cast<ClassT *>(instance);
+                if (args.size() != sizeof...(Args))
+                    throw std::runtime_error("Incorrect number of arguments.");
+                return InvokeMethod(classInstance, methodPtr, args);
+            };
 
-                        va_end(args);
-                    };
-
-                    classData.functions.push_back(methodData);
-                    return *this;
-                }*/
+            classData.functions.push_back(methodData);
+            return *this;
+        }
 
         ~ClassRegistrar()
         {
@@ -184,6 +172,7 @@ namespace NGIN::Meta::Reflection
             else // This static_assert is to ensure the function won't compile when the index goes out of range
             {
                 static_assert(Index < sizeof...(ArgTypes), "Index out of range when unpacking arguments.");
+                return {};
             }
         }
 
@@ -201,6 +190,42 @@ namespace NGIN::Meta::Reflection
             else // This static_assert is to ensure the function won't compile when the index goes out of range
             {
                 static_assert(Index < sizeof...(ArgTypes), "Index out of range when unpacking arguments.");
+                return {};
+            }
+        }
+
+        // INVOKE
+        template <typename ReturnType, std::size_t Index = 0, typename... ArgTypes>
+        static std::any InvokeMethod(ClassT *classInstance, ReturnType (ClassT::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args)
+        {
+            if constexpr (Index == sizeof...(ArgTypes)) // Base case
+            {
+                return std::any(std::apply([classInstance, methodPtr](auto &&...unpackedArgs)
+                                           { return (classInstance->*methodPtr)(std::forward<decltype(unpackedArgs)>(unpackedArgs)...); },
+                                           std::tuple<std::any_cast<ArgTypes>(args[Index])...>));
+            }
+            else // This static_assert is to ensure the function won't compile when the index goes out of range
+            {
+                static_assert(Index < sizeof...(ArgTypes), "Index out of range when unpacking arguments.");
+                return {};
+            }
+        }
+
+        template <std::size_t Index = 0, typename... ArgTypes>
+        static std::any InvokeMethod(ClassT *classInstance, void (ClassT::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args)
+        {
+            if constexpr (Index == sizeof...(ArgTypes)) // Base case
+            {
+                auto tupleArgs = std::make_tuple(std::any_cast<ArgTypes>(args[Index])...);
+                std::apply([classInstance, methodPtr](auto &&...unpackedArgs)
+                           { (classInstance->*methodPtr)(std::forward<decltype(unpackedArgs)>(unpackedArgs)...); },
+                           tupleArgs);
+                return {};
+            }
+            else // This static_assert is to ensure the function won't compile when the index goes out of range
+            {
+                static_assert(Index < sizeof...(ArgTypes), "Index out of range when unpacking arguments.");
+                return {};
             }
         }
     };
