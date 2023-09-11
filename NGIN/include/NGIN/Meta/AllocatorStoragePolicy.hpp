@@ -9,9 +9,9 @@ namespace NGIN::Meta
 
         template <typename T>
         AllocatorStoragePolicy(const T &obj, NGIN::Memory::Allocator &alloc)
-            : allocator(alloc)
+            : allocator(alloc), ptr(alloc.New<T>(obj))
         {
-            ptr = alloc.New<T>(obj);
+
             destructor = [&](void *obj)
             {
                 alloc.Delete(static_cast<T *>(obj));

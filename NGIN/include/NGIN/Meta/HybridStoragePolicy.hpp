@@ -2,6 +2,14 @@
 #include <cstddef>
 #include <memory>
 
+#define NGIN_HYBRID_STORAGE_ALIGNMENT 16
+#define NGIN_HYBRID_STORAGE_TO_STRING(x) #x
+#if defined(_MSC_VER)
+#define NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE __declspec(align(NGIN_HYBRID_STORAGE_ALIGNMENT))
+#else
+#define NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE alignas(NGIN_HYBRID_STORAGE_ALIGNMENT)
+#endif
+
 namespace NGIN::Meta
 {
     /// \class HybridStoragePolicy
@@ -12,15 +20,9 @@ namespace NGIN::Meta
     /// If the object fits within the buffer size specified by Size, it is stored statically.
     /// Otherwise, it is stored dynamically on the heap.
     template <std::size_t Size = 128>
-    class
-#ifdef _MSC_VER
-        __declspec(align(16))
-#else
-        alignas(16)
-#endif
-            HybridStoragePolicy
+    class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE HybridStoragePolicy
     {
-        static_assert(Size % 16 == 0, "Size must be a multiple of 16.");
+        static_assert(Size % NGIN_HYBRID_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_HYBRID_STORAGE_TO_STRING(NGIN_HYBRID_STORAGE_ALIGNMENT) ".");
 
     public:
         /// \brief Default constructor is deleted to prevent empty initialization.
@@ -32,7 +34,7 @@ namespace NGIN::Meta
         template <typename T>
         HybridStoragePolicy(const T &obj)
         {
-            if (sizeof(T) <= Size)
+            if constexpr (sizeof(T) <= Size)
             {
                 // Using placement new here
                 new (&data.buffer[0]) T(obj);
@@ -55,7 +57,7 @@ namespace NGIN::Meta
         template <typename T>
         HybridStoragePolicy(T &&obj)
         {
-            if (sizeof(T) <= Size)
+            if constexpr (sizeof(T) <= Size)
             {
                 // Using placement new here
                 new (&data.buffer[0]) T(std::move(obj));
