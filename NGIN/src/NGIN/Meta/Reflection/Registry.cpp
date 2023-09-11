@@ -9,7 +9,7 @@ namespace NGIN::Meta::Reflection
         return instance;
     }
 
-    void Registry::AddClass(const Class &classData)
+    void Registry::AddClass(const Types::Class &classData)
     {
         classMap[classData.name] = classData;
         std::cout << classData.name << std::endl;
@@ -24,7 +24,7 @@ namespace NGIN::Meta::Reflection
             std::cout << "\t" << func.name << " : " << func.returnType << std::endl;
         }
     }
-    const Class &Registry::GetClassFromString(std::string className)
+    const Types::Class &Registry::GetClassFromString(std::string className)
     {
         return classMap[className];
     }

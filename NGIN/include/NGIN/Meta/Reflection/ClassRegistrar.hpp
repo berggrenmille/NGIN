@@ -10,36 +10,7 @@
 namespace NGIN::Meta::Reflection
 {
 
-    template <typename... Args>
-    std::tuple<Args...> ExtractArgsIntoTuple(va_list &args)
-    {
-        return std::tuple<Args...>{va_arg(args, Args)...};
-    }
-
-    template <typename ClassT, typename... Args>
-    static void MethodInvoker(void *context, void *instance, ...)
-    {
-        auto methodPtr = reinterpret_cast<void (ClassT::*)(Args...)>(context);
-
-        va_list args;
-        va_start(args, instance);
-
-        std::tuple<Args...> argumentsTuple;
-
-        // Unpack the arguments
-        std::apply([&args](auto &...items)
-                   { (..., (items = va_arg(args, decltype(items)))); },
-                   argumentsTuple);
-
-        // Use the arguments tuple to invoke the method on the instance
-        std::apply([instance, methodPtr](auto &...items)
-                   { (reinterpret_cast<ClassT *>(instance)->*methodPtr)(items...); },
-                   argumentsTuple);
-
-        va_end(args);
-    }
-
-    template <typename ClassT>
+    template <typename ClassType>
     class ClassRegistrar
     {
     public:
@@ -49,102 +20,102 @@ namespace NGIN::Meta::Reflection
         ClassRegistrar();
         ClassRegistrar(const std::string &className);
 
-        ClassRegistrar<ClassT> &RegisterConstructor();
-        ClassRegistrar<ClassT> &RegisterDestructor();
+        ClassRegistrar<ClassType> &RegisterConstructor();
+        ClassRegistrar<ClassType> &RegisterDestructor();
         template <typename FieldType>
-        ClassRegistrar<ClassT> &RegisterProperty(const std::string &fieldName, FieldType ClassT::*fieldPtr);
+        ClassRegistrar<ClassType> &RegisterProperty(const std::string &fieldName, FieldType ClassType::*fieldPtr);
 
         template <typename ReturnType, typename... Args>
-        ClassRegistrar<ClassT> &RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...));
+        ClassRegistrar<ClassType> &RegisterMethod(const std::string &methodName, ReturnType (ClassType::*methodPtr)(Args...));
         template <typename ReturnType, typename... Args>
-        ClassRegistrar<ClassT> &RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...) const);
+        ClassRegistrar<ClassType> &RegisterMethod(const std::string &methodName, ReturnType (ClassType::*methodPtr)(Args...) const);
 
         ~ClassRegistrar();
 
     private:
-        Class classData;
+        Types::Class classData;
 
         template <typename ReturnType, std::size_t Index = 0, typename... ArgTypes>
-        static std::any InvokeMethod(ClassT *classInstance, ReturnType (ClassT::*methodPtr)(ArgTypes...), std::vector<std::any> &args);
+        static std::any InvokeMethod(ClassType *classInstance, ReturnType (ClassType::*methodPtr)(ArgTypes...), std::vector<std::any> &args);
 
         template <std::size_t Index = 0, typename... ArgTypes>
-        static std::any InvokeMethod(ClassT *classInstance, void (ClassT::*methodPtr)(ArgTypes...), std::vector<std::any> &args);
+        static std::any InvokeMethod(ClassType *classInstance, void (ClassType::*methodPtr)(ArgTypes...), std::vector<std::any> &args);
 
         template <typename ReturnType, std::size_t Index = 0, typename... ArgTypes>
-        static std::any InvokeMethod(ClassT *classInstance, ReturnType (ClassT::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args);
+        static std::any InvokeMethod(ClassType *classInstance, ReturnType (ClassType::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args);
 
         template <std::size_t Index = 0, typename... ArgTypes>
-        static std::any InvokeMethod(ClassT *classInstance, void (ClassT::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args);
+        static std::any InvokeMethod(ClassType *classInstance, void (ClassType::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args);
     };
 
-    template <typename ClassT>
-    void *ClassRegistrar<ClassT>::DefaultCtor(void *memoryPtr)
+    template <typename ClassType>
+    void *ClassRegistrar<ClassType>::DefaultCtor(void *memoryPtr)
     {
-        return new (memoryPtr) ClassT();
+        return new (memoryPtr) ClassType();
     }
 
-    template <typename ClassT>
-    void ClassRegistrar<ClassT>::DefaultDtor(void *memoryPtr)
+    template <typename ClassType>
+    void ClassRegistrar<ClassType>::DefaultDtor(void *memoryPtr)
     {
-        reinterpret_cast<ClassT *>(memoryPtr)->~ClassT();
+        reinterpret_cast<ClassType *>(memoryPtr)->~ClassType();
     }
 
-    template <typename ClassT>
-    ClassRegistrar<ClassT>::ClassRegistrar()
+    template <typename ClassType>
+    ClassRegistrar<ClassType>::ClassRegistrar()
     {
-        classData.name = TypeName<ClassT>::value;
-        classData.ctor = &ClassRegistrar<ClassT>::DefaultCtor;
+        classData.name = TypeName<ClassType>::value;
+        classData.ctor = &ClassRegistrar<ClassType>::DefaultCtor;
 
-        classData.dtor = &ClassRegistrar<ClassT>::DefaultDtor;
+        classData.dtor = &ClassRegistrar<ClassType>::DefaultDtor;
     }
 
-    template <typename ClassT>
-    ClassRegistrar<ClassT>::ClassRegistrar(const std::string &className)
+    template <typename ClassType>
+    ClassRegistrar<ClassType>::ClassRegistrar(const std::string &className)
     {
         classData.name = className;
-        classData.ctor = &ClassRegistrar<ClassT>::DefaultCtor;
+        classData.ctor = &ClassRegistrar<ClassType>::DefaultCtor;
 
-        classData.dtor = &ClassRegistrar<ClassT>::DefaultDtor;
+        classData.dtor = &ClassRegistrar<ClassType>::DefaultDtor;
     }
 
-    template <typename ClassT>
-    ClassRegistrar<ClassT> &ClassRegistrar<ClassT>::RegisterConstructor()
+    template <typename ClassType>
+    ClassRegistrar<ClassType> &ClassRegistrar<ClassType>::RegisterConstructor()
     {
         classData.ctor = [](void *memoryPtr)
         {
-            new (memoryPtr) ClassT();
+            new (memoryPtr) ClassType();
         };
         return *this;
     }
 
-    template <typename ClassT>
-    ClassRegistrar<ClassT> &ClassRegistrar<ClassT>::RegisterDestructor()
+    template <typename ClassType>
+    ClassRegistrar<ClassType> &ClassRegistrar<ClassType>::RegisterDestructor()
     {
         classData.dtor = [](void *memoryPtr)
         {
-            reinterpret_cast<ClassT *>(memoryPtr)->~ClassT();
+            reinterpret_cast<ClassType *>(memoryPtr)->~ClassType();
         };
         return *this;
     }
 
-    template <typename ClassT>
+    template <typename ClassType>
     template <typename FieldType>
-    ClassRegistrar<ClassT> &ClassRegistrar<ClassT>::RegisterProperty(const std::string &fieldName, FieldType ClassT::*fieldPtr)
+    ClassRegistrar<ClassType> &ClassRegistrar<ClassType>::RegisterProperty(const std::string &fieldName, FieldType ClassType::*fieldPtr)
     {
-        Field fieldData;
+        Types::Field fieldData;
         fieldData.name = fieldName;
         fieldData.type = TypeName<FieldType>::value;
-        fieldData.offset = reinterpret_cast<std::size_t>(&(reinterpret_cast<ClassT *>(0)->*fieldPtr));
+        fieldData.offset = reinterpret_cast<std::size_t>(&(reinterpret_cast<ClassType *>(0)->*fieldPtr));
 
         classData.fields.push_back(fieldData);
         return *this;
     }
 
-    template <typename ClassT>
+    template <typename ClassType>
     template <typename ReturnType, typename... Args>
-    ClassRegistrar<ClassT> &ClassRegistrar<ClassT>::RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...))
+    ClassRegistrar<ClassType> &ClassRegistrar<ClassType>::RegisterMethod(const std::string &methodName, ReturnType (ClassType::*methodPtr)(Args...))
     {
-        Function methodData;
+        Types::Function methodData;
 
         methodData.name = methodName;
 
@@ -157,7 +128,7 @@ namespace NGIN::Meta::Reflection
         // Create a lambda to wrap the method
         methodData.invoker = [methodPtr](void *instance, std::vector<std::any> &args) -> std::any
         {
-            ClassT *classInstance = reinterpret_cast<ClassT *>(instance);
+            ClassType *classInstance = reinterpret_cast<ClassType *>(instance);
             if (args.size() != sizeof...(Args))
                 throw std::runtime_error("Incorrect number of arguments.");
             return InvokeMethod(classInstance, methodPtr, args);
@@ -167,11 +138,11 @@ namespace NGIN::Meta::Reflection
         return *this;
     }
 
-    template <typename ClassT>
+    template <typename ClassType>
     template <typename ReturnType, typename... Args>
-    ClassRegistrar<ClassT> &ClassRegistrar<ClassT>::RegisterMethod(const std::string &methodName, ReturnType (ClassT::*methodPtr)(Args...) const)
+    ClassRegistrar<ClassType> &ClassRegistrar<ClassType>::RegisterMethod(const std::string &methodName, ReturnType (ClassType::*methodPtr)(Args...) const)
     {
-        Function methodData;
+        Types::Function methodData;
 
         methodData.name = methodName;
 
@@ -184,7 +155,7 @@ namespace NGIN::Meta::Reflection
         // Create a lambda to wrap the method
         methodData.invoker = [methodPtr](void *instance, std::vector<std::any> &args) -> std::any
         {
-            ClassT *classInstance = reinterpret_cast<ClassT *>(instance);
+            ClassType *classInstance = reinterpret_cast<ClassType *>(instance);
             if (args.size() != sizeof...(Args))
                 throw std::runtime_error("Incorrect number of arguments.");
             return InvokeMethod(classInstance, methodPtr, args);
@@ -194,15 +165,15 @@ namespace NGIN::Meta::Reflection
         return *this;
     }
 
-    template <typename ClassT>
-    ClassRegistrar<ClassT>::~ClassRegistrar()
+    template <typename ClassType>
+    ClassRegistrar<ClassType>::~ClassRegistrar()
     {
         Registry::GetInstance().AddClass(classData);
     }
 
-    template <typename ClassT>
+    template <typename ClassType>
     template <typename ReturnType, std::size_t Index, typename... ArgTypes>
-    std::any ClassRegistrar<ClassT>::InvokeMethod(ClassT *classInstance, ReturnType (ClassT::*methodPtr)(ArgTypes...), std::vector<std::any> &args)
+    std::any ClassRegistrar<ClassType>::InvokeMethod(ClassType *classInstance, ReturnType (ClassType::*methodPtr)(ArgTypes...), std::vector<std::any> &args)
     {
         if constexpr (Index == sizeof...(ArgTypes)) // Base case
         {
@@ -217,9 +188,9 @@ namespace NGIN::Meta::Reflection
         }
     }
 
-    template <typename ClassT>
+    template <typename ClassType>
     template <std::size_t Index, typename... ArgTypes>
-    std::any ClassRegistrar<ClassT>::InvokeMethod(ClassT *classInstance, void (ClassT::*methodPtr)(ArgTypes...), std::vector<std::any> &args)
+    std::any ClassRegistrar<ClassType>::InvokeMethod(ClassType *classInstance, void (ClassType::*methodPtr)(ArgTypes...), std::vector<std::any> &args)
     {
         if constexpr (Index == sizeof...(ArgTypes)) // Base case
         {
@@ -237,9 +208,9 @@ namespace NGIN::Meta::Reflection
     }
 
     // INVOKE
-    template <typename ClassT>
+    template <typename ClassType>
     template <typename ReturnType, std::size_t Index, typename... ArgTypes>
-    std::any ClassRegistrar<ClassT>::InvokeMethod(ClassT *classInstance, ReturnType (ClassT::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args)
+    std::any ClassRegistrar<ClassType>::InvokeMethod(ClassType *classInstance, ReturnType (ClassType::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args)
     {
         if constexpr (Index == sizeof...(ArgTypes)) // Base case
         {
@@ -254,9 +225,9 @@ namespace NGIN::Meta::Reflection
         }
     }
 
-    template <typename ClassT>
+    template <typename ClassType>
     template <std::size_t Index, typename... ArgTypes>
-    std::any ClassRegistrar<ClassT>::InvokeMethod(ClassT *classInstance, void (ClassT::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args)
+    std::any ClassRegistrar<ClassType>::InvokeMethod(ClassType *classInstance, void (ClassType::*methodPtr)(ArgTypes...) const, std::vector<std::any> &args)
     {
         if constexpr (Index == sizeof...(ArgTypes)) // Base case
         {
