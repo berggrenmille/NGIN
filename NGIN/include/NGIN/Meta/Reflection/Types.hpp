@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <functional>
 #include <any>
+
 namespace NGIN::Meta::Reflection
 {
 
@@ -32,9 +33,9 @@ namespace NGIN::Meta::Reflection
     using DtorFuncPtr = void (*)(void *);
     struct Class
     {
-        std::string name;
-        size_t size;
-        size_t alignment;
+        std::string name = "";
+        size_t size = 0;
+        size_t alignment = alignof(std::max_align_t);
         CtorFuncPtr ctor = nullptr;
         DtorFuncPtr dtor = nullptr;
         std::vector<Field> fields;

@@ -24,4 +24,9 @@ namespace NGIN::Meta::Reflection
             std::cout << "\t" << func.name << " : " << func.returnType << std::endl;
         }
     }
+    const Class &Registry::GetClassFromString(std::string className)
+    {
+        return classMap[className];
+    }
+
 }
