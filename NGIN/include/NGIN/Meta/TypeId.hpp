@@ -3,14 +3,14 @@
 namespace NGIN::Meta
 {
     template <typename T>
-    struct type
+    struct TypeIDResolver
     {
-        static void id() {}
+        static void ID() {}
     };
 
     template <typename T>
-    size_t TypeId()
+    size_t TypeID()
     {
-        return reinterpret_cast<size_t>(&type<T>::id);
+        return reinterpret_cast<size_t>(&TypeIDResolver<T>::ID);
     }
 }

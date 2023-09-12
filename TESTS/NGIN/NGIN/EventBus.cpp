@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <NGIN/EventBus.hpp>
+#include <NGIN/Core/EventBus.hpp>
 
-using namespace NGIN;
+using namespace NGIN::Core;
 
 class EventBusTest : public ::testing::Test
 {
@@ -15,7 +15,7 @@ protected:
 	};
 
 	// This will serve as a global event handler.
-	static void GlobalHandler(TestEvent& event)
+	static void GlobalHandler(TestEvent &event)
 	{
 		event.data += 1;
 	}
@@ -26,7 +26,7 @@ protected:
 	public:
 		int value = 0;
 
-		void MemberHandler(TestEvent& event)
+		void MemberHandler(TestEvent &event)
 		{
 			event.data += 2;
 			value += 2;
@@ -36,7 +36,7 @@ protected:
 
 TEST_F(EventBusTest, GlobalSubscription)
 {
-	TestEvent e{ 0 };
+	TestEvent e{0};
 	bus.Subscribe<TestEvent>(GlobalHandler);
 	bus.Publish(e);
 	EXPECT_EQ(e.data, 1);
@@ -44,7 +44,7 @@ TEST_F(EventBusTest, GlobalSubscription)
 
 TEST_F(EventBusTest, MemberFunctionSubscription)
 {
-	TestEvent e{ 0 };
+	TestEvent e{0};
 	MockListener listener;
 	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
 	bus.Publish(e);
@@ -54,7 +54,7 @@ TEST_F(EventBusTest, MemberFunctionSubscription)
 
 TEST_F(EventBusTest, MultipleSubscriptions)
 {
-	TestEvent e{ 0 };
+	TestEvent e{0};
 	MockListener listener;
 	bus.Subscribe<TestEvent>(GlobalHandler);
 	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
@@ -64,4 +64,3 @@ TEST_F(EventBusTest, MultipleSubscriptions)
 }
 
 // Additional tests can be added here to cover more scenarios.
-
