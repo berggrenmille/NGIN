@@ -1,14 +1,16 @@
 #pragma once
-#include <NGIN/Memory/Allocator.hpp>
-namespace NGIN::Meta
+
+#include <NGIN/Meta/StoragePolicy.hpp>
+namespace NGIN::Meta::StoragePolicy
 {
-    class AllocatorStoragePolicy
+    template <typename AllocatorType>
+    class Allocator
     {
     public:
-        AllocatorStoragePolicy() = delete;
+        Allocator() = delete;
 
         template <typename T>
-        AllocatorStoragePolicy(const T &obj, NGIN::Memory::Allocator &alloc)
+        Allocator(const T &obj, AllocatorType &alloc)
             : allocator(alloc), ptr(alloc.New<T>(obj))
         {
 
@@ -19,7 +21,7 @@ namespace NGIN::Meta
         }
 
         template <typename T>
-        AllocatorStoragePolicy(T &&obj, Memory::Allocator &alloc)
+        Allocator(T &&obj, AllocatorType &alloc)
             : allocator(alloc)
         {
             ptr = alloc.New<T>(std::move(obj));
@@ -30,7 +32,7 @@ namespace NGIN::Meta
             };
         }
 
-        ~AllocatorStoragePolicy()
+        ~Allocator()
         {
             destructor(ptr);
         }
@@ -38,7 +40,7 @@ namespace NGIN::Meta
         void *get() const { return ptr; }
 
     private:
-        Memory::Allocator &allocator;
+        AllocatorType &allocator;
         void *ptr = nullptr;
         void (*destructor)(void *) = nullptr;
     };

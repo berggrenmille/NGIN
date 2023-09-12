@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/Mallocator.hpp>
 #include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Meta/StoragePolicy.hpp>
 #include <utility>
 #include <cstddef>
 #include <source_location>
@@ -38,6 +39,6 @@ TEST_F(MallocatorTest, Deallocate)
 
 TEST_F(MallocatorTest, TypeErase)
 {
-    NGIN::Memory::Allocator<> typeErasedAllocator(std::move(allocator));
+    NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> typeErasedAllocator(std::move(allocator));
     SUCCEED(); // If we get here, the test passed
 }

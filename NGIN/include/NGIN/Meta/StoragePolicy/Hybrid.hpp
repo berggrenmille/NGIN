@@ -10,29 +10,29 @@
 #define NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE alignas(NGIN_HYBRID_STORAGE_ALIGNMENT)
 #endif
 
-namespace NGIN::Meta
+namespace NGIN::Meta::StoragePolicy
 {
-    /// \class HybridStoragePolicy
+    /// \class Hybrid
     /// \tparam Size The size of the static buffer, defaults to 128 bytes.
     /// \brief A class for dynamic and static storage management.
     ///
-    /// The HybridStoragePolicy class is designed to handle storage for objects either on the stack or heap.
+    /// The Hybrid class is designed to handle storage for objects either on the stack or heap.
     /// If the object fits within the buffer size specified by Size, it is stored statically.
     /// Otherwise, it is stored dynamically on the heap.
     template <std::size_t Size = 128>
-    class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE HybridStoragePolicy
+    class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE Hybrid
     {
         static_assert(Size % NGIN_HYBRID_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_HYBRID_STORAGE_TO_STRING(NGIN_HYBRID_STORAGE_ALIGNMENT) ".");
 
     public:
         /// \brief Default constructor is deleted to prevent empty initialization.
-        HybridStoragePolicy() = delete;
+        Hybrid() = delete;
 
-        /// \brief Construct HybridStoragePolicy with an object.
+        /// \brief Construct Hybrid with an object.
         /// \tparam T The type of the object.
         /// \param obj The object to be stored.
         template <typename T>
-        HybridStoragePolicy(const T &obj)
+        Hybrid(const T &obj)
         {
             if constexpr (sizeof(T) <= Size)
             {
@@ -51,11 +51,11 @@ namespace NGIN::Meta
             }
         }
 
-        /// \brief Construct HybridStoragePolicy by moving an object.
+        /// \brief Construct Hybrid by moving an object.
         /// \tparam T The type of the object.
         /// \param obj The object to be moved into storage.
         template <typename T>
-        HybridStoragePolicy(T &&obj)
+        Hybrid(T &&obj)
         {
             if constexpr (sizeof(T) <= Size)
             {
@@ -74,10 +74,10 @@ namespace NGIN::Meta
             }
         }
 
-        /// \brief Destructor for HybridStoragePolicy.
+        /// \brief Destructor for Hybrid.
         ///
         /// Calls the destructor function pointer to clean up the stored object, whether it's on the stack or heap.
-        ~HybridStoragePolicy()
+        ~Hybrid()
         {
             if (destructor)
             {

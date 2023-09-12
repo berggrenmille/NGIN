@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Meta/StoragePolicy.hpp>
 
 using namespace NGIN;
 namespace
@@ -64,7 +65,7 @@ class AllocatorTest : public ::testing::Test
 {
 protected:
     MockAllocator mockAllocator;
-    Memory::Allocator<> allocator;
+    Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> allocator;
 
     AllocatorTest() : allocator(std::move(mockAllocator)) {}
 };

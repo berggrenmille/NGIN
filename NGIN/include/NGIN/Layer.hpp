@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NGIN/Meta/DynamicStoragePolicy.hpp>
+#include <NGIN/Meta/StoragePolicy.hpp>
 #include <NGIN/Memory/Allocator.hpp>
 
 #include <memory>
@@ -60,7 +60,7 @@ namespace NGIN
 	 * This class can manage any object that matches the expected interface (OnAttach, OnDetach, OnUpdate).
 	 * Instead of relying on virtual functions, it utilizes manual vtable pointers for a dynamic dispatch mechanism.
 	 */
-	template <typename StoragePolicy = Meta::DynamicStoragePolicy>
+
 	class Layer
 	{
 	public:
@@ -77,8 +77,8 @@ namespace NGIN
 			SetupFunctionPointers<T>();
 		}
 
-		template <typename T>
-		Layer(T &&layer, Memory::Allocator<> &allocator)
+		template <typename T, typename AllocatorType>
+		Layer(T &&layer, AllocatorType &allocator)
 			: pimpl(std::move(layer), allocator)
 		{
 			SetupFunctionPointers<T>();
@@ -105,7 +105,7 @@ namespace NGIN
 		 *
 		 * Utilizes a custom deleter to ensure the correct destruction of the type-erased object.
 		 */
-		StoragePolicy pimpl;
+		Meta::StoragePolicy::Hybrid<64> pimpl;
 
 		/**
 		 * @brief Function pointer that triggers the OnAttach method of the stored object.

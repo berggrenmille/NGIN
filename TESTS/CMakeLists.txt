@@ -35,9 +35,9 @@ endmacro()
 
 ngin_add_test_macro(NGIN_LOGGIN_TESTS "Logging")
 ngin_add_test_macro(NGIN_MEMORY_TESTS "Memory")
-ngin_add_test_macro(NGIN_META_TESTS "Memory")
+ngin_add_test_macro(NGIN_META_TESTS "Meta")
 
-#[===[
+
 
 # Define test sources
 file(GLOB_RECURSE NGIN_TEST_SOURCES "*.cpp")
@@ -49,8 +49,7 @@ target_link_libraries(NGIN_TESTS PRIVATE gtest_main NGIN)
 
 # Register tests
 
-add_test(NAME NGIN_TESTS 
-         COMMAND NGIN_TESTS)
+
 
 
 
@@ -71,4 +70,3 @@ if(NIGN_TEST_ON_BUILD)
     endif()
 endif()
 
-]===]

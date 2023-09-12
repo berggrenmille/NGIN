@@ -4,18 +4,18 @@ using namespace NGIN;
 
 LayerStack::~LayerStack()
 {
-	for (LayerT *layer : layers)
+	for (NGIN::Layer *layer : layers)
 	{
 		delete layer;
 	}
 }
 
-void LayerStack::PushLayer(LayerT *layer)
+void LayerStack::PushLayer(NGIN::Layer *layer)
 {
 	layers.emplace_back(layer);
 }
 
-void LayerStack::PopLayer(LayerT *layer)
+void LayerStack::PopLayer(NGIN::Layer *layer)
 {
 	auto it = std::find(layers.begin(), layers.end(), layer);
 	if (it != layers.end())
@@ -25,12 +25,12 @@ void LayerStack::PopLayer(LayerT *layer)
 	}
 }
 
-void LayerStack::PushOverlay(LayerT *overlay)
+void LayerStack::PushOverlay(NGIN::Layer *overlay)
 {
 	layers.emplace_back(overlay);
 }
 
-void LayerStack::PopOverlay(LayerT *overlay)
+void LayerStack::PopOverlay(NGIN::Layer *overlay)
 {
 	auto it = std::find(layers.begin(), layers.end(), overlay);
 	if (it != layers.end())
@@ -42,7 +42,7 @@ void LayerStack::PopOverlay(LayerT *overlay)
 
 void LayerStack::OnUpdate()
 {
-	for (LayerT *layer : layers)
+	for (NGIN::Layer *layer : layers)
 	{
 		layer->OnUpdate();
 	}

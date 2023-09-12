@@ -1,7 +1,6 @@
 
 #pragma once
 #include <NGIN/Core.h>
-#include <NGIN/Meta/DynamicStoragePolicy.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -50,7 +49,7 @@ namespace NGIN::Memory
     ///
     /// The Allocator class manages objects with the expected Allocate, Deallocate, and DeallocateAll interface.
     /// Instead of using virtual functions, it employs manual vtable pointers for dynamic dispatch.
-    template <typename StoragePolicy = Meta::DynamicStoragePolicy>
+    template <typename StoragePolicy>
     class Allocator
     {
     public:

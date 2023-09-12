@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <NGIN/Meta/HybridStoragePolicy.hpp> // Replace with the actual path
+#include <NGIN/Meta/StoragePolicy/Hybrid.hpp> // Replace with the actual path
 
 using namespace NGIN;
 
@@ -36,7 +36,7 @@ class HybridStoragePolicyTest : public ::testing::Test
 TEST_F(HybridStoragePolicyTest, HandlesSmallTypeByValue)
 {
 
-    Meta::HybridStoragePolicy<128> policy{SmallType()};
+    Meta::StoragePolicy::Hybrid<128> policy{SmallType()};
 
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
@@ -44,7 +44,7 @@ TEST_F(HybridStoragePolicyTest, HandlesSmallTypeByValue)
 
 TEST_F(HybridStoragePolicyTest, HandlesLargeTypeByValue)
 {
-    Meta::HybridStoragePolicy<128> policy{LargeType()};
+    Meta::StoragePolicy::Hybrid<128> policy{LargeType()};
     LargeType *ptr = static_cast<LargeType *>(policy.get());
     EXPECT_EQ(ptr->data[0], 'a');
 }
@@ -52,7 +52,7 @@ TEST_F(HybridStoragePolicyTest, HandlesLargeTypeByValue)
 TEST_F(HybridStoragePolicyTest, HandlesSmallTypeByMove)
 {
     SmallType small;
-    Meta::HybridStoragePolicy<128> policy(std::move(small));
+    Meta::StoragePolicy::Hybrid<128> policy(std::move(small));
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
 }
@@ -60,7 +60,7 @@ TEST_F(HybridStoragePolicyTest, HandlesSmallTypeByMove)
 TEST_F(HybridStoragePolicyTest, HandlesLargeTypeByMove)
 {
     LargeType large;
-    Meta::HybridStoragePolicy<128> policy(std::move(large));
+    Meta::StoragePolicy::Hybrid<128> policy(std::move(large));
     LargeType *ptr = static_cast<LargeType *>(policy.get());
     EXPECT_EQ(ptr->data[0], 'a');
 }
@@ -68,7 +68,7 @@ TEST_F(HybridStoragePolicyTest, HandlesLargeTypeByMove)
 TEST_F(HybridStoragePolicyTest, DestructorForSmallType)
 {
     {
-        Meta::HybridStoragePolicy<128> policy{SmallType()};
+        Meta::StoragePolicy::Hybrid<128> policy{SmallType()};
         SmallType *ptr = static_cast<SmallType *>(policy.get());
         EXPECT_EQ(ptr->x, 42);
     }
@@ -80,7 +80,7 @@ TEST_F(HybridStoragePolicyTest, DestructorForLargeType)
 {
 
     {
-        Meta::HybridStoragePolicy<128> policy{LargeType()};
+        Meta::StoragePolicy::Hybrid<128> policy{LargeType()};
         LargeType *ptr = static_cast<LargeType *>(policy.get());
         EXPECT_EQ(ptr->data[0], 'a');
     }

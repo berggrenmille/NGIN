@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/LinearAllocator.hpp>
 #include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Meta/StoragePolicy.hpp>
 #include <utility>
 using namespace NGIN::Memory;
 
@@ -48,7 +49,7 @@ TEST_F(LinearAllocatorTest, DeallocateAll)
 
 TEST_F(LinearAllocatorTest, TypeErase)
 {
-	NGIN::Memory::Allocator<> typeErasedAllocator(std::move(allocator));
+	NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> typeErasedAllocator(std::move(allocator));
 	SUCCEED(); // If we get here, the test passed
 }
 

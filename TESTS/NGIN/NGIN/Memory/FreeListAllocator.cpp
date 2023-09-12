@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <NGIN/Memory/FreeListAllocator.hpp>
 #include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Meta/StoragePolicy.hpp>
 #include <utility>
 
 using namespace NGIN;
@@ -80,7 +81,7 @@ TEST_F(FreeListAllocatorTest, Fragmentation)
 
 TEST_F(FreeListAllocatorTest, TypeErase)
 {
-	NGIN::Memory::Allocator<> typeErasedAllocator(std::move(allocator));
+	NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> typeErasedAllocator(std::move(allocator));
 	SUCCEED(); // If we get here, the test passed
 }
 

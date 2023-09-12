@@ -1,25 +1,25 @@
 #pragma once
 
-namespace NGIN::Meta
+namespace NGIN::Meta::StoragePolicy
 {
-    /// \class DynamicStoragePolicy
+    /// \class Dynamic
     /// \brief A class for dynamic storage management.
     ///
-    /// The DynamicStoragePolicy class is a utility for dynamically managing storage.
+    /// The Dynamic class is a utility for dynamically managing storage.
     /// It supports dynamic allocation and deallocation of objects of different types.
     /// This is particularly useful for type erasure techniques where the type of the object
     /// is required to be decoupled from the interface.
-    class DynamicStoragePolicy
+    class Dynamic
     {
     public:
         /// \brief Default constructor is deleted to prevent empty initialization.
-        DynamicStoragePolicy() = delete;
+        Dynamic() = delete;
 
-        /// \brief Construct DynamicStoragePolicy with an object.
+        /// \brief Construct Dynamic with an object.
         /// \tparam T The type of the object.
         /// \param obj The object to be stored.
         template <typename T>
-        DynamicStoragePolicy(const T &obj)
+        Dynamic(const T &obj)
         {
             ptr = new T(obj);
             destructor = [](void *obj)
@@ -28,11 +28,11 @@ namespace NGIN::Meta
             };
         }
 
-        /// \brief Construct DynamicStoragePolicy by moving an object.
+        /// \brief Construct Dynamic by moving an object.
         /// \tparam T The type of the object.
         /// \param obj The object to be moved into storage.
         template <typename T>
-        DynamicStoragePolicy(T &&obj)
+        Dynamic(T &&obj)
         {
             ptr = new T(std::move(obj));
             destructor = [](void *obj)
@@ -41,10 +41,10 @@ namespace NGIN::Meta
             };
         }
 
-        /// \brief Destructor for DynamicStoragePolicy.
+        /// \brief Destructor for Dynamic.
         ///
         /// Calls the destructor function pointer to clean up the dynamically allocated object.
-        ~DynamicStoragePolicy()
+        ~Dynamic()
         {
             destructor(ptr);
         }
