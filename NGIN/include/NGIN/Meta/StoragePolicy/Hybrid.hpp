@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <memory>
 #include <cstring>
+#include "Concepts.hpp"
 
 #define NGIN_HYBRID_STORAGE_ALIGNMENT 16
 #define NGIN_HYBRID_STORAGE_TO_STRING(x) #x
@@ -13,130 +14,160 @@
 
 namespace NGIN::Meta::StoragePolicy
 {
-    /// \class Hybrid
-    /// \tparam Size The size of the static buffer, defaults to 128 bytes.
-    /// \brief A class for dynamic and static storage management.
-    ///
-    /// The Hybrid class is designed to handle storage for objects either on the stack or heap.
-    /// If the object fits within the buffer size specified by Size, it is stored statically.
-    /// Otherwise, it is stored dynamically on the heap.
-    template <std::size_t Size = 128>
-    class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE Hybrid
-    {
-        static_assert(Size % NGIN_HYBRID_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_HYBRID_STORAGE_TO_STRING(NGIN_HYBRID_STORAGE_ALIGNMENT) ".");
+	/// \class Hybrid
+	/// \tparam Size The size of the static buffer, defaults to 128 bytes.
+	/// \brief A class for dynamic and static storage management.
+	///
+	/// The Hybrid class is designed to handle storage for objects either on the stack or heap.
+	/// If the object fits within the buffer size specified by Size, it is stored statically.
+	/// Otherwise, it is stored dynamically on the heap.
+	template <std::size_t Size = 64>
+	class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE Hybrid
+	{
+		static_assert(Size% NGIN_HYBRID_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_HYBRID_STORAGE_TO_STRING(NGIN_HYBRID_STORAGE_ALIGNMENT) ".");
+		static_assert(Size >= sizeof(void*), "Size must be at least the size of a pointer.");
 
-    public:
-        /// \brief Default constructor is deleted to prevent empty initialization.
-        Hybrid() = delete;
+	public:
+		Hybrid();
+		Hybrid(const Hybrid&) = delete;
+		Hybrid(Hybrid&& other) noexcept;
+		Hybrid& operator=(Hybrid&& other) noexcept;
 
-        /// \brief Construct Hybrid with an object.
-        /// \tparam T The type of the object.
-        /// \param obj The object to be stored.
-        template <typename T>
-        Hybrid(const T &obj)
-        {
-            using StoredType = std::decay_t<T>;
-            if constexpr (std::is_same<StoredType, Hybrid<Size>>::value)
-            {
-                /// TODO: MIGHT BE BROKEN. CHECK THIS.
-                std::memcpy(&data.buffer[0], &obj.data.buffer[0], sizeof(StoredType));
-                destructor = obj.destructor;
-            }
-            else
-            {
-                if constexpr (sizeof(T) <= Size)
-                {
-                    // Using placement new here
-                    new (&data.buffer[0]) StoredType(obj);
-                    SetDestructor([](void *obj)
-                                  { reinterpret_cast<StoredType *>(obj)->~T(); },
-                                  false);
-                }
-                else
-                {
-                    data.ptr = new StoredType(obj);
-                    SetDestructor([](void *obj)
-                                  { delete static_cast<StoredType *>(obj); },
-                                  true);
-                }
-            }
-        }
+		template <IsStorageWrappable T>
+		Hybrid(T&& obj) requires IsNotSame<Hybrid<Size>, T>;
 
-        /// \brief Construct Hybrid by moving an object.
-        /// \tparam T The type of the object.
-        /// \param obj The object to be moved into storage.
-        template <typename T>
-        Hybrid(T &&obj)
-        {
-            using StoredType = std::decay_t<T>;
-            if constexpr (std::is_same<StoredType, Hybrid<Size>>::value)
-            {
-                std::memcpy(&data.buffer[0], &obj.data.buffer[0], sizeof(StoredType));
-                destructor = obj.destructor;
+		~Hybrid();
 
-                obj.data.ptr = nullptr;
-                obj.destructor = nullptr;
-            }
-            else
-            {
-                if constexpr (sizeof(T) <= Size)
-                {
-                    // Using placement new here
-                    new (&data.buffer[0]) StoredType(std::move(obj));
-                    SetDestructor([](void *obj)
-                                  { reinterpret_cast<StoredType *>(obj)->~T(); },
-                                  false);
-                }
-                else
-                {
-                    data.ptr = new StoredType(std::move(obj));
-                    SetDestructor([](void *obj)
-                                  { delete static_cast<StoredType *>(obj); },
-                                  true);
-                }
-            }
-        }
+		void* get();
 
-        /// \brief Destructor for Hybrid.
-        ///
-        /// Calls the destructor function pointer to clean up the stored object, whether it's on the stack or heap.
-        ~Hybrid()
-        {
-            if (destructor)
-            {
-                void (*actualDestructor)(void *) = reinterpret_cast<void (*)(void *)>(reinterpret_cast<std::uintptr_t>(destructor) & ~std::uintptr_t(1));
-                actualDestructor(UseHeap() ? data.ptr : &data.buffer[0]);
-            }
-        }
+	private:
+		void SetDestructorFunc(void (*d)(void*), bool heap);
+		bool UseHeap() const;
 
-        /// \brief Get the stored object as a void pointer.
-        /// \return A void pointer to the stored object.
-        void *get()
-        {
-            return UseHeap() ? data.ptr : &data.buffer[0];
-        }
+		void (*destructorFunc)(void*) = nullptr;
+		void (*moveFunc)(void* dst, void* src) = nullptr;
 
-    private:
-        /// \brief A function pointer for the destructor of the stored object.
-        ///
-        /// This function pointer will point to the appropriate destructor based on the type of object stored.
-        /// It is used in the destructor to clean up the object.
-        void (*destructor)(void *) = nullptr;
 
-        union Data
-        {
-            void *ptr;
-            std::byte buffer[Size];
-        } data;
+		union Data
+		{
+			void* ptr = nullptr;
+			std::byte buffer[Size];
+			Data() : buffer{  } {}
+		} data;
+	};
 
-        void SetDestructor(void (*d)(void *), bool heap)
-        {
-            destructor = reinterpret_cast<void (*)(void *)>((reinterpret_cast<uintptr_t>(d) & ~uintptr_t(1)) | static_cast<uintptr_t>(heap));
-        }
+	template <std::size_t Size>
+	Hybrid<Size>::Hybrid()
+		: data{}
+	{}
 
-        inline bool UseHeap() const
-        {
-            return reinterpret_cast<uintptr_t>(destructor) & 1;
-        }
-    };
+	template <std::size_t Size>
+	Hybrid<Size>::Hybrid(Hybrid&& other) noexcept
+		: data{}
+	{
+		if (!UseHeap())
+		{
+			if (other.moveFunc)
+				other.moveFunc(get(), other.get());
+			else
+				std::memcpy(get(), other.get(), Size);
+			destructorFunc = other.destructorFunc;
+			moveFunc = other.moveFunc;
+
+			other.destructorFunc = nullptr;
+		}
+		else
+		{
+			data.ptr = other.data.ptr;
+			destructorFunc = other.destructorFunc;
+
+			other.data.ptr = nullptr;
+			other.destructorFunc = nullptr;
+		}
+	}
+
+	template <std::size_t Size>
+	Hybrid<Size>& Hybrid<Size>::operator=(Hybrid&& other) noexcept
+	{
+		if (!UseHeap())
+		{
+			if (other.moveFunc)
+				other.moveFunc(get(), other.get());
+			else
+				std::memcpy(get(), other.get(), Size);
+			destructorFunc = other.destructorFunc;
+			moveFunc = other.moveFunc;
+
+			other.destructorFunc = nullptr;
+		}
+		else
+		{
+			data.ptr = other.data.ptr;
+			destructorFunc = other.destructorFunc;
+
+			other.data.ptr = nullptr;
+			other.destructorFunc = nullptr;
+		}
+		return *this;
+	}
+
+	template <std::size_t Size>
+	template <IsStorageWrappable T>
+	Hybrid<Size>::Hybrid(T&& obj) requires IsNotSame<Hybrid<Size>, T>
+	{
+		using StoredType = std::decay_t<T>;
+		if constexpr (sizeof(StoredType) <= Size)
+		{
+			// Using placement new here
+			new (&data.buffer[0]) StoredType(std::move(obj));
+			SetDestructorFunc([](void* obj)
+							  { static_cast<StoredType*>(obj)->~T(); },
+							  false);
+		}
+		else
+		{
+			data.ptr = new StoredType(std::move(obj));
+			SetDestructorFunc([](void* obj)
+							  { delete static_cast<StoredType*>(obj); },
+							  true);
+		}
+
+		if constexpr (std::is_move_assignable_v<StoredType>)
+		{
+			moveFunc = [](void* dst, void* src)
+			{
+				*static_cast<StoredType*>(dst) = std::move(*static_cast<StoredType*>(src));
+			};
+		}
+	}
+
+	template <std::size_t Size>
+	Hybrid<Size>::~Hybrid()
+	{
+		void (*actualDestructor)(void*) = reinterpret_cast<void (*)(void*)>(reinterpret_cast<std::uintptr_t>(destructorFunc) & ~std::uintptr_t(1));
+
+		if (actualDestructor)
+		{
+			actualDestructor(UseHeap() ? data.ptr : &data.buffer[0]);
+		}
+
+	}
+
+	template <std::size_t Size>
+	void* Hybrid<Size>::get()
+	{
+		return UseHeap() ? data.ptr : &data.buffer[0];
+	}
+
+	template <std::size_t Size>
+	void Hybrid<Size>::SetDestructorFunc(void (*d)(void*), bool heap)
+	{
+		destructorFunc = reinterpret_cast<void (*)(void*)>((reinterpret_cast<uintptr_t>(d) & ~uintptr_t(1)) | static_cast<uintptr_t>(heap));
+	}
+
+	template <std::size_t Size>
+	bool Hybrid<Size>::UseHeap() const
+	{
+		return reinterpret_cast<uintptr_t>(destructorFunc) & 1;
+	}
 }

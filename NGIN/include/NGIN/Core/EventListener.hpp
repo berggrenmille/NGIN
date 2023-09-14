@@ -14,15 +14,33 @@ namespace NGIN::Core
 		 *
 		 * @param listener The function that listens for the event.
 		 */
+		EventListener() = delete;
 
-		EventListener(Listener listener)
-			: listener(listener)
+		EventListener(const Listener& other)
+			: listener(other)
+		{}
+
+		EventListener(Listener&& other) noexcept
+			: listener(std::move(other))
 		{}
 
 		EventListener(const EventListener& other)
+			: listener(other.listener)
+		{}
+
+		EventListener(EventListener&& other) noexcept
+			: listener(std::move(other.listener))
+		{}
+
+		EventListener& operator=(EventListener&& other)
 		{
-			listener = other.listener;
+			listener = std::move(other.listener);
+			return *this;
 		}
+
+
+
+
 
 
 		/**
@@ -32,7 +50,8 @@ namespace NGIN::Core
 		 */
 		void Invoke(EventType& event) const
 		{
-			listener(event);
+			if (listener)
+				listener(event);
 		}
 
 	private:
