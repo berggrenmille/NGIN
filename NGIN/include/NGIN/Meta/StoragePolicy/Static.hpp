@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <cstring>
 
 #define NGIN_STATIC_STORAGE_ALIGNMENT 16
 #define NGIN_STATIC_STORAGE_TO_STRING(x) #x
@@ -23,31 +24,41 @@ namespace NGIN::Meta::StoragePolicy
         template <typename T>
         Static(const T &obj)
         {
-            static_assert(sizeof(T) <= Size, "Type too large for Static.");
-            new (&buffer[0]) T(obj);
-            destructor = [](void *obj)
+            using StoredType = std::decay_t<T>;
+            if constexpr (std::is_same<StoredType, Static<Size>>::value)
             {
-                reinterpret_cast<T *>(obj)->~T();
-            };
+                /// TODO: Might be broken. Check this.
+                std::memcpy(&buffer[0], &obj.buffer[0], sizeof(StoredType));
+                destructor = obj.destructor;
+            }
+            else
+            {
+                new (&buffer[0]) StoredType(obj);
+                destructor = [](void *obj)
+                {
+                    reinterpret_cast<StoredType *>(obj)->~T();
+                };
+            }
         }
 
         template <typename T>
         Static(T &&obj)
         {
             static_assert(sizeof(T) <= Size, "Type too large for Static.");
-            new (&buffer[0]) T(std::move(obj));
+            using StoredType = std::decay_t<T>;
+
+            new (&buffer[0]) StoredType(std::move(obj));
             destructor = [](void *obj)
             {
-                reinterpret_cast<T *>(obj)->~T();
+                reinterpret_cast<StoredType *>(obj)->~T();
             };
         }
 
         ~Static()
         {
             if (destructor)
-            {
+
                 destructor(&buffer[0]);
-            }
         }
 
         void *get() { return &buffer[0]; }

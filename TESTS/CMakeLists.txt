@@ -37,7 +37,7 @@ ngin_add_test_macro(NGIN_LOGGIN_TESTS "Logging")
 ngin_add_test_macro(NGIN_MEMORY_TESTS "Memory")
 ngin_add_test_macro(NGIN_META_TESTS "Meta")
 ngin_add_test_macro(NGIN_UTIL_TESTS "Util")
-
+ngin_add_test_macro(NGIN_CORE_TESTS "Core")
 
 
 ## CREATE GLOBAL TESTS EXECUTABLE

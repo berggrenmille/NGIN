@@ -11,12 +11,13 @@ namespace NGIN::Meta::StoragePolicy
 
         template <typename T>
         Allocator(const T &obj, AllocatorType &alloc)
-            : allocator(alloc), ptr(alloc.New<T>(obj))
+            : allocator(alloc)
         {
-
+            using StoredType = std::decay_t<T>;
+            ptr = alloc.New<StoredType>(obj);
             destructor = [&](void *obj)
             {
-                alloc.Delete(static_cast<T *>(obj));
+                alloc.Delete(static_cast<StoredType *>(obj));
             };
         }
 
@@ -24,17 +25,26 @@ namespace NGIN::Meta::StoragePolicy
         Allocator(T &&obj, AllocatorType &alloc)
             : allocator(alloc)
         {
-            ptr = alloc.New<T>(std::move(obj));
+            using StoredType = std::decay_t<T>;
+            ptr = alloc.New<StoredType>(std::move(obj));
 
             destructor = [&](void *obj)
             {
-                alloc.Delete(static_cast<T *>(obj));
+                alloc.Delete(static_cast<StoredType *>(obj));
             };
+        }
+
+        Allocator(Allocator &&other)
+            : allocator(other.allocator), ptr(other.ptr), destructor(other.destructor)
+        {
+            other.ptr = nullptr;
+            other.destructor = nullptr;
         }
 
         ~Allocator()
         {
-            destructor(ptr);
+            if (destructor)
+                destructor(ptr);
         }
 
         void *get() const { return ptr; }

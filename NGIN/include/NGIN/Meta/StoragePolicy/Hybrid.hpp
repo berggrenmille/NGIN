@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <memory>
+#include <cstring>
 
 #define NGIN_HYBRID_STORAGE_ALIGNMENT 16
 #define NGIN_HYBRID_STORAGE_TO_STRING(x) #x
@@ -34,20 +35,30 @@ namespace NGIN::Meta::StoragePolicy
         template <typename T>
         Hybrid(const T &obj)
         {
-            if constexpr (sizeof(T) <= Size)
+            using StoredType = std::decay_t<T>;
+            if constexpr (std::is_same<StoredType, Hybrid<Size>>::value)
             {
-                // Using placement new here
-                new (&data.buffer[0]) T(obj);
-                SetDestructor([](void *obj)
-                              { reinterpret_cast<T *>(obj)->~T(); },
-                              false);
+                /// TODO: MIGHT BE BROKEN. CHECK THIS.
+                std::memcpy(&data.buffer[0], &obj.data.buffer[0], sizeof(StoredType));
+                destructor = obj.destructor;
             }
             else
             {
-                data.ptr = new T(obj);
-                SetDestructor([](void *obj)
-                              { delete static_cast<T *>(obj); },
-                              true);
+                if constexpr (sizeof(T) <= Size)
+                {
+                    // Using placement new here
+                    new (&data.buffer[0]) StoredType(obj);
+                    SetDestructor([](void *obj)
+                                  { reinterpret_cast<StoredType *>(obj)->~T(); },
+                                  false);
+                }
+                else
+                {
+                    data.ptr = new StoredType(obj);
+                    SetDestructor([](void *obj)
+                                  { delete static_cast<StoredType *>(obj); },
+                                  true);
+                }
             }
         }
 
@@ -57,20 +68,32 @@ namespace NGIN::Meta::StoragePolicy
         template <typename T>
         Hybrid(T &&obj)
         {
-            if constexpr (sizeof(T) <= Size)
+            using StoredType = std::decay_t<T>;
+            if constexpr (std::is_same<StoredType, Hybrid<Size>>::value)
             {
-                // Using placement new here
-                new (&data.buffer[0]) T(std::move(obj));
-                SetDestructor([](void *obj)
-                              { reinterpret_cast<T *>(obj)->~T(); },
-                              false);
+                std::memcpy(&data.buffer[0], &obj.data.buffer[0], sizeof(StoredType));
+                destructor = obj.destructor;
+
+                obj.data.ptr = nullptr;
+                obj.destructor = nullptr;
             }
             else
             {
-                data.ptr = new T(std::move(obj));
-                SetDestructor([](void *obj)
-                              { delete static_cast<T *>(obj); },
-                              true);
+                if constexpr (sizeof(T) <= Size)
+                {
+                    // Using placement new here
+                    new (&data.buffer[0]) StoredType(std::move(obj));
+                    SetDestructor([](void *obj)
+                                  { reinterpret_cast<StoredType *>(obj)->~T(); },
+                                  false);
+                }
+                else
+                {
+                    data.ptr = new StoredType(std::move(obj));
+                    SetDestructor([](void *obj)
+                                  { delete static_cast<StoredType *>(obj); },
+                                  true);
+                }
             }
         }
 

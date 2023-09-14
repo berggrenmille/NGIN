@@ -63,4 +63,27 @@ TEST_F(EventBusTest, MultipleSubscriptions)
 	EXPECT_EQ(listener.value, 2);
 }
 
+// Test that checks if the event bus is able to handle events with no subscribers
+TEST_F(EventBusTest, ZeroSubscriptionsEvents)
+{
+	TestEvent e{0};
+	bus.Publish(e);
+	EXPECT_EQ(e.data, 0);
+}
+
+// Test that checks if the event bus is able to handle multiple events
+TEST_F(EventBusTest, MultipleSubscriptionsAndEvents)
+{
+	TestEvent e1{0};
+	TestEvent e2{0};
+	MockListener listener;
+	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
+	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
+	bus.Publish(e1);
+	bus.Publish(e2);
+	EXPECT_EQ(e1.data, 4);
+	EXPECT_EQ(e2.data, 4);
+	EXPECT_EQ(listener.value, 8);
+}
+
 // Additional tests can be added here to cover more scenarios.
