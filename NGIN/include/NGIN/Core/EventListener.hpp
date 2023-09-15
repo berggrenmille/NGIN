@@ -7,7 +7,7 @@ namespace NGIN::Core
 	{
 	public:
 		/// @brief Function type for listening to events.
-		using Listener = std::function<void(EventType&)>;
+		using Listener = std::function<void(EventType &)>;
 
 		/**
 		 * @brief Construct an event listener.
@@ -16,39 +16,38 @@ namespace NGIN::Core
 		 */
 		EventListener() = delete;
 
-		EventListener(const Listener& other)
+		EventListener(const Listener &other)
 			: listener(other)
-		{}
+		{
+		}
 
-		EventListener(Listener&& other) noexcept
+		EventListener(Listener &&other) noexcept
 			: listener(std::move(other))
-		{}
+		{
+		}
 
-		EventListener(const EventListener& other)
+		EventListener(const EventListener &other)
 			: listener(other.listener)
-		{}
+		{
+		}
 
-		EventListener(EventListener&& other) noexcept
+		EventListener(EventListener &&other) noexcept
 			: listener(std::move(other.listener))
-		{}
+		{
+		}
 
-		EventListener& operator=(EventListener&& other)
+		EventListener &operator=(EventListener &&other)
 		{
 			listener = std::move(other.listener);
 			return *this;
 		}
-
-
-
-
-
 
 		/**
 		 * @brief Call the listener with the event.
 		 *
 		 * @param event The event to handle.
 		 */
-		void Invoke(EventType& event) const
+		void Invoke(EventType &event) const
 		{
 			if (listener)
 				listener(event);

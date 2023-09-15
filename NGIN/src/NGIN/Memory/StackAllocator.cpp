@@ -71,7 +71,7 @@ namespace NGIN::Memory
 		usedMemory = 0;
 	}
 
-	bool StackAllocator::Owns(void *ptr) const
+	bool StackAllocator::Owns(void *ptr)
 	{
 		uintptr_t startAddress = reinterpret_cast<uintptr_t>(startPtr);
 		uintptr_t endAddress = reinterpret_cast<uintptr_t>(currentTop); // Assuming currentTop points to the current end of used memory

@@ -47,7 +47,7 @@ namespace NGIN::Memory
 
 		void DeallocateAll();
 
-		bool Owns(void *ptr) const;
+		bool Owns(void *ptr);
 
 	private:
 		void *startPtr;	   ///< Pointer to the start of the memory block.

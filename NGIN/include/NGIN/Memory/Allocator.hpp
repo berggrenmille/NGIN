@@ -1,6 +1,7 @@
 
 #pragma once
 #include <NGIN/Core.h>
+#include "Concepts.hpp"
 
 #include <cstddef>
 #include <type_traits>
@@ -12,37 +13,6 @@
 namespace NGIN::Memory
 {
 
-    template <typename T>
-    concept HasAllocate = requires(T a, size_t size, size_t alignment, const std::source_location &location) {
-        {
-            a.Allocate(size, alignment, location)
-        } -> std::same_as<void *>;
-    };
-
-    template <typename T>
-    concept HasDeallocate = requires(T a, void *ptr) {
-        {
-            a.Deallocate(ptr)
-        } -> std::same_as<void>;
-    };
-
-    template <typename T>
-    concept HasDeallocateAll = requires(T a) {
-        {
-            a.DeallocateAll()
-        } -> std::same_as<void>;
-    };
-
-    template <typename T>
-    concept HasOwns = requires(T a, void *ptr) {
-        {
-            a.Owns(ptr)
-        } -> std::same_as<bool>;
-    };
-
-    template <typename T>
-    concept IsAllocator = HasAllocate<T> && HasOwns<T>;
-
     /// \class Allocator
     /// \brief Represents a generic memory allocator with dynamic dispatch.
     /// \tparam StoragePolicy The storage policy for wrapped allocator.
@@ -53,14 +23,46 @@ namespace NGIN::Memory
     class Allocator
     {
     public:
-        Allocator() = delete;
+        Allocator()
+            : pImpl{}
+        {
+        }
         Allocator(const Allocator &) = delete;
+        Allocator(Allocator &&other) noexcept
+            : pImpl(std::move(other.pImpl)),
+              allocateFn(other.allocateFn),
+              deallocateFn(other.deallocateFn),
+              deallocateAllFn(other.deallocateAllFn),
+              ownsFn(other.ownsFn)
+        {
 
+            other.allocateFn = nullptr;
+            other.deallocateFn = nullptr;
+            other.deallocateAllFn = nullptr;
+            other.ownsFn = nullptr;
+        }
+
+        Allocator &operator=(Allocator &&other) noexcept
+        {
+            pImpl = std::move(other.pImpl);
+            allocateFn = other.allocateFn;
+            deallocateFn = other.deallocateFn;
+            deallocateAllFn = other.deallocateAllFn;
+            ownsFn = other.ownsFn;
+
+            other.allocateFn = nullptr;
+            other.deallocateFn = nullptr;
+            other.deallocateAllFn = nullptr;
+            other.ownsFn = nullptr;
+
+            return *this;
+        }
         /// \brief Constructs a new Allocator object.
         /// \tparam T The type of the allocator object.
         /// \param alloc The allocator object.
         template <IsAllocator T>
         Allocator(T &&alloc)
+            requires IsNotSame<Allocator, T>
             : pImpl(std::move(alloc))
         {
             SetupFunctionPointers<T>();
@@ -71,21 +73,21 @@ namespace NGIN::Memory
         /// \param alignment Alignment for the memory (defaults to max alignment).
         /// \param location Source location of the allocation request (defaults to current location).
         /// \return Pointer to allocated memory, or nullptr if allocation fails.
-        void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t), const std::source_location &location = std::source_location::current()) const
+        void *Allocate(size_t size, size_t alignment = alignof(std::max_align_t), const std::source_location &location = std::source_location::current())
         {
             return allocateFn(pImpl.get(), size, alignment, location);
         }
 
         /// \brief Deallocates the provided memory.
         /// \param ptr Pointer to the memory segment to deallocate
-        void Deallocate(void *ptr) const
+        void Deallocate(void *ptr)
         {
 
             deallocateFn(pImpl.get(), ptr);
         }
 
         /// \brief Deallocates all managed memory by the allocator.
-        void DeallocateAll() const
+        void DeallocateAll()
         {
 
             deallocateAllFn(pImpl.get());
@@ -94,7 +96,7 @@ namespace NGIN::Memory
         /// \brief Checks if the allocator owns the provided memory.
         /// \param ptr Pointer to the memory segment to check.
         /// \return True if the memory is owned, otherwise false.
-        bool Owns(void *ptr) const
+        bool Owns(void *ptr)
         {
             return ownsFn(pImpl.get(), ptr);
         }

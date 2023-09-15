@@ -20,6 +20,24 @@ namespace
         {
             destroyed = true;
         }
+
+        LargeType(LargeType &&other) noexcept
+        {
+            std::memcpy(data, other.data, 200);
+            other.data[0] = 0;
+        }
+        LargeType &operator=(LargeType &&other)
+        {
+            std::memcpy(data, other.data, 200);
+            other.data[0] = 0;
+            return *this;
+        }
+
+        void Move(LargeType &&other) noexcept
+        {
+            std::memcpy(data, other.data, 200);
+            other.data[0] = 0;
+        }
     };
 
     struct SmallType
@@ -27,6 +45,10 @@ namespace
         int x;
         SmallType() : x(42) { destroyed = false; }
         ~SmallType() { destroyed = true; }
+
+        SmallType(SmallType &&other) noexcept : x(other.x) { other.x = 0; }
+        SmallType &operator=(SmallType &&other) = default;
+        void Move(SmallType &&other) noexcept { x = other.x; }
     };
 }
 class HybridStoragePolicyTest : public ::testing::Test
@@ -82,6 +104,30 @@ TEST_F(HybridStoragePolicyTest, DestructorForLargeType)
     {
         Meta::StoragePolicy::Hybrid<128> policy{LargeType()};
         LargeType *ptr = static_cast<LargeType *>(policy.get());
+        EXPECT_EQ(ptr->data[0], 'a');
+    }
+    // Here, the destructor for `policy` will have been called.
+    EXPECT_EQ(destroyed, true);
+}
+
+TEST_F(HybridStoragePolicyTest, MoveConstructorForSmallType)
+{
+    {
+        Meta::StoragePolicy::Hybrid<128> policy{SmallType()};
+        Meta::StoragePolicy::Hybrid<128> policy2(std::move(policy));
+        SmallType *ptr = static_cast<SmallType *>(policy2.get());
+        EXPECT_EQ(ptr->x, 42);
+    }
+    // Here, the destructor for `policy` will have been called.
+    EXPECT_EQ(destroyed, true);
+}
+
+TEST_F(HybridStoragePolicyTest, MoveConstructorForLargeType)
+{
+    {
+        Meta::StoragePolicy::Hybrid<128> policy{LargeType()};
+        Meta::StoragePolicy::Hybrid<128> policy2(std::move(policy));
+        LargeType *ptr = static_cast<LargeType *>(policy2.get());
         EXPECT_EQ(ptr->data[0], 'a');
     }
     // Here, the destructor for `policy` will have been called.

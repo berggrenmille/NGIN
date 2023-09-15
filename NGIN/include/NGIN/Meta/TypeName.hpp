@@ -42,7 +42,7 @@ namespace NGIN::Meta
         /// version of the type name.
         ///
         /// @return A `std::string_view` containing the name of the type.
-        constexpr static std::string_view Name()
+        constexpr static std::string_view Full()
         {
             if constexpr (std::is_same_v<T, void *>)
                 return "void*";
@@ -59,10 +59,35 @@ namespace NGIN::Meta
             return rv.substr(rv.rfind(' ') + 1);
         }
 
-        /// Alias for the current type.
-        using type = T;
-        /// The computed type name as a `std::string_view`.
-        constexpr static std::string_view value = Name();
+        /// @brief Computes and returns the class name of the type.
+        ///
+        /// The function computes the class name of the type based on the type signature
+        /// and performs string manipulation to retrieve a clean version of the class name.
+        ///
+        /// @return A `std::string_view` containing the class name.
+        constexpr static std::string_view Class()
+        {
+            std::string_view fullType = Full();
+            size_t lastColons = fullType.rfind("::");
+            if (lastColons == std::string_view::npos)
+                return fullType;
+            return fullType.substr(lastColons + 2);
+        }
+
+        /// @brief Computes and returns the namespace of the type.
+        ///
+        /// The function computes the namespace of the type based on the type signature
+        /// and performs string manipulation to retrieve the namespace.
+        ///
+        /// @return A `std::string_view` containing the namespace.
+        constexpr static std::string_view Namespace()
+        {
+            std::string_view fullType = Full();
+            size_t lastColons = fullType.rfind("::");
+            if (lastColons == std::string_view::npos)
+                return {};
+            return fullType.substr(0, lastColons);
+        }
     };
 
 } // namespace NGIN::Meta

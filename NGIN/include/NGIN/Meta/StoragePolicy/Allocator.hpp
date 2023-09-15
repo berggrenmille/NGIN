@@ -1,6 +1,5 @@
 #pragma once
-
-#include <NGIN/Meta/StoragePolicy.hpp>
+#include "Concepts.hpp"
 namespace NGIN::Meta::StoragePolicy
 {
     template <typename AllocatorType>
@@ -9,20 +8,11 @@ namespace NGIN::Meta::StoragePolicy
     public:
         Allocator() = delete;
 
-        template <typename T>
-        Allocator(const T &obj, AllocatorType &alloc)
-            : allocator(alloc)
-        {
-            using StoredType = std::decay_t<T>;
-            ptr = alloc.New<StoredType>(obj);
-            destructor = [&](void *obj)
-            {
-                alloc.Delete(static_cast<StoredType *>(obj));
-            };
-        }
+        Allocator(const Allocator &) = delete;
 
-        template <typename T>
+        template <IsStorageWrappable T>
         Allocator(T &&obj, AllocatorType &alloc)
+            requires IsNotSame<Allocator, T>
             : allocator(alloc)
         {
             using StoredType = std::decay_t<T>;
@@ -47,7 +37,7 @@ namespace NGIN::Meta::StoragePolicy
                 destructor(ptr);
         }
 
-        void *get() const { return ptr; }
+        void *get() { return ptr; }
 
     private:
         AllocatorType &allocator;

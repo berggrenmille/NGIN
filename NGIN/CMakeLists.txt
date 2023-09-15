@@ -8,8 +8,6 @@ add_library(NGIN SHARED
 
   "src/NGIN/App.cpp"
   "src/NGIN/Config.cpp"
-  "src/NGIN/Layer.cpp"
-  "src/NGIN/LayerStack.cpp"
   "src/NGIN/Memory/LinearAllocator.cpp"
   "src/NGIN/Memory/StackAllocator.cpp"
   "src/NGIN/Memory/FreeListAllocator.cpp"
@@ -24,7 +22,8 @@ add_library(NGIN SHARED
   "src/NGIN/Logging/BaseLogger.cpp"  
   "src/Utils/JSON.cpp"
   "src/NGIN/Meta/UUID.cpp"
-  "src/NGIN/Meta/Reflection/Registry.cpp")
+  "src/NGIN/Meta/Reflection/Registry.cpp"
+)
 
 
 # Setup precompiled header

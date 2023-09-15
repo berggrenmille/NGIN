@@ -32,7 +32,7 @@ namespace NGIN::Memory
 #endif
     }
 
-    bool Mallocator::Owns(void *ptr) const
+    bool Mallocator::Owns(void *ptr)
     {
         return true; // Assume true, since Mallocator should be used as a fallback allocator
     }

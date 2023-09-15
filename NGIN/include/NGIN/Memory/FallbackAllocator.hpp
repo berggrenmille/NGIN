@@ -1,5 +1,6 @@
 #pragma once
-#include <NGIN/Memory/Allocator.hpp>
+#include <NGIN/Core.h>
+#include <NGIN/Memory/Concepts.hpp>
 namespace NGIN::Memory
 {
     template <IsAllocator PrimaryT, IsAllocator FallbackT>
@@ -51,7 +52,7 @@ namespace NGIN::Memory
                 fallback.DeallocateAll();
         }
 
-        bool Owns(void *ptr) const
+        bool Owns(void *ptr)
         {
             return primary.Owns(ptr) || fallback.Owns(ptr);
         }

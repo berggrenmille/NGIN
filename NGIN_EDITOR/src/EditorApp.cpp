@@ -2,6 +2,7 @@
 
 #include <NGIN.h>
 #include <NGIN/Meta/Reflection/Registry.hpp>
+#include <NGIN/EntryPoint.hpp>
 
 class EditorApp : public NGIN::App
 {

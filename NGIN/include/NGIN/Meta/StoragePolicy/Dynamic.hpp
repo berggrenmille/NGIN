@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Concepts.hpp"
 namespace NGIN::Meta::StoragePolicy
 {
 	/// \class Dynamic
@@ -13,81 +13,85 @@ namespace NGIN::Meta::StoragePolicy
 	{
 	public:
 		/// \brief Default constructor is deleted to prevent empty initialization.
-		Dynamic() = delete;
+		Dynamic() = default;
 
+		Dynamic(const Dynamic &) = delete;
 
-		/// \brief Construct Dynamic with an object.
-		/// \tparam T The type of the object.
-		/// \param obj The object to be stored.
-		template <typename T>
-		Dynamic(const T& obj)
-		{
-			using StoredType = std::decay_t<T>;
+		Dynamic(Dynamic &&other) noexcept;
 
-			if constexpr (std::is_same<StoredType, Dynamic>::value)
-			{
-				ptr = obj.ptr;
-				destructor = obj.destructor;
-			}
-			else
-			{
-				ptr = new StoredType(obj);
-				destructor = [](void* obj)
-				{
-					delete static_cast<StoredType*>(obj);
-				};
-			}
-		}
+		Dynamic &operator=(Dynamic &&other) noexcept;
 
 		/// \brief Construct Dynamic by moving an object.
 		/// \tparam T The type of the object.
 		/// \param obj The object to be moved into storage.
-		template <typename T>
-		Dynamic(T&& obj)
-		{
-			using StoredType = std::decay_t<T>;
-			if constexpr (std::is_same<StoredType, Dynamic>::value)
-			{
-				ptr = obj.ptr;
-				destructor = obj.destructor;
-
-				obj.ptr = nullptr;
-				obj.destructor = nullptr;
-			}
-			else
-			{
-
-				ptr = new StoredType(std::forward<T>(obj));
-				destructor = [](void* objPtr)
-				{
-					delete static_cast<StoredType*>(objPtr);
-				};
-			}
-		}
-
-
+		template <IsStorageWrappable T>
+		Dynamic(T &&obj)
+			requires IsNotSame<Dynamic, T>;
 
 		/// \brief Destructor for Dynamic.
 		///
 		/// Calls the destructor function pointer to clean up the dynamically allocated object.
-		~Dynamic()
-		{
-			if (destructor)
-				destructor(ptr);
-		}
+		~Dynamic();
 
 		/// \brief Get the stored object as a void pointer.
 		/// \return A void pointer to the stored object.
-		void* get() const { return ptr; }
+		void *get();
 
 	private:
 		/// \brief A pointer to the stored object.
-		void* ptr = nullptr;
+		void *ptr = nullptr;
 
 		/// \brief A function pointer for the destructor of the stored object.
 		///
 		/// This function pointer will point to the appropriate destructor based on
 		/// the type of object stored. It is used in the destructor to clean up the object.
-		void (*destructor)(void*) = nullptr;
+		void (*destructor)(void *) = nullptr;
 	};
+
+	inline Dynamic::Dynamic(Dynamic &&other) noexcept
+	{
+		if (destructor)
+			destructor(ptr);
+
+		ptr = other.ptr;
+		destructor = other.destructor;
+
+		other.ptr = nullptr;
+		other.destructor = nullptr;
+	}
+	inline Dynamic &Dynamic::operator=(Dynamic &&other) noexcept
+	{
+		if (destructor)
+			destructor(ptr);
+
+		ptr = other.ptr;
+		destructor = other.destructor;
+
+		other.ptr = nullptr;
+		other.destructor = nullptr;
+
+		return *this;
+	}
+	template <IsStorageWrappable T>
+	Dynamic::Dynamic(T &&obj)
+		requires IsNotSame<Dynamic, T>
+	{
+		using StoredType = std::decay_t<T>;
+		ptr = new StoredType(std::forward<T>(obj));
+		destructor = [](void *objPtr)
+		{
+			delete static_cast<StoredType *>(objPtr);
+		};
+	}
+
+	inline Dynamic::~Dynamic()
+	{
+		if (destructor)
+			destructor(ptr);
+	}
+
+	inline void *Dynamic::get()
+	{
+		return ptr;
+	}
 }
