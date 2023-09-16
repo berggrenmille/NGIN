@@ -15,43 +15,43 @@
 
 namespace NGIN::Meta::StoragePolicy
 {
-	/// \class Hybrid
+	/// \class HybridStorage
 	/// \tparam Size The size of the static buffer, defaults to 128 bytes.
 	/// \brief A class for dynamic and static storage management.
 	///
-	/// The Hybrid class is designed to handle storage for objects either on the stack or heap.
+	/// The HybridStorage class is designed to handle storage for objects either on the stack or heap.
 	/// If the object fits within the buffer size specified by Size, it is stored statically.
 	/// Otherwise, it is stored dynamically on the heap.
 	template <std::size_t Size = 64>
-	class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE Hybrid
+	class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE HybridStorage
 	{
 		static_assert(Size % NGIN_HYBRID_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_HYBRID_STORAGE_TO_STRING(NGIN_HYBRID_STORAGE_ALIGNMENT) ".");
 
 	public:
 		/// \brief Default constructor.
-		Hybrid();
+		HybridStorage();
 
 		/// \brief Copy constructor is deleted.
-		Hybrid(const Hybrid &) = delete;
+		HybridStorage(const HybridStorage &) = delete;
 
 		/// \brief Move constructor.
 		/// \param other The object to move from.
-		Hybrid(Hybrid &&other) noexcept;
+		HybridStorage(HybridStorage &&other) noexcept;
 
 		/// \brief Move assignment operator.
 		/// \param other The object to move from.
 		/// \return A reference to the moved-to object.
-		Hybrid &operator=(Hybrid &&other) noexcept;
+		HybridStorage &operator=(HybridStorage &&other) noexcept;
 
 		/// \brief Constructor taking a wrappable storage type.
 		/// \tparam T Type of the object to store.
 		/// \param obj The object to store.
 		template <IsStorageWrappable T>
-		Hybrid(T &&obj)
-			requires IsNotSame<Hybrid<Size>, T>;
+		HybridStorage(T &&obj)
+			requires IsNotSame<HybridStorage<Size>, T>;
 
 		/// \brief Destructor.
-		~Hybrid();
+		~HybridStorage();
 
 		/// \brief Retrieve the pointer to the stored data.
 		/// \return A pointer to the stored data.
@@ -83,13 +83,13 @@ namespace NGIN::Meta::StoragePolicy
 	};
 
 	template <std::size_t Size>
-	Hybrid<Size>::Hybrid()
+	HybridStorage<Size>::HybridStorage()
 		: data{}
 	{
 	}
 
 	template <std::size_t Size>
-	Hybrid<Size>::Hybrid(Hybrid &&other) noexcept
+	HybridStorage<Size>::HybridStorage(HybridStorage &&other) noexcept
 		: data{}
 	{
 		if (this == &other)
@@ -118,7 +118,7 @@ namespace NGIN::Meta::StoragePolicy
 	}
 
 	template <std::size_t Size>
-	Hybrid<Size> &Hybrid<Size>::operator=(Hybrid &&other) noexcept
+	HybridStorage<Size> &HybridStorage<Size>::operator=(HybridStorage &&other) noexcept
 	{
 		if (this == &other)
 			return *this;
@@ -148,8 +148,8 @@ namespace NGIN::Meta::StoragePolicy
 
 	template <std::size_t Size>
 	template <IsStorageWrappable T>
-	Hybrid<Size>::Hybrid(T &&obj)
-		requires IsNotSame<Hybrid<Size>, T>
+	HybridStorage<Size>::HybridStorage(T &&obj)
+		requires IsNotSame<HybridStorage<Size>, T>
 	{
 		using StoredType = std::decay_t<T>;
 		if constexpr (sizeof(StoredType) <= Size)
@@ -178,7 +178,7 @@ namespace NGIN::Meta::StoragePolicy
 	}
 
 	template <std::size_t Size>
-	Hybrid<Size>::~Hybrid()
+	HybridStorage<Size>::~HybridStorage()
 	{
 
 		if (destructorFunc)
@@ -188,7 +188,7 @@ namespace NGIN::Meta::StoragePolicy
 	}
 
 	template <std::size_t Size>
-	void *Hybrid<Size>::get()
+	void *HybridStorage<Size>::get()
 	{
 		return useHeap ? data.ptr : &data.buffer[0];
 	}

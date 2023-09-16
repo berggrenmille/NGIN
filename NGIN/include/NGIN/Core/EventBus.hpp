@@ -13,7 +13,7 @@ namespace NGIN::Core
 	class EventBus
 	{
 	public:
-		using StoragePolicy = Meta::StoragePolicy::Hybrid<64>;
+		using StoragePolicy = Meta::StoragePolicy::HybridStorage<64>;
 		using EventVector = std::vector<StoragePolicy>;
 		/**
 		 * @brief Subscribe to an event.

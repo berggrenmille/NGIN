@@ -39,6 +39,6 @@ TEST_F(MallocatorTest, Deallocate)
 
 TEST_F(MallocatorTest, TypeErase)
 {
-    NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> typeErasedAllocator(std::move(allocator));
+    NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::DynamicStorage> typeErasedAllocator(std::move(allocator));
     SUCCEED(); // If we get here, the test passed
 }

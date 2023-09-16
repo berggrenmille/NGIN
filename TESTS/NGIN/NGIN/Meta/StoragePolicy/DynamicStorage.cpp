@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <NGIN/Meta/StoragePolicy/Dynamic.hpp>
+#include <NGIN/Meta/StoragePolicy/DynamicStorage.hpp>
 #include <utility>
 
 namespace
@@ -27,54 +27,54 @@ namespace
         ~SmallType() { destroyed = true; }
     };
 }
-class DynamicStoragePolicyTest : public ::testing::Test
+class DynamicStorageTest : public ::testing::Test
 {
 };
 
-TEST_F(DynamicStoragePolicyTest, HandlesSmallTypeByValue)
+TEST_F(DynamicStorageTest, HandlesSmallTypeByValue)
 {
-    NGIN::Meta::StoragePolicy::Dynamic policy{SmallType()};
+    NGIN::Meta::StoragePolicy::DynamicStorage policy{SmallType()};
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
 }
 
-TEST_F(DynamicStoragePolicyTest, HandlesSmallTypeByMove)
+TEST_F(DynamicStorageTest, HandlesSmallTypeByMove)
 {
     SmallType small;
-    NGIN::Meta::StoragePolicy::Dynamic policy(std::move(small));
+    NGIN::Meta::StoragePolicy::DynamicStorage policy(std::move(small));
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
 }
 
-TEST_F(DynamicStoragePolicyTest, DestructorForSmallType)
+TEST_F(DynamicStorageTest, DestructorForSmallType)
 {
     {
-        NGIN::Meta::StoragePolicy::Dynamic policy{SmallType()};
+        NGIN::Meta::StoragePolicy::DynamicStorage policy{SmallType()};
         SmallType *ptr = static_cast<SmallType *>(policy.get());
         EXPECT_EQ(ptr->x, 42);
     }
     EXPECT_EQ(destroyed, true);
 }
 
-TEST_F(DynamicStoragePolicyTest, HandlesLargeTypeByValue)
+TEST_F(DynamicStorageTest, HandlesLargeTypeByValue)
 {
-    NGIN::Meta::StoragePolicy::Dynamic policy{LargeType()};
+    NGIN::Meta::StoragePolicy::DynamicStorage policy{LargeType()};
     LargeType *ptr = static_cast<LargeType *>(policy.get());
     EXPECT_EQ(ptr->data[0], 'a');
 }
 
-TEST_F(DynamicStoragePolicyTest, HandlesLargeTypeByMove)
+TEST_F(DynamicStorageTest, HandlesLargeTypeByMove)
 {
     LargeType large;
-    NGIN::Meta::StoragePolicy::Dynamic policy(std::move(large));
+    NGIN::Meta::StoragePolicy::DynamicStorage policy(std::move(large));
     LargeType *ptr = static_cast<LargeType *>(policy.get());
     EXPECT_EQ(ptr->data[0], 'a');
 }
 
-TEST_F(DynamicStoragePolicyTest, DestructorForLargeType)
+TEST_F(DynamicStorageTest, DestructorForLargeType)
 {
     {
-        NGIN::Meta::StoragePolicy::Dynamic policy{LargeType()};
+        NGIN::Meta::StoragePolicy::DynamicStorage policy{LargeType()};
         LargeType *ptr = static_cast<LargeType *>(policy.get());
         EXPECT_EQ(ptr->data[0], 'a');
     }

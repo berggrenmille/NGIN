@@ -21,10 +21,11 @@ message(STATUS "Run tests on build: ${NIGN_TEST_ON_BUILD}")
 
 # When building shared lib for Windows with MinGW,
 # avoid the DLL having a "lib" prefix
-if(WIN32)
+
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-endif()
+  #enable position independent code
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 #---------------------------------------------------------------------------------------------------------
 # Specify different compiler flags and settings based on the build type
@@ -44,7 +45,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInf
     if(MSVC)
         add_compile_options(/MDd)
     else()
-        add_compile_options(-Wall -Wextra -pedantic)
+        #add_compile_options(-Wall -Wextra -pedantic)
     endif()
 endif()
  # RelWithDebInfo/Release specific settings

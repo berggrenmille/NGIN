@@ -15,38 +15,38 @@ namespace NGIN::Meta::StoragePolicy
 {
 
 	template <std::size_t Size = 64>
-	class NGIN_STATIC_STORAGE_ALIGNMENT_ATTRIBUTE Static
+	class NGIN_STATIC_STORAGE_ALIGNMENT_ATTRIBUTE StaticStorage
 	{
 		static_assert(Size % NGIN_STATIC_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_STATIC_STORAGE_TO_STRING(NGIN_STATIC_STORAGE_ALIGNMENT) ".");
 
 	public:
 		/// @brief Default constructor.
 		/// Initializes the internal storage.
-		Static();
+		StaticStorage();
 
 		/// @brief Copy constructor (deleted).
 		/// StoragePolicies can only be moved.
-		Static(const Static &other) = delete;
+		StaticStorage(const StaticStorage &other) = delete;
 
 		/// @brief Move assignment operator.
 		/// @param other The object to be moved.
 		/// @return Reference to the moved object.
-		Static &operator=(Static &&other) noexcept;
+		StaticStorage &operator=(StaticStorage &&other) noexcept;
 
 		/// @brief Move constructor.
 		/// @param other The object to be moved.
-		Static(Static &&other) noexcept;
+		StaticStorage(StaticStorage &&other) noexcept;
 
 		/// @brief Construct from a storage wrappable type.
 		/// @tparam T Type of the object to be stored.
 		/// @param obj The object to be stored.
 		template <IsStorageWrappable T>
-		Static(T &&obj)
-			requires IsNotSame<Static<Size>, T>;
+		StaticStorage(T &&obj)
+			requires IsNotSame<StaticStorage<Size>, T>;
 
 		/// @brief Destructor.
 		/// Calls the destructor of the stored object.
-		~Static();
+		~StaticStorage();
 
 		/// @brief Get a pointer to the internal buffer.
 		/// @return Pointer to the internal buffer.
@@ -64,13 +64,13 @@ namespace NGIN::Meta::StoragePolicy
 	};
 
 	template <std::size_t Size>
-	Static<Size>::Static()
+	StaticStorage<Size>::StaticStorage()
 		: destructorFunc(nullptr), buffer{}
 	{
 	}
 
 	template <std::size_t Size>
-	Static<Size> &Static<Size>::operator=(Static &&other) noexcept
+	StaticStorage<Size> &StaticStorage<Size>::operator=(StaticStorage &&other) noexcept
 	{
 		destructorFunc = other.destructorFunc;
 		moveFunc = other.moveFunc;
@@ -86,7 +86,7 @@ namespace NGIN::Meta::StoragePolicy
 	}
 
 	template <std::size_t Size>
-	Static<Size>::Static(Static &&other) noexcept
+	StaticStorage<Size>::StaticStorage(StaticStorage &&other) noexcept
 		: buffer{}
 	{
 		destructorFunc = other.destructorFunc;
@@ -102,11 +102,11 @@ namespace NGIN::Meta::StoragePolicy
 
 	template <std::size_t Size>
 	template <IsStorageWrappable T>
-	Static<Size>::Static(T &&obj)
-		requires IsNotSame<Static<Size>, T>
+	StaticStorage<Size>::StaticStorage(T &&obj)
+		requires IsNotSame<StaticStorage<Size>, T>
 	{
 		using StoredType = std::decay_t<T>;
-		static_assert(sizeof(StoredType) <= Size, "Type too large for Static.");
+		static_assert(sizeof(StoredType) <= Size, "Type too large for StaticStorage.");
 
 		new (&buffer[0]) StoredType(std::move(obj));
 		destructorFunc = [](void *ptr)
@@ -123,7 +123,7 @@ namespace NGIN::Meta::StoragePolicy
 	}
 
 	template <std::size_t Size>
-	Static<Size>::~Static()
+	StaticStorage<Size>::~StaticStorage()
 	{
 		if (destructorFunc)
 			destructorFunc(&buffer[0]);

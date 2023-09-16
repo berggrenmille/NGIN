@@ -29,14 +29,6 @@ add_library(NGIN SHARED
 # Setup precompiled header
 target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
   
- if (MSVC)
-    # Set /MD flag for Release configurations
-    target_compile_options(NGIN PRIVATE $<$<CONFIG:Release>:/MD>)
-    target_compile_options(NGIN PRIVATE $<$<CONFIG:Dist>:/MD>)
-    # Set /MDd flag for Debug configurations
-    target_compile_options(NGIN PRIVATE $<$<CONFIG:Debug>:/MDd>)
-endif()
-
  
 
 target_compile_definitions(NGIN PRIVATE NGIN_EXPORTS)

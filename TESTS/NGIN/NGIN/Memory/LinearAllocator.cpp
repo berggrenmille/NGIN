@@ -49,7 +49,7 @@ TEST_F(LinearAllocatorTest, DeallocateAll)
 
 TEST_F(LinearAllocatorTest, TypeErase)
 {
-	NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> typeErasedAllocator(std::move(allocator));
+	NGIN::Memory::Allocator<NGIN::Meta::StoragePolicy::DynamicStorage> typeErasedAllocator(std::move(allocator));
 	SUCCEED(); // If we get here, the test passed
 }
 

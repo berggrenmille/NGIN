@@ -2,36 +2,36 @@
 #include "Concepts.hpp"
 namespace NGIN::Meta::StoragePolicy
 {
-	/// \class Dynamic
+	/// \class DynamicStorage
 	/// \brief A class for dynamic storage management.
 	///
-	/// The Dynamic class is a utility for dynamically managing storage.
+	/// The DynamicStorage class is a utility for dynamically managing storage.
 	/// It supports dynamic allocation and deallocation of objects of different types.
 	/// This is particularly useful for type erasure techniques where the type of the object
 	/// is required to be decoupled from the interface.
-	class Dynamic
+	class DynamicStorage
 	{
 	public:
 		/// \brief Default constructor is deleted to prevent empty initialization.
-		Dynamic() = default;
+		DynamicStorage() = default;
 
-		Dynamic(const Dynamic &) = delete;
+		DynamicStorage(const DynamicStorage &) = delete;
 
-		Dynamic(Dynamic &&other) noexcept;
+		DynamicStorage(DynamicStorage &&other) noexcept;
 
-		Dynamic &operator=(Dynamic &&other) noexcept;
+		DynamicStorage &operator=(DynamicStorage &&other) noexcept;
 
-		/// \brief Construct Dynamic by moving an object.
+		/// \brief Construct DynamicStorage by moving an object.
 		/// \tparam T The type of the object.
 		/// \param obj The object to be moved into storage.
 		template <IsStorageWrappable T>
-		Dynamic(T &&obj)
-			requires IsNotSame<Dynamic, T>;
+		DynamicStorage(T &&obj)
+			requires IsNotSame<DynamicStorage, T>;
 
-		/// \brief Destructor for Dynamic.
+		/// \brief Destructor for DynamicStorage.
 		///
 		/// Calls the destructor function pointer to clean up the dynamically allocated object.
-		~Dynamic();
+		~DynamicStorage();
 
 		/// \brief Get the stored object as a void pointer.
 		/// \return A void pointer to the stored object.
@@ -48,7 +48,7 @@ namespace NGIN::Meta::StoragePolicy
 		void (*destructor)(void *) = nullptr;
 	};
 
-	inline Dynamic::Dynamic(Dynamic &&other) noexcept
+	inline DynamicStorage::DynamicStorage(DynamicStorage &&other) noexcept
 	{
 		if (destructor)
 			destructor(ptr);
@@ -59,7 +59,7 @@ namespace NGIN::Meta::StoragePolicy
 		other.ptr = nullptr;
 		other.destructor = nullptr;
 	}
-	inline Dynamic &Dynamic::operator=(Dynamic &&other) noexcept
+	inline DynamicStorage &DynamicStorage::operator=(DynamicStorage &&other) noexcept
 	{
 		if (destructor)
 			destructor(ptr);
@@ -73,8 +73,8 @@ namespace NGIN::Meta::StoragePolicy
 		return *this;
 	}
 	template <IsStorageWrappable T>
-	Dynamic::Dynamic(T &&obj)
-		requires IsNotSame<Dynamic, T>
+	DynamicStorage::DynamicStorage(T &&obj)
+		requires IsNotSame<DynamicStorage, T>
 	{
 		using StoredType = std::decay_t<T>;
 		ptr = new StoredType(std::forward<T>(obj));
@@ -84,13 +84,13 @@ namespace NGIN::Meta::StoragePolicy
 		};
 	}
 
-	inline Dynamic::~Dynamic()
+	inline DynamicStorage::~DynamicStorage()
 	{
 		if (destructor)
 			destructor(ptr);
 	}
 
-	inline void *Dynamic::get()
+	inline void *DynamicStorage::get()
 	{
 		return ptr;
 	}

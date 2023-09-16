@@ -65,7 +65,7 @@ class AllocatorTest : public ::testing::Test
 {
 protected:
     MockAllocator mockAllocator;
-    Memory::Allocator<NGIN::Meta::StoragePolicy::Dynamic> allocator;
+    Memory::Allocator<NGIN::Meta::StoragePolicy::DynamicStorage> allocator;
 
     AllocatorTest() : allocator(std::move(mockAllocator)) {}
 };
