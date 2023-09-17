@@ -2,6 +2,7 @@
 #include <NGIN/Meta/StoragePolicy/AllocatedStorage.hpp> // Replace with the actual path
 #include <cstring>                                      // for std::memcpy
 #include <cstddef>
+#include <new>
 using namespace NGIN;
 
 namespace
@@ -15,7 +16,7 @@ namespace
         void *Allocate(size_t size, size_t alignment)
         {
             ++allocateCount;
-            return std::aligned_alloc(alignment, size);
+            return ::operator new(size, std::align_val_t(alignment));
         }
 
         void Deallocate(void *ptr)

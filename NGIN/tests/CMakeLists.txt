@@ -4,10 +4,10 @@
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeDependencies.cmake)
 
 macro(ngin_add_test_macro TARGET_NAME SOURCE_DIR)
-    file(GLOB_RECURSE TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/NGIN/NGIN/${SOURCE_DIR}/*.cpp")
+    file(GLOB_RECURSE TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/NGIN/${SOURCE_DIR}/*.cpp")
 
     enable_testing()
-    add_executable(${TARGET_NAME} ${TEST_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/NGIN/main.cpp)
+    add_executable(${TARGET_NAME} ${TEST_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
     target_compile_definitions(${TARGET_NAME} PRIVATE -DNGIN_TESTING)
     target_link_libraries(${TARGET_NAME} PRIVATE gtest_main NGIN)

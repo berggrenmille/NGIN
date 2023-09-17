@@ -71,11 +71,7 @@ if(NOT NGIN_BUILD_ONLY_DOCUMENTATION)
     # Include sub-projects.
     add_subdirectory("NGIN")
     add_subdirectory ("NGIN_EDITOR")
-    if(NGIN_BUILD_TESTS)
-        include(CTest)
-        enable_testing()
-        add_subdirectory("TESTS")
-    endif()
+
 endif()
 
 
