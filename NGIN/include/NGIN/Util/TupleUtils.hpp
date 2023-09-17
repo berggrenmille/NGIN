@@ -8,6 +8,7 @@ namespace NGIN
 	{
 
 		/**
+		 * @internal
 		 * @brief Implementation of Apply()
 		 * @param t The tuple to be unpacked.
 		 * @param f The function to be applied to the tuple's elements.

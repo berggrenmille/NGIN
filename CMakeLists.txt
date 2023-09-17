@@ -1,5 +1,7 @@
 ﻿# CMakeList.txt : Top-level CMake project file
-cmake_minimum_required (VERSION 3.8)
+set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
+
+cmake_minimum_required(VERSION 3.8...3.27)
 project ("NGIN" VERSION 0.1)
 
 

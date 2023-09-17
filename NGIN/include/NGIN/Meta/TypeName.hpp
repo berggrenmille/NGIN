@@ -7,14 +7,19 @@ namespace NGIN::Meta
 
     /// @brief Retrieves the type name as a string.
     ///
-    /// This structure provides functionality to get the type name
+    /// This struct provides functionality to get the type name
     /// of a given type as a compile-time `std::string_view`.
     /// @tparam T The type whose name is to be retrieved.
     ///
-    /// @example
-    /// ```cpp
-    /// std::cout << TypeName<int>::value; // Outputs: int
-    /// ```
+    /// @code
+    /// namsepace Foo
+    /// {
+    ///     struct Bar{};
+    /// }
+    /// std::cout << TypeName<Foo::Bar>::Class();     // Outputs: Bar
+    /// std::cout << TypeName<Foo::Bar>::Namespace(); // Outputs: Foo
+    /// std::cout << TypeName<Foo::Bar>::Full();      // Outputs: Foo::Bar
+    /// @endcode
     template <typename T>
     struct TypeName
     {

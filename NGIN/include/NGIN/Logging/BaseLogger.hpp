@@ -3,7 +3,6 @@
 #include <NGIN/Util/Format.hpp>
 #include <NGIN/Util/TupleUtils.hpp>
 #include <NGIN/Util/StringUtils.hpp>
-#include <NGIN/Util/TimeUtils.hpp>
 
 #include <vector>
 #include <memory>

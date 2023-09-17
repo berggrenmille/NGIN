@@ -2,52 +2,47 @@
 
 #include <HideWarnings/fmt.hpp>
 
-#include <iostream>
-#include <sstream>
-#include <string>
-
-namespace NGIN
+namespace NGIN::Util
 {
-    namespace Util
+    /// @brief Formats a string at runtime using provided format arguments.
+    /// This function wraps around the `fmt::format` function from the fmt library.
+    ///
+    /// @note For compile-time string formatting, see `NGIN::Util::Format` function.
+    ///
+    /// @tparam Args Types of the arguments used for formatting.
+    /// @param message The message string to be formatted.
+    /// @param args The arguments to be substituted into the format string.
+    /// @return The formatted string.
+    ///
+    /// @code
+    ///   std::string_view msg = "Hello, {}!";
+    ///   std::string result = RuntimeFormat(msg, "World");
+    ///   // result will be "Hello, World!"
+    /// @endcode
+    template <typename... Args>
+    std::string RuntimeFormat(std::string_view message, Args &&...args)
     {
-        /**
-         * @brief Performs runtime formatting on a given message string using provided format arguments.
-         *
-         * This function allows for dynamically formatting a message string based on the given formatArgs tuple.
-         * The actual formatting is performed using the fmt library.
-         *
-         * @tparam Args The types of format arguments contained in the formatArgs tuple.
-         * @param message The message string to be formatted.
-         * @param formatArgs A tuple containing the arguments to be used for formatting the message.
-         * @return A formatted string based on the provided message and format arguments.
-         */
-        template <typename... Args>
-        std::string RuntimeFormat(std::string_view message, Args... args)
-        {
-            return fmt::format(fmt::runtime(message), std::forward<Args>(args)...);
-        }
-
-        /**
-         * @brief Formats a string using a format string and arguments.
-         *
-         * This function wraps around the `fmt::format` function, providing a consistent
-         * interface for string formatting within the codebase. It takes a format string
-         * and a variable number of arguments to format the string accordingly.
-         *
-         * @param message The format string.
-         * @param args The arguments to be substituted into the format string.
-         * @return The formatted string.
-         *
-         * @note This function only works with string literals. For runtime formatting, use the `NGIN::Util::RuntimeFormat` function.
-         *
-         * @example Util::Format("Hello, {}", "world!");  // Returns "Hello, world!"
-         */
-        template <typename... Args>
-        std::string Format(fmt::format_string<Args...> fmt, Args &&...args)
-        {
-
-            auto str = fmt::format(fmt, std::forward<Args>(args)...);
-            return str;
-        }
+        return fmt::format(fmt::runtime(message), std::forward<Args>(args)...);
     }
+
+    /// @brief Formats a string at compile-time using provided format arguments.
+    /// This function wraps around the `fmt::format` function from the fmt library.
+    ///
+    /// @note For runtime string formatting, see `NGIN::Util::RuntimeFormat` function.
+    ///
+    /// @tparam Args Types of the arguments used for formatting.
+    /// @param message The format string (must be a string literal).
+    /// @param args The arguments to be substituted into the format string.
+    /// @return The formatted string.
+    /// @code
+    ///   constexpr const char* msg = "Hello, {}!";
+    ///   std::string result = Format(msg, "World");
+    ///   // result will be "Hello, World!"
+    /// @endcode
+    template <typename... Args>
+    constexpr std::string Format(fmt::format_string<Args...> message, Args &&...args)
+    {
+        return fmt::format(message, std::forward<Args>(args)...);
+    }
+
 }
