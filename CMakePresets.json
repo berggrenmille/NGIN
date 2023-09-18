@@ -181,9 +181,23 @@
     ],
     "testPresets": [
         {
-            "name": "default",
+            "name": "default-debug",
             "description": "Default",
             "configurePreset": "debug-with-tests",
+            "output": {
+                "outputOnFailure": true,
+                "shortProgress": true,
+                "verbosity": "default"
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        },
+        {
+            "name": "default-release",
+            "description": "Default",
+            "configurePreset": "release-with-tests",
             "output": {
                 "outputOnFailure": true,
                 "shortProgress": true,
