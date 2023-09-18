@@ -21,6 +21,11 @@ message(STATUS "Build only documentation: ${NGIN_BUILD_ONLY_DOCS}")
 option(NIGN_TEST_ON_BUILD "Run tests on build" OFF)
 message(STATUS "Run tests on build: ${NIGN_TEST_ON_BUILD}")
 
+if(NGIN_BUILD_TESTS)
+    set (BUILD_TESTING ON CACHE BOOL "" FORCE)
+    include(CTest)
+    enable_testing()
+endif()
 # When building shared lib for Windows with MinGW,
 # avoid the DLL having a "lib" prefix
 

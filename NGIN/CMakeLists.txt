@@ -78,8 +78,7 @@ if(WIN32) # Check if we are on Windows
 endif()
 
 if(NGIN_BUILD_TESTS)
-    include(CTest)
-    enable_testing()
+
     add_subdirectory("tests")
 endif()
 
