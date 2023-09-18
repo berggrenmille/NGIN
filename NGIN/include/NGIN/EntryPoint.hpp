@@ -1,14 +1,10 @@
 #pragma once
 #include <NGIN/Core.h>
-#include <NGIN/Memory/FreeListAllocator.hpp>
-#include <NGIN/Logging/AsyncLogger.hpp>
-#include <NGIN/Logging/ConsoleSink.hpp>
+
 #include <NGIN/Time/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
-#include <NGIN/Memory/StackAllocator.hpp>
-#include <NGIN/Memory/Allocator.hpp>
-#include <NGIN/Layer.hpp>
+
 #include <SDL2/SDL.h>
 
 namespace NGIN
@@ -32,8 +28,6 @@ namespace NGIN
 			<< "NGIN"
 			<< "\007";
 		Logging::Init();
-
-		NGIN_WARNING("TEST {}", 1);
 		// Init Config
 		Config::Init();
 		Time::Timer<Time::Milliseconds> timer;

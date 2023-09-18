@@ -12,7 +12,7 @@ namespace NGIN::Memory
     class LinearAllocator
     {
     public:
-        NGIN_API LinearAllocator(size_t size);
+        NGIN_API LinearAllocator(size_t size = 1024);
 
         NGIN_API LinearAllocator(LinearAllocator &&other) noexcept;
 
@@ -25,6 +25,8 @@ namespace NGIN::Memory
         NGIN_API void DeallocateAll();
 
         NGIN_API bool Owns(void *ptr) const;
+
+        float test = 32;
 
     private:
         std::unique_ptr<std::byte[]> buffer;

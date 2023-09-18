@@ -39,6 +39,8 @@ namespace NGIN::Memory
 		 */
 		FreeListAllocator(FreeListAllocator &&other) noexcept;
 
+		FreeListAllocator &operator=(FreeListAllocator &&other) noexcept;
+
 		/**
 		 * @brief Allocates memory of the requested size, ensuring proper alignment.
 		 *
@@ -62,7 +64,7 @@ namespace NGIN::Memory
 		 */
 		void DeallocateAll();
 
-		bool Owns(void *ptr) const;
+		bool Owns(void *ptr);
 
 	private:
 		/**

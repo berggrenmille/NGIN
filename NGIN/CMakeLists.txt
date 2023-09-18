@@ -8,8 +8,6 @@ add_library(NGIN SHARED
 
   "src/NGIN/App.cpp"
   "src/NGIN/Config.cpp"
-  "src/NGIN/Layer.cpp"
-  "src/NGIN/LayerStack.cpp"
   "src/NGIN/Memory/LinearAllocator.cpp"
   "src/NGIN/Memory/StackAllocator.cpp"
   "src/NGIN/Memory/FreeListAllocator.cpp"
@@ -22,20 +20,15 @@ add_library(NGIN SHARED
   "src/NGIN/Graphics/Window.cpp" 
   "src/NGIN/Logging.cpp" 
   "src/NGIN/Logging/BaseLogger.cpp"  
-  "src/Utils/JSON.cpp")
+  "src/Utils/JSON.cpp"
+  "src/NGIN/Meta/UUID.cpp"
+  "src/NGIN/Meta/Reflection/Registry.cpp"
+)
 
 
 # Setup precompiled header
 target_precompile_headers(NGIN PRIVATE include/Precompiled/PCH.h)
   
- if (MSVC)
-    # Set /MD flag for Release configurations
-    target_compile_options(NGIN PRIVATE $<$<CONFIG:Release>:/MD>)
-    target_compile_options(NGIN PRIVATE $<$<CONFIG:Dist>:/MD>)
-    # Set /MDd flag for Debug configurations
-    target_compile_options(NGIN PRIVATE $<$<CONFIG:Debug>:/MDd>)
-endif()
-
  
 
 target_compile_definitions(NGIN PRIVATE NGIN_EXPORTS)
@@ -84,6 +77,10 @@ if(WIN32) # Check if we are on Windows
 
 endif()
 
+if(NGIN_BUILD_TESTS)
+
+    add_subdirectory("tests")
+endif()
 
 
 

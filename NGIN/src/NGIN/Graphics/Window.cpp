@@ -11,10 +11,10 @@ namespace NGIN::Graphics
 		uint32_t flags = 0; // Add base flags here
 		switch (backend)
 		{
-		case GraphicsBackend::Vulkan:
+		case GraphicsBackend::VULKAN:
 			flags |= SDL_WINDOW_VULKAN;
 			break;
-		case GraphicsBackend::OpenGL:
+		case GraphicsBackend::OPEN_GL:
 			flags |= SDL_WINDOW_OPENGL;
 			break;
 		}

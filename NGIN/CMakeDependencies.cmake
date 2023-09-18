@@ -26,7 +26,8 @@ endmacro()
 
 # fmtlib
 find_package(fmt 10 QUIET)
-fetch_dependency(fmt "https://github.com/fmtlib/fmt" "10.0.0")
+set(FMT_USE_NOEXCEPT ON CACHE BOOL "" FORCE)
+fetch_dependency(fmt "https://github.com/fmtlib/fmt" "10.1.1")
 
 # DYLIB
 find_package(DYLIB QUIET)

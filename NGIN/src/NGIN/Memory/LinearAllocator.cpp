@@ -1,5 +1,4 @@
 #include <NGIN/Memory/LinearAllocator.hpp>
-
 namespace NGIN::Memory
 {
 

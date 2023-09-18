@@ -1,190 +1,212 @@
 {
-  "version": 3,
-  "configurePresets": [
-    {
-      "name": "base",
-      "hidden": true,
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
-        "NGIN_BUILD_DOCUMENTATION": "OFF",
-        "NGIN_BUILD_TESTS": "OFF"
-      }
-    },
-    {
-      "name": "debug",
-      "inherits": "base",
-      "displayName": "Debug",
-      "description": "Debug build for x64 architecture",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      }
-    },
-    {
-      "name": "debug-with-tests",
-      "inherits": "base",
-      "displayName": "Tests Debug",
-      "description": "Debug build for x64 architecture",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "NGIN_BUILD_TESTS": "ON"
-      }
-    },
-    {
-      "name": "release",
-      "inherits": "base",
-      "displayName": "Release",
-      "description": "Release build for x64 architecture",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
-    },
-    {
-      "name": "release-with-tests",
-      "inherits": "base",
-      "displayName": "Tests Release",
-      "description": "Release build for x64 architecture with tests",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "NGIN_BUILD_TESTS": "ON"
-      }
-    },
-    {
-      "name": "release-with-tests-and-docs",
-      "inherits": "base",
-      "displayName": "Release With Tests and Docs",
-      "description": "Release build for x64 architecture, with tests and documentation",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "NGIN_BUILD_DOCUMENTATION": "ON",
-        "NGIN_BUILD_TESTS": "ON"
-      }
-    },
-    {
-      "name": "rel-with-deb-info",
-      "inherits": "base",
-      "displayName": "RelWithDebInfo",
-      "description": "Release build with debugging info for x64 architecture",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-      }
-    },
-    {
-      "name": "rel-with-deb-info-with-tests",
-      "inherits": "base",
-      "displayName": "RelWithDebInfo",
-      "description": "Release build with debugging info for x64 architecture",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "NGIN_BUILD_TESTS": "ON"
-      }
-    },
-    {
-      "name": "docs",
-      "inherits": "base",
-      "displayName": "Documentation",
-      "description": "Does not build any executable only generates documentation",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "NGIN_BUILD_DOCUMENTATION": "ON",
-        "NGIN_BUILD_ONLY_DOCUMENTATION": "ON",
-        "NGIN_BUILD_TESTS": "OFF"
-      }
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "buildDebug",
-      "displayName": "Debug",
-      "description": "Build all projects in Debug mode",
-      "configurePreset": "debug",
-      "targets": "all"
-    },
-    {
-      "name": "buildRelease",
-      "displayName": "Release",
-      "description": "Build all projects in Release mode",
-      "configurePreset": "release",
-      "targets": "all"
-    },
-    {
-      "name": "buildDocs",
-      "displayName": "Documentation",
-      "description": "Builds the API documentation into HTML format",
-      "configurePreset": "docs",
-      "targets": "DOCS"
-    },
-    {
-      "name": "rebuildDebug",
-      "displayName": "Rebuild Debug",
-      "description": "Clean and then build all projects in Debug mode",
-      "configurePreset": "debug",
-      "targets": "all",
-      "cleanFirst": true
-    },
-    {
-      "name": "rebuildRelease",
-      "displayName": "Rebuild Release",
-      "description": "Clean and then build all projects in Release mode",
-      "configurePreset": "release",
-      "targets": "all",
-      "cleanFirst": true
-    },
-    {
-      "name": "buildTestsRelease",
-      "displayName": "Tests",
-      "description": "Builds the tests for NGIN in release mode",
-      "configurePreset": "release-with-tests",
-      "targets": "NGIN_TESTS"
-    },
-    {
-      "name": "buildTestsDebug",
-      "displayName": "Tests",
-      "description": "Builds the tests for NGIN in debug mode",
-      "configurePreset": "debug-with-tests",
-      "targets": "NGIN_TESTS"
-    },
-    {
-      "name": "buildReleaseWithTestsAndDocs",
-      "displayName": "Release With Tests And Docs",
-      "description": "Builds all targets, including documentation and tests in release mode",
-      "configurePreset": "release-with-tests-and-docs",
-      "targets": "all"
-    },
-    {
-      "name": "buildRelWithDebInfo",
-      "displayName": "RelWithDebInfo",
-      "description": "Build all projects in Release mode with debugging information",
-      "configurePreset": "rel-with-deb-info",
-      "targets": "all"
-    },
-    {
-      "name": "rebuildRelWithDebInfo",
-      "displayName": "Rebuild RelWithDebInfo",
-      "description": "Clean and then build all projects in Release mode with debugging information",
-      "configurePreset": "rel-with-deb-info",
-      "targets": "all",
-      "cleanFirst": true
-    },
-    {
-      "name": "buildTestsRelWithDebInfo",
-      "displayName": "Tests RelWithDebInfo",
-      "description": "Builds the tests for NGIN in Release mode with debugging information",
-      "configurePreset": "rel-with-deb-info-with-tests",
-      "targets": "NGIN_TESTS"
-    }
-  ],
-  "testPresets": [
-    {
-      "name": "test",
-      "description": "",
-      "displayName": "",
-      "configurePreset": "release-with-tests"
-    }
-  ]
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+                "NGIN_BUILD_DOCUMENTATION": "OFF",
+                "NGIN_BUILD_TESTS": "OFF"
+            }
+        },
+        {
+            "name": "debug",
+            "inherits": "base",
+            "displayName": "Debug",
+            "description": "Debug build for x64 architecture",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "debug-with-tests",
+            "inherits": "base",
+            "displayName": "Tests Debug",
+            "description": "Debug build for x64 architecture",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "NGIN_BUILD_TESTS": "ON"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "displayName": "Release",
+            "description": "Release build for x64 architecture",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "release-with-tests",
+            "inherits": "base",
+            "displayName": "Tests Release",
+            "description": "Release build for x64 architecture with tests",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NGIN_BUILD_TESTS": "ON"
+            }
+        },
+        {
+            "name": "release-with-tests-and-docs",
+            "inherits": "base",
+            "displayName": "Release With Tests and Docs",
+            "description": "Release build for x64 architecture, with tests and documentation",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NGIN_BUILD_DOCUMENTATION": "ON",
+                "NGIN_BUILD_TESTS": "ON"
+            }
+        },
+        {
+            "name": "rel-with-deb-info",
+            "inherits": "base",
+            "displayName": "RelWithDebInfo",
+            "description": "Release build with debugging info for x64 architecture",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
+            "name": "rel-with-deb-info-with-tests",
+            "inherits": "base",
+            "displayName": "RelWithDebInfo",
+            "description": "Release build with debugging info for x64 architecture",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "NGIN_BUILD_TESTS": "ON"
+            }
+        },
+        {
+            "name": "docs",
+            "inherits": "base",
+            "displayName": "Documentation",
+            "description": "Does not build any executable only generates documentation",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "NGIN_BUILD_DOCUMENTATION": "ON",
+                "NGIN_BUILD_ONLY_DOCUMENTATION": "ON",
+                "NGIN_BUILD_TESTS": "OFF"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "buildDebug",
+            "displayName": "Debug",
+            "description": "Build all projects in Debug mode",
+            "configurePreset": "debug",
+            "targets": "all"
+        },
+        {
+            "name": "buildRelease",
+            "displayName": "Release",
+            "description": "Build all projects in Release mode",
+            "configurePreset": "release",
+            "targets": "all"
+        },
+        {
+            "name": "buildDocs",
+            "displayName": "Documentation",
+            "description": "Builds the API documentation into HTML format",
+            "configurePreset": "docs",
+            "targets": "DOCS"
+        },
+        {
+            "name": "rebuildDebug",
+            "displayName": "Rebuild Debug",
+            "description": "Clean and then build all projects in Debug mode",
+            "configurePreset": "debug",
+            "targets": "all",
+            "cleanFirst": true
+        },
+        {
+            "name": "rebuildRelease",
+            "displayName": "Rebuild Release",
+            "description": "Clean and then build all projects in Release mode",
+            "configurePreset": "release",
+            "targets": "all",
+            "cleanFirst": true
+        },
+        {
+            "name": "buildTestsRelease",
+            "displayName": "Tests",
+            "description": "Builds the tests for NGIN in release mode",
+            "configurePreset": "release-with-tests",
+            "targets": "all"
+        },
+        {
+            "name": "buildTestsDebug",
+            "displayName": "Tests",
+            "description": "Builds the tests for NGIN in debug mode",
+            "configurePreset": "debug-with-tests",
+            "targets": "all"
+        },
+        {
+            "name": "buildReleaseWithTestsAndDocs",
+            "displayName": "Release With Tests And Docs",
+            "description": "Builds all targets, including documentation and tests in release mode",
+            "configurePreset": "release-with-tests-and-docs",
+            "targets": "all"
+        },
+        {
+            "name": "buildRelWithDebInfo",
+            "displayName": "RelWithDebInfo",
+            "description": "Build all projects in Release mode with debugging information",
+            "configurePreset": "rel-with-deb-info",
+            "targets": "all"
+        },
+        {
+            "name": "rebuildRelWithDebInfo",
+            "displayName": "Rebuild RelWithDebInfo",
+            "description": "Clean and then build all projects in Release mode with debugging information",
+            "configurePreset": "rel-with-deb-info",
+            "targets": "all",
+            "cleanFirst": true
+        },
+        {
+            "name": "buildTestsRelWithDebInfo",
+            "displayName": "Tests RelWithDebInfo",
+            "description": "Builds the tests for NGIN in Release mode with debugging information",
+            "configurePreset": "rel-with-deb-info-with-tests",
+            "targets": "all"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default-debug",
+            "description": "Default",
+            "configurePreset": "debug-with-tests",
+            "output": {
+                "outputOnFailure": true,
+                "shortProgress": true,
+                "verbosity": "default"
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        },
+        {
+            "name": "default-release",
+            "description": "Default",
+            "configurePreset": "release-with-tests",
+            "output": {
+                "outputOnFailure": true,
+                "shortProgress": true,
+                "verbosity": "default"
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        }
+    ]
 }

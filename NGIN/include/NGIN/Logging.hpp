@@ -3,7 +3,6 @@
 #include <NGIN/Logging/ConsoleSink.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging/Defines.hpp>
-#include <NGIN/Util/TupleHelper.hpp>
 #include <thread>
 
 namespace NGIN::Logging

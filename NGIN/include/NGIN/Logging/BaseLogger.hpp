@@ -1,8 +1,8 @@
 #pragma once
 #include "BaseSink.hpp"
-#include <NGIN/Util/TupleHelper.hpp>
+#include <NGIN/Util/Format.hpp>
+#include <NGIN/Util/TupleUtils.hpp>
 #include <NGIN/Util/StringUtils.hpp>
-#include <NGIN/Util/TimeUtils.hpp>
 
 #include <vector>
 #include <memory>
@@ -28,7 +28,9 @@ namespace NGIN::Logging
 		void Log(Level level, const std::string &message, std::tuple<Args...> formatArgs, const std::source_location &location = std::source_location::current())
 		{
 			// Format message
-			std::string messageFmt = Util::RuntimeFormat(message, formatArgs);
+			std::string messageFmt;
+			Util::Apply(formatArgs, [&](auto &&...args)
+						{ messageFmt = fmt::format(fmt::runtime(message), std::forward<Args>(args)...); });
 			LogInternal(level, FormatLogMessage(level, messageFmt, location));
 		}
 

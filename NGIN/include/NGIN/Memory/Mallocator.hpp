@@ -17,6 +17,6 @@ namespace NGIN::Memory
 
         void Deallocate(void *ptr);
 
-        bool Owns(void *ptr) const;
+        bool Owns(void *ptr);
     };
 }

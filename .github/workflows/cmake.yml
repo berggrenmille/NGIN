@@ -13,7 +13,7 @@ on:
 env:
   CONFIG_PRESET: release-with-tests
   BUILD_PRESET: buildTestsRelease
-  TEST_PRESET: test
+  TEST_PRESET: default-release
 
 jobs:   
   build_and_test:

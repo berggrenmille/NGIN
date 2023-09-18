@@ -1,55 +1,44 @@
 #pragma once
 
-/**
- * @brief The main namespace
- */
+/// \namespace NGIN
+/// \brief The main namespace for the NGIN game engine.
 namespace NGIN
 {
-
-	/**
-	 * @brief A namespace containing internal helper functions
-	 *
-	 *  Contains very specialized code, so use externally at own risk.
-	 */
+	/// \namespace NGIN::Util
+	/// \brief Contains specialized internal helper functions.
+	/// Use externally with caution due to highly specialized nature.
 	namespace Util
 	{
 	}
 
-	/**
-	 * @brief Provides functionalities related to the logging process.
-	 *
-	 * This namespace encompasses all the utilities, handlers, formatters, and other components
-	 * that are essential for the logging process within the system. It offers a holistic approach
-	 * to capture, format, and manage log entries for various applications.
-	 */
+	/// \namespace NGIN::Logging
+	/// \brief Provides utilities essential for the logging process.
+	/// Encompasses handlers, formatters, and other components for logging.
 	namespace Logging
 	{
 	}
 
-	/**
-	 * @brief The namespace encapsulates the Memory functions of the NGIN.
-	 *
-	 */
+	/// \namespace NGIN::Memory
+	/// \brief Encapsulates memory-related functions and utilities of NGIN.
 	namespace Memory
 	{
 	}
 
-	/**
-	 *  @brief The namespace encapsulates the Time functions of the NGIN.
-	 */
+	/// \namespace NGIN::Time
+	/// \brief Encapsulates time-related functions and utilities of NGIN.
 	namespace Time
 	{
 	}
 
 	/// \namespace NGIN::IO
-	/// \brief Namespace for IO-related classes and functions.
+	/// \brief Encapsulates IO-related functionalities and classes.
 	namespace IO
 	{
 	}
 
-	/// \namespace NGIN::TypeErasure
-	/// \brief Namespace for NGIN type erasure utilities.
-	namespace NGIN::TypeErasure
+	/// \namespace NGIN::Meta
+	/// \brief Contains Meta programming utilities for NGIN, such as Reflection.
+	namespace Meta
 	{
 	}
 }

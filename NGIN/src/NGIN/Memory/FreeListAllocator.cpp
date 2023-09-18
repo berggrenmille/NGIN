@@ -44,6 +44,22 @@ namespace NGIN::Memory
 		other.freeBlocks = nullptr;
 	}
 
+	FreeListAllocator &FreeListAllocator::operator=(FreeListAllocator &&other) noexcept
+	{
+		if (this == &other)
+			return *this;
+
+		start = other.start;
+		size = other.size;
+		usedMemory = other.usedMemory;
+		freeBlocks = other.freeBlocks;
+
+		other.start = nullptr;
+		other.size = 0;
+		other.usedMemory = 0;
+		other.freeBlocks = nullptr;
+		return *this;
+	}
 	void *FreeListAllocator::Allocate(size_t size, size_t alignment, const std::source_location &location)
 	{
 		NGIN_ASSERT(size > 0, "Cannot allocate zero bytes.");
@@ -116,7 +132,7 @@ namespace NGIN::Memory
 		usedMemory = 0;
 	}
 
-	bool FreeListAllocator::Owns(void *ptr) const
+	bool FreeListAllocator::Owns(void *ptr)
 	{
 		// Convert the void pointers to uintptr_t for arithmetic
 		uintptr_t startAddress = reinterpret_cast<uintptr_t>(start);

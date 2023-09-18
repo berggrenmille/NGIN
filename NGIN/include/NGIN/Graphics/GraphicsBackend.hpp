@@ -3,9 +3,9 @@ namespace NGIN::Graphics
 {
     enum class GraphicsBackend
     {
-        Vulkan,
-        OpenGL,
-        DX12,
+        VULKAN,
+        OPEN_GL,
+        D3D12,
         //... other backends
     };
 } // namespace NGIN::Graphics
