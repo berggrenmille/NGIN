@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/TypeErasure/DynamicStoragePolicy.hpp>
+#include <NGIN/Meta/StoragePolicy/DynamicStorage.hpp>
 #include <NGIN/Memory/Allocator.hpp>
 
 #include <memory>

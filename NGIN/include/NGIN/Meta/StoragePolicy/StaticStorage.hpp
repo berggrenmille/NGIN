@@ -17,7 +17,6 @@ namespace NGIN::Meta::StoragePolicy
 	template <std::size_t Size = 64>
 	class NGIN_STATIC_STORAGE_ALIGNMENT_ATTRIBUTE StaticStorage
 	{
-		static_assert(Size % NGIN_STATIC_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_STATIC_STORAGE_TO_STRING(NGIN_STATIC_STORAGE_ALIGNMENT) ".");
 
 	public:
 		/// @brief Default constructor.
@@ -53,14 +52,13 @@ namespace NGIN::Meta::StoragePolicy
 		inline void *get() { return &buffer[0]; }
 
 	private:
+		/// @brief Internal buffer to hold object data.
+		std::byte buffer[Size];
 		/// @brief Function pointer for object destruction.
 		void (*destructorFunc)(void *) = nullptr;
 
 		/// @brief Function pointer for moving object data.
 		void (*moveFunc)(void *dst, void *src) = nullptr;
-
-		/// @brief Internal buffer to hold object data.
-		std::byte buffer[Size];
 	};
 
 	template <std::size_t Size>
@@ -107,12 +105,17 @@ namespace NGIN::Meta::StoragePolicy
 	{
 		using StoredType = std::decay_t<T>;
 		static_assert(sizeof(StoredType) <= Size, "Type too large for StaticStorage.");
+		static_assert(alignof(StoredType) <= NGIN_STATIC_STORAGE_ALIGNMENT, "Type alignment too large for StaticStorage.");
 
 		new (&buffer[0]) StoredType(std::move(obj));
-		destructorFunc = [](void *ptr)
+		if constexpr (std::is_destructible_v<StoredType>)
 		{
-			static_cast<StoredType *>(ptr)->~T();
-		};
+			destructorFunc = [](void *ptr)
+			{
+				static_cast<StoredType *>(ptr)->~StoredType();
+			};
+		}
+
 		if constexpr (std::is_move_assignable_v<StoredType>)
 		{
 			moveFunc = [](void *dst, void *src)

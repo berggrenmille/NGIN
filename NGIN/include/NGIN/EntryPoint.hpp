@@ -1,11 +1,26 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 
 #include <NGIN/Time/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
 
+#include <NGIN/Meta/StoragePolicy.hpp>
+#include <algorithm>
+#include <random>
+
 #include <SDL2/SDL.h>
+
+struct HeavyStruct
+{
+	int a, b, c, d, e;
+	//
+
+	int heavyCalculation() const
+	{
+		return a * a + b * b + c * c + d * d + e * e;
+	}
+};
 
 namespace NGIN
 {
@@ -30,7 +45,6 @@ namespace NGIN
 		Logging::Init();
 		// Init Config
 		Config::Init();
-		Time::Timer<Time::Milliseconds> timer;
 
 		NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
 

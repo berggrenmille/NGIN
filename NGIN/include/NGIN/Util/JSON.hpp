@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
