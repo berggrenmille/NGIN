@@ -64,7 +64,7 @@ namespace NGIN::Util
             {
                 throw std::runtime_error("Delegate not initialized");
             }
-            void *args_arr[] = {&args...};
+            void *args_arr[] = {nullptr, &args...};
             return invoker(storage.get(), args_arr);
         }
 
@@ -89,7 +89,7 @@ namespace NGIN::Util
         template <typename Callable, typename First, typename... Rest>
         static void InvokeImpl(Callable &callable, void *args_arr[])
         {
-            callable(*static_cast<First *>(args_arr[0]), *static_cast<Rest *>(args_arr[1])...);
+            callable(*static_cast<First *>(args_arr[1]), *static_cast<Rest *>(args_arr[2])...);
         }
 
         template <typename Callable>

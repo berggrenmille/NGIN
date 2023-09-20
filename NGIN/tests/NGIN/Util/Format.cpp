@@ -66,7 +66,7 @@ TEST_F(FormatTest, RuntimeFormatMissingArguments)
         std::string result = RuntimeFormat(formatStrView, "Alice");
         FAIL();
     }
-    catch (const std::exception &e)
+    catch (const std::exception &)
     {
         SUCCEED();
     }
