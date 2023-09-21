@@ -1,7 +1,9 @@
 #pragma once
+#include <NGIN/Defines.hpp>
+
 namespace NGIN::Graphics
 {
-    enum class GraphicsBackend
+    enum class GraphicsBackend : uint8
     {
         VULKAN,
         OPEN_GL,

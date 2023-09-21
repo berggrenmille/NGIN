@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <NGIN/Graphics/GraphicsBackend.hpp>
 
 #include <SDL2/SDL.h>

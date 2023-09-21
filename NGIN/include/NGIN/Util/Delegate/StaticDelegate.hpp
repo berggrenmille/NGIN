@@ -8,23 +8,27 @@ namespace NGIN::Util
 {
 
     template <typename FuncType>
-    class Delegate2;
+    class StaticDelegate;
 
     template <typename ReturnType, typename... ArgTypes>
-    class Delegate2<ReturnType(ArgTypes...)>
+    class StaticDelegate<ReturnType(ArgTypes...)>
     {
     public:
+        /// \brief Type of the function pointer.
         using FunctionType = ReturnType (*)(ArgTypes...);
 
         /// \brief Type of the return value.
         using ResultType = ReturnType;
+
+        /// \brief Number of arguments.
+        static constexpr size_t NumArgs = sizeof...(ArgTypes);
 
         /// \brief Tuple of argument types.
         using ArgsTupleType = std::tuple<ArgTypes...>;
 
         template <typename F>
             requires std::is_invocable_v<std::decay_t<F>, ArgTypes...>
-        Delegate2(F &&f) noexcept
+        StaticDelegate(F &&f) noexcept
         {
             using CallableType = std::decay_t<F>;
 
@@ -32,7 +36,7 @@ namespace NGIN::Util
             invoker = InvokeCallable<CallableType>;
         }
 
-        Delegate2(ReturnType (*func)(ArgTypes...)) noexcept
+        StaticDelegate(ReturnType (*func)(ArgTypes...)) noexcept
         {
 
             using FuncType = ReturnType (*)(ArgTypes...);
@@ -42,7 +46,7 @@ namespace NGIN::Util
         }
 
         template <class T>
-        Delegate2(ReturnType (T::*func)(ArgTypes...), T *obj) noexcept
+        StaticDelegate(ReturnType (T::*func)(ArgTypes...), T *obj) noexcept
         {
             auto wrapper = [func, obj](ArgTypes... args)
             {
@@ -55,12 +59,10 @@ namespace NGIN::Util
             invoker = InvokeCallable<WrapperType>;
         }
 
-        template <typename... Args>
-        auto operator()(Args &&...args) -> decltype(auto)
+        auto operator()(ArgTypes... args) -> decltype(auto)
         {
 
-            return invoker(storage.get(), std::forward<Args>(args)...);
-            //   return invoker(storage.get(), args_arr);
+            return invoker(storage.get(), std::forward<ArgTypes>(args)...);
         }
 
     private:
