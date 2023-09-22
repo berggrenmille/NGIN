@@ -5,9 +5,14 @@ using namespace NGIN::Util;
 
 namespace
 {
-    int SimpleFunction(int x, int y)
+    int ReturningSimpleFunction(int x, int y)
     {
         return x + y;
+    }
+
+    void VoidSimpleFunction()
+    {
+        return;
     }
 
     struct CallableObject
@@ -24,6 +29,11 @@ namespace
         {
             return x * y;
         }
+
+        int ConstMultiply(int x, int y) const
+        {
+            return x * y;
+        }
     };
 }
 
@@ -33,10 +43,64 @@ protected:
     // You can set up context here if needed
 };
 
+TEST_F(StaticDelegateTest, VoidFunctionTest)
+{
+    StaticDelegate<void()> del(VoidSimpleFunction);
+    del();
+    SUCCEED();
+}
+
+TEST_F(StaticDelegateTest, VoidLambdaTest)
+{
+    auto lambda = []() -> void
+    { return; };
+    StaticDelegate<void()> del(lambda);
+    del();
+    SUCCEED();
+}
+
+TEST_F(StaticDelegateTest, LValueArgumentTest)
+{
+    auto lambda = [](int &x) -> void
+    { x = 5; };
+    StaticDelegate<void(int &)> del(lambda);
+    int x = 0;
+    del(x);
+    EXPECT_EQ(x, 5);
+}
+
+TEST_F(StaticDelegateTest, RValueArgumentTest)
+{
+    auto lambda = [](int &&x) -> void
+    { return; };
+    StaticDelegate<void(int &&)> del(lambda);
+    del(5);
+    SUCCEED();
+}
+
+TEST_F(StaticDelegateTest, ConstLValueArgumentTest)
+{
+    auto lambda = [](const int &x) -> void
+    { return; };
+    StaticDelegate<void(const int &)> del(lambda);
+    int x = 0;
+    del(x);
+    SUCCEED();
+}
+
+TEST_F(StaticDelegateTest, ConstRValueArgumentTest)
+{
+    auto lambda = [](const int &&x) -> void
+    { return; };
+    StaticDelegate<void(const int &&)> del(lambda);
+    del(5);
+    SUCCEED();
+}
+
 /// \brief Test if simple function can be wrapped.
 TEST_F(StaticDelegateTest, SimpleFunctionTest)
 {
-    StaticDelegate<int(int, int)> del(SimpleFunction);
+    StaticDelegate<int(int, int)> del(ReturningSimpleFunction);
     EXPECT_EQ(del(2, 3), 5);
 }
 
@@ -48,15 +112,6 @@ TEST_F(StaticDelegateTest, CallableObjectTest)
     EXPECT_EQ(del(2, 3), 6);
 }
 
-/// \brief Test if lambda functions can be wrapped.
-TEST_F(StaticDelegateTest, LambdaTest)
-{
-    auto lambda = [](int x, int y) -> int
-    { return x - y; };
-    StaticDelegate<int(int, int)> del(lambda);
-    EXPECT_EQ(del(5, 2), 3);
-}
-
 /// \brief Test if member functions can be wrapped.
 TEST_F(StaticDelegateTest, MemberFunctionTest)
 {
@@ -65,13 +120,59 @@ TEST_F(StaticDelegateTest, MemberFunctionTest)
     EXPECT_EQ(del(2, 3), 6);
 }
 
-/// \brief Test if the delegate can be invoked with arguments.
-TEST_F(StaticDelegateTest, ArgumentInvokeTest)
+TEST_F(StaticDelegateTest, ConstMemberFunctionTest)
 {
-    StaticDelegate<int(int, int)> del(SimpleFunction);
-    int x = 5;
-    int y = 2;
-    EXPECT_EQ(del(x, y), 7);
+    TestClass obj;
+    StaticDelegate<int(int, int)> del(&TestClass::ConstMultiply, &obj);
+    EXPECT_EQ(del(2, 3), 6);
 }
 
-// Add more tests based on what you need to cover
+TEST_F(StaticDelegateTest, NullVoidFunctionPointerTest)
+{
+    ASSERT_ANY_THROW(StaticDelegate<void()> del(nullptr));
+}
+
+TEST_F(StaticDelegateTest, NullReturningFunctionPointerTest)
+{
+    ASSERT_ANY_THROW(StaticDelegate<int(int, int)> del(nullptr));
+}
+
+TEST_F(StaticDelegateTest, MultipleInstancesTest)
+{
+    StaticDelegate<int(int, int)> del1(ReturningSimpleFunction);
+    StaticDelegate<int(int, int)> del2(ReturningSimpleFunction);
+    EXPECT_EQ(del1(2, 3), 5);
+    EXPECT_EQ(del2(2, 3), 5);
+}
+
+TEST_F(StaticDelegateTest, StatefulLambda)
+{
+    int a = 1;
+    auto lambda = [a](int x) -> int
+    { return x + a; };
+    StaticDelegate<int(int)> del(lambda);
+    EXPECT_EQ(del(2), 3);
+}
+
+TEST_F(StaticDelegateTest, ChainedDelegates)
+{
+    StaticDelegate<int(int, int)> del1(ReturningSimpleFunction);
+    StaticDelegate<int(int, int)> del2([&del1](int x, int y)
+                                       { return del1(x, y); });
+    EXPECT_EQ(del2(2, 3), 5);
+}
+
+TEST_F(StaticDelegateTest, NonCopyableCallable)
+{
+    struct NonCopyable
+    {
+        NonCopyable() = default;
+        NonCopyable(const NonCopyable &) = delete;
+        NonCopyable(NonCopyable &&) = default;
+        int operator()(int x) { return x + 1; }
+    };
+
+    NonCopyable obj;
+    StaticDelegate<int(int)> del(std::move(obj));
+    EXPECT_EQ(del(1), 2);
+}

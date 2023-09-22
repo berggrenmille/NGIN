@@ -36,18 +36,22 @@ namespace NGIN::Util
             invoker = InvokeCallable<CallableType>;
         }
 
-        StaticDelegate(ReturnType (*func)(ArgTypes...)) noexcept
+        StaticDelegate(ReturnType (*func)(ArgTypes...))
         {
 
-            using FuncType = ReturnType (*)(ArgTypes...);
-            storage = StorageType(FuncType(func));
+            if (func == nullptr)
+                throw std::invalid_argument("Function pointer cannot be null.");
 
+            using FuncType = ReturnType (*)(ArgTypes...);
+
+            storage = StorageType(FuncType(func));
             invoker = InvokeCallable<FuncType>;
         }
 
         template <class T>
         StaticDelegate(ReturnType (T::*func)(ArgTypes...), T *obj) noexcept
         {
+
             auto wrapper = [func, obj](ArgTypes... args)
             {
                 return (obj->*func)(std::forward<ArgTypes>(args)...);
@@ -59,6 +63,20 @@ namespace NGIN::Util
             invoker = InvokeCallable<WrapperType>;
         }
 
+        template <class T>
+        StaticDelegate(ReturnType (T::*func)(ArgTypes...) const, const T *obj) noexcept
+        {
+
+            auto wrapper = [func, obj](ArgTypes... args) -> ReturnType
+            {
+                return (obj->*func)(std::forward<ArgTypes>(args)...);
+            };
+
+            using WrapperType = decltype(wrapper);
+
+            storage = StorageType(std::move(wrapper));
+            invoker = InvokeCallable<WrapperType>;
+        }
         auto operator()(ArgTypes... args) -> decltype(auto)
         {
 
@@ -81,20 +99,7 @@ namespace NGIN::Util
         {
             auto &callable = *static_cast<Callable *>(storage);
             return callable(std::forward<ArgTypes>(args)...);
-            //   return InvokeImpl<Callable, Args...>(callable, std::forward<Args>(args)...);
         }
-        /*
-                template <typename Callable, typename First, typename... Rest>
-                inline static auto InvokeImpl(Callable &callable, First &&first, Rest &&...rest) -> decltype(auto)
-                {
-                    return callable(std::forward<First>(first), std::forward<Rest>(rest)...);
-                }
-
-                template <typename Callable>
-                inline static auto InvokeImpl(Callable &callable) -> decltype(auto)
-                {
-                    return callable();
-                }*/
     };
 
 }

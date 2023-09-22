@@ -1,7 +1,10 @@
+#include <NGIN/Defines.hpp>
 #include <cstddef>
 
 namespace NGIN::Meta
 {
+    using TypeIDType = Size;
+
     template <typename T>
     struct TypeIDResolver
     {
@@ -17,8 +20,8 @@ namespace NGIN::Meta
     /// @tparam T The type for which the ID should be fetched.
     /// @return The unique type ID for the specified type.
     template <typename T>
-    size_t TypeID()
+    [[nodiscard]] TypeIDType TypeID() noexcept
     {
-        return reinterpret_cast<size_t>(&TypeIDResolver<T>::ID);
+        return reinterpret_cast<TypeIDType>(&TypeIDResolver<T>::ID);
     }
 }

@@ -56,6 +56,8 @@ namespace NGIN::Meta::StoragePolicy
 		/// \return A pointer to the stored data.
 		void *get();
 
+		void *get() const;
+
 	private:
 		/// \union Data
 		/// \brief Union for either holding a pointer to heap-allocated data or a static buffer.
@@ -197,4 +199,5 @@ namespace NGIN::Meta::StoragePolicy
 	{
 		return useHeap ? data.ptr : &data.buffer[0];
 	}
+
 }

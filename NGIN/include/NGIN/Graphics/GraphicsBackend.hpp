@@ -3,7 +3,7 @@
 
 namespace NGIN::Graphics
 {
-    enum class GraphicsBackend : uint8
+    enum class GraphicsBackend : UInt8
     {
         VULKAN,
         OPEN_GL,
