@@ -89,8 +89,6 @@ namespace NGIN::Util
         using InvokerFunc = ReturnType (*)(void *, ArgTypes &&...);
         using StorageType = Meta::StoragePolicy::HybridStorage<BUFFER_SIZE>;
 
-        using DestroyerFunc = void (*)(void *);
-
         StorageType storage;
         InvokerFunc invoker = nullptr;
 

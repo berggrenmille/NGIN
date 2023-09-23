@@ -1,8 +1,8 @@
 #pragma once
 #include <NGIN/Defines.hpp>
-#include <nlohmann/json.hpp>
+#include <rapidjson/document.h>
 #include <string>
-#include <unordered_map>
+#include <type_traits>
 
 namespace NGIN::Util
 {
@@ -21,129 +21,141 @@ namespace NGIN::Util
 		 * @brief Constructs the JSON object from a string representation.
 		 * @param jsonString A string representation of a JSON object.
 		 */
-		NGIN_API JSON(const std::string &jsonString);
+		NGIN_API JSON(const String &jsonString);
+
+		/**
+		 * @brief Copy constructor for JSON.
+		 * @param other The JSON object to copy from.
+		 */
+		NGIN_API JSON(const JSON &other);
+
+		/**
+		 * @brief Move constructor for JSON.
+		 * @param other The JSON object to move from.
+		 */
+		NGIN_API JSON(JSON &&other) noexcept;
+
+		/**
+		 * @brief Copy assignment operator for JSON.
+		 * @param other The JSON object to copy from.
+		 * @return Returns *this.
+		 */
+		NGIN_API JSON &operator=(const JSON &other);
+
+		/**
+		 * @brief Move assignment operator for JSON.
+		 * @param other The JSON object to move from.
+		 * @return Returns *this.
+		 */
+		NGIN_API JSON &operator=(JSON &&other) noexcept;
 
 		/**
 		 * @brief Parses a string representation into a JSON object.
 		 * @param jsonString The string representation of the JSON.
 		 * @return Returns true if the parse was successful, otherwise false.
 		 */
-		NGIN_API bool Parse(const std::string &jsonString);
+		NGIN_API Bool Parse(const String &jsonString);
 
 		/**
 		 * @brief Checks if the JSON object contains a given key.
-		 *
 		 * @param key The key to check for.
 		 * @return Returns true if the key is found, otherwise false.
 		 */
-		NGIN_API bool Contains(const std::string &key) const;
+		NGIN_API Bool Contains(const String &key) const;
 
 		/**
 		 * @brief Checks if the JSON object is empty.
-		 *
 		 * @return Returns true if the JSON object is empty, otherwise false.
 		 */
-		NGIN_API bool IsEmpty() const;
-
-		/**
-		 * @brief Retrieves a value of type T associated with a given key.
-		 * @param key The key associated with the desired value.
-		 * @param value A reference to a variable to store the retrieved value.
-		 * @return Returns true if the key is found and the value is successfully retrieved, otherwise false.
-		 */
-		// For arithmetic types:
-		template <typename T,
-				  typename std::enable_if<std::is_arithmetic<T>::value, int>::type = 0>
-		bool Get(const std::string &key, T &value) const;
-
-		// For string types
-		template <typename T,
-				  typename std::enable_if<std::is_same<T, std::string>::value, int>::type = 0>
-		bool Get(const std::string &key, T &value) const;
-
-		// For unknown types:
-		template <typename T,
-				  typename std::enable_if<!std::is_arithmetic<T>::value &&
-											  !std::is_same<T, std::string>::value,
-										  int>::type = 0>
-		bool Get(const std::string &key, T &value) const;
+		NGIN_API Bool IsEmpty() const;
 
 		/**
 		 * @brief Retrieves a nested JSON object associated with a given key.
 		 * @param key The key associated with the desired JSON object.
 		 * @return Returns the JSON object if the key is found and it corresponds to an object, otherwise returns an empty JSON object.
 		 */
-		NGIN_API JSON GetObject(const std::string &key) const;
+		NGIN_API JSON GetObject(const String &key) const;
 
 		/**
-		 * @brief Sets a key-value pair in the JSON object of a generic type T.
-		 * @param key The key to be associated with the given value.
-		 * @param value The value to be set.
+		 * @brief Retrieves a value of a specific type T associated with a given key.
+		 *
+		 * @tparam T The type of value to retrieve.
+		 * @param key The key associated with the value.
+		 * @return The value of the specified type T if the key exists and the value can be converted to T.
+		 *         Otherwise returns a default-constructed value of T.
 		 */
 		template <typename T>
-		void Set(const std::string &key, const T &value);
+		T Get(const String &key) const;
+
+		// Explicit template specializations
+		template <>
+		NGIN_API String Get<String>(const String &key) const;
+
+		template <>
+		NGIN_API Int32 Get<Int32>(const String &key) const;
+
+		template <>
+		NGIN_API Int64 Get<Int64>(const String &key) const;
+
+		template <>
+		NGIN_API F32 Get<F32>(const String &key) const;
+
+		template <>
+		NGIN_API F64 Get<F64>(const String &key) const;
+
+		template <>
+		NGIN_API UInt64 Get<UInt64>(const String &key) const;
+
+		template <>
+		NGIN_API Bool Get<Bool>(const String &key) const;
 
 		/**
-		 * @brief Sets a key-value pair in the JSON object with a string value.
-		 * @param key The key to be associated with the given value.
-		 * @param value The string value to be set.
+		 * @brief Sets a value of a specific type T for a given key.
+		 *
+		 * @tparam T The type of value to set.
+		 * @param key The key to associate with the value.
+		 * @param value The value to set.
 		 */
-		NGIN_API void Set(const std::string &key, const std::string &value);
+		template <typename T>
+		void Set(const String &key, const T &value);
+		// Explicit template specializations
+		template <>
+		NGIN_API void Set<String>(const String &key, const String &value);
+
+		template <>
+		NGIN_API void Set<Int32>(const String &key, const Int32 &value);
+
+		template <>
+		NGIN_API void Set<Int64>(const String &key, const Int64 &value);
+
+		template <>
+		NGIN_API void Set<F32>(const String &key, const F32 &value);
+
+		template <>
+		NGIN_API void Set<F64>(const String &key, const F64 &value);
+
+		template <>
+		NGIN_API void Set<UInt64>(const String &key, const UInt64 &value);
+
+		template <>
+		NGIN_API void Set<Bool>(const String &key, const Bool &value);
 
 		/**
 		 * @brief Sets a nested JSON object in the current JSON object associated with a given key.
 		 * @param key The key to be associated with the given JSON object.
 		 * @param value The JSON object to be set.
 		 */
-		NGIN_API void SetObject(const std::string &key, const JSON &value);
+		NGIN_API void SetObject(const String &key, const JSON &value);
 
 		/**
 		 * @brief Converts the JSON object into its string representation.
 		 * @return Returns the string representation of the JSON object.
 		 */
-		NGIN_API std::string Dump() const;
+		NGIN_API String Dump() const;
 
 	private:
 		/// The internal representation of the JSON data.
-		nlohmann::json data;
+		rapidjson::Document data;
 	};
 
-	template <typename T,
-			  typename std::enable_if<std::is_arithmetic<T>::value, int>::type>
-	bool JSON::Get(const std::string &key, T &value) const
-	{
-		if (data.contains(key) && data[key].is_number())
-		{
-			value = data[key].get<T>();
-			return true;
-		}
-		return false;
-	}
-
-	template <typename T,
-			  typename std::enable_if<std::is_same<T, std::string>::value, int>::type>
-	bool JSON::Get(const std::string &key, T &value) const
-	{
-		if (data.contains(key) && data[key].is_string())
-		{
-			value = data[key].get<std::string>();
-			return true;
-		}
-		return false;
-	}
-
-	template <typename T,
-			  typename std::enable_if<!std::is_arithmetic<T>::value &&
-										  !std::is_same<T, std::string>::value,
-									  int>::type>
-	bool JSON::Get(const std::string &key, T &value) const
-	{
-		return false;
-	}
-
-	template <typename T>
-	void JSON::Set(const std::string &key, const T &value)
-	{
-		data[key] = value;
-	}
 }

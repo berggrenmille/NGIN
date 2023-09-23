@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <string>
 
 #if defined(_MSC_VER)
 #ifdef NGIN_EXPORTS
@@ -34,7 +35,10 @@ namespace NGIN
     using F32 = float;
     using F64 = double;
 
-    using Size = std::size_t;
+    using String = std::string;
+    using StringView = std::string_view;
+
+    using Bool = bool;
 
     template <typename T>
     using Scope = std::unique_ptr<T>;

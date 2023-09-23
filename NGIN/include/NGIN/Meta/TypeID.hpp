@@ -3,7 +3,7 @@
 
 namespace NGIN::Meta
 {
-    using TypeIDType = Size;
+    using TypeIDType = UInt64;
 
     template <typename T>
     struct TypeIDResolver

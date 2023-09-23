@@ -24,7 +24,6 @@ namespace NGIN::Util
             returnTypeID = Meta::TypeID<typename Traits::ReturnType>();
             storage = StorageType(CallableType(std::forward<F>(f)));
             SetInvokerFromArgsTuple<CallableType, ArgumentTuple>(Traits::argsIndexSequence);
-            destroyer = &DestroyCallable<CallableType>;
         }
 
         template <typename R, typename... Args>
@@ -36,7 +35,6 @@ namespace NGIN::Util
             storage = StorageType(FuncType(func));
 
             invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<FuncType, Args...>);
-            destroyer = &DestroyCallable<FuncType>;
         }
 
         // Handling Member Functions
@@ -53,7 +51,6 @@ namespace NGIN::Util
 
             storage = StorageType(std::move(wrapper));
             invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<WrapperType, Args...>);
-            destroyer = &DestroyCallable<WrapperType>;
         }
 
         template <class T, typename R, typename... Args>
@@ -69,15 +66,10 @@ namespace NGIN::Util
 
             storage = StorageType(std::move(wrapper));
             invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<WrapperType, Args...>);
-            destroyer = &DestroyCallable<WrapperType>;
         }
 
         ~DynamicDelegate()
         {
-            if (destroyer)
-            {
-                destroyer(storage.get());
-            }
         }
 
         template <typename... Args>
@@ -91,7 +83,7 @@ namespace NGIN::Util
         template <typename R, typename... Args>
         R Return(Args... args)
         {
-            static Size localReturnTypeID = Meta::TypeID<R>();
+            static UInt64 localReturnTypeID = Meta::TypeID<R>();
             if (localReturnTypeID != returnTypeID)
                 throw std::bad_cast();
 
@@ -109,7 +101,7 @@ namespace NGIN::Util
         StorageType storage;
         InvokerFunc<void> invoker = nullptr;
         DestroyerFunc destroyer = nullptr;
-        Size returnTypeID = 0;
+        UInt64 returnTypeID = 0;
 
         template <typename Callable, typename... Args>
         inline static auto InvokeCallable(void *storage, Args &&...args) -> decltype(auto)
