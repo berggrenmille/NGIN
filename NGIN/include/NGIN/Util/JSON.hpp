@@ -1,6 +1,6 @@
 #pragma once
 #include <NGIN/Defines.hpp>
-#include <rapidjson/document.h>
+#include <HideWarnings/Json.hpp>
 #include <string>
 #include <type_traits>
 
@@ -154,6 +154,7 @@ namespace NGIN::Util
 		NGIN_API String Dump() const;
 
 	private:
+		NGIN_API void SetInternal(rapidjson::Value &k, rapidjson::Value &v);
 		/// The internal representation of the JSON data.
 		rapidjson::Document data;
 	};

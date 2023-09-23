@@ -69,6 +69,7 @@ namespace NGIN::Util
 
 	JSON JSON::GetObject(const String &key) const
 	{
+
 		if (Contains(key) && data[key.c_str()].IsObject())
 		{
 			rapidjson::StringBuffer buffer;
@@ -76,6 +77,7 @@ namespace NGIN::Util
 			data[key.c_str()].Accept(writer);
 			return JSON(buffer.GetString());
 		}
+
 		return JSON();
 	}
 
@@ -84,19 +86,32 @@ namespace NGIN::Util
 		// Return if key is empty
 		if (key.empty())
 			return;
-		rapidjson::Document doc;
-		doc.Parse(value.Dump().c_str());
-		data.AddMember(rapidjson::Value(key.c_str(), data.GetAllocator()), doc, data.GetAllocator());
+
+		rapidjson::Value k(key.c_str(), data.GetAllocator());
+		rapidjson::Value v;
+		v.CopyFrom(value.data, data.GetAllocator());
+
+		SetInternal(k, v);
 	}
 
 	String JSON::Dump() const
 	{
 		rapidjson::StringBuffer buffer;
-		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+
 		data.Accept(writer);
 		return String(buffer.GetString());
 	}
 
+	void JSON::SetInternal(rapidjson::Value &k, rapidjson::Value &v)
+	{
+		auto memberItr = data.FindMember(k);
+
+		if (memberItr != data.MemberEnd())
+			memberItr->value = v;
+		else
+			data.AddMember(k, v, data.GetAllocator());
+	}
 	template <>
 	String JSON::Get<String>(const String &key) const
 	{
@@ -150,7 +165,8 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value.c_str(), data.GetAllocator());
-		data.AddMember(k, v, data.GetAllocator());
+
+		SetInternal(k, v);
 	}
 
 	template <>
@@ -158,7 +174,7 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
-		data.AddMember(k, v, data.GetAllocator());
+		SetInternal(k, v);
 	}
 
 	template <>
@@ -166,7 +182,7 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
-		data.AddMember(k, v, data.GetAllocator());
+		SetInternal(k, v);
 	}
 
 	template <>
@@ -174,7 +190,7 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
-		data.AddMember(k, v, data.GetAllocator());
+		SetInternal(k, v);
 	}
 
 	template <>
@@ -182,7 +198,7 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
-		data.AddMember(k, v, data.GetAllocator());
+		SetInternal(k, v);
 	}
 
 	template <>
@@ -190,7 +206,7 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
-		data.AddMember(k, v, data.GetAllocator());
+		SetInternal(k, v);
 	}
 
 	template <>
@@ -198,6 +214,6 @@ namespace NGIN::Util
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
-		data.AddMember(k, v, data.GetAllocator());
+		SetInternal(k, v);
 	}
 }

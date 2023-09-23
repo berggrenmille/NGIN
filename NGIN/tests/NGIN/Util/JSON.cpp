@@ -117,11 +117,19 @@ TEST_F(JSONTest, InitializationFromAnotherJSON)
 
 TEST_F(JSONTest, SetAndGetNestedObject)
 {
+	// Create a nested JSON object
 	JSON person(validJSONString);
-	JSON root;
+	JSON root = JSON();
 	root.SetObject("person", person);
 
+	// Check if the nested object exists
+	EXPECT_TRUE(root.Contains("person"));
+
+	// Retrieve the nested object and check if it contains the correct key
 	JSON retrievedPerson = root.GetObject("person");
+	EXPECT_TRUE(retrievedPerson.Contains("name"));
+
+	// Check if the retrieved object contains the correct value
 	EXPECT_EQ(retrievedPerson.Get<std::string>("name"), "Alice");
 }
 
