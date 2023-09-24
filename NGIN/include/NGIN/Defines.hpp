@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <source_location>
 
 #if defined(_MSC_VER)
 #ifdef NGIN_EXPORTS
@@ -32,6 +33,9 @@ namespace NGIN
 
     using Byte = std::byte;
 
+    using Void = void;
+
+
     using F32 = float;
     using F64 = double;
 
@@ -40,6 +44,7 @@ namespace NGIN
 
     using Bool = bool;
 
+    using SourceLocation = std::source_location;
     template <typename T>
     using Scope = std::unique_ptr<T>;
 
