@@ -52,7 +52,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInf
     if(MSVC)
         add_compile_options(/MDd)
     else()
-        #add_compile_options(-Wall -Wextra -pedantic)
+        add_compile_options(-Wall -Wextra -pedantic)
     endif()
 endif()
  # RelWithDebInfo/Release specific settings
@@ -61,11 +61,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebI
     if(MSVC)
         add_compile_options(/O2)
     else()
-        add_compile_options(-O2)
+        add_compile_options(-O3)
     endif()
 endif()
  # Release specific settings
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    if(MSVC)
+        add_compile_options(/MD)
+    endif()
     add_compile_definitions(NDEBUG)
 endif()
 

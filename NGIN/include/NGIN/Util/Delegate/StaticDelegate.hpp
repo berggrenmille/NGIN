@@ -49,7 +49,7 @@ namespace NGIN::Util
 
 
         template <typename F>
-            requires std::is_invocable_v<std::decay_t<F>, ArgTypes...> && not std::is_same_v<std::decay_t<F>, StaticDelegate>
+            requires std::is_invocable_v<std::decay_t<F>, ArgTypes...> && (!std::is_same_v<std::decay_t<F>, StaticDelegate>)
         StaticDelegate(F&& f) noexcept
         {
             using CallableType = std::decay_t<F>;

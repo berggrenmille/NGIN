@@ -87,27 +87,7 @@ namespace NGIN::Util
 		template <typename T>
 		T Get(const String& key) const;
 
-		// Explicit template specializations
-		template <>
-		NGIN_API String Get<String>(const String& key) const;
 
-		template <>
-		NGIN_API Int32 Get<Int32>(const String& key) const;
-
-		template <>
-		NGIN_API Int64 Get<Int64>(const String& key) const;
-
-		template <>
-		NGIN_API F32 Get<F32>(const String& key) const;
-
-		template <>
-		NGIN_API F64 Get<F64>(const String& key) const;
-
-		template <>
-		NGIN_API UInt64 Get<UInt64>(const String& key) const;
-
-		template <>
-		NGIN_API Bool Get<Bool>(const String& key) const;
 
 		/**
 		 * @brief Sets a value of a specific type T for a given key.
@@ -118,27 +98,7 @@ namespace NGIN::Util
 		 */
 		template <typename T>
 		void Set(const String& key, const T& value);
-		// Explicit template specializations
-		template <>
-		NGIN_API void Set<String>(const String& key, const String& value);
 
-		template <>
-		NGIN_API void Set<Int32>(const String& key, const Int32& value);
-
-		template <>
-		NGIN_API void Set<Int64>(const String& key, const Int64& value);
-
-		template <>
-		NGIN_API void Set<F32>(const String& key, const F32& value);
-
-		template <>
-		NGIN_API void Set<F64>(const String& key, const F64& value);
-
-		template <>
-		NGIN_API void Set<UInt64>(const String& key, const UInt64& value);
-
-		template <>
-		NGIN_API void Set<Bool>(const String& key, const Bool& value);
 
 		/**
 		 * @brief Sets a nested JSON object in the current JSON object associated with a given key.
@@ -161,5 +121,49 @@ namespace NGIN::Util
 		/// The internal representation of the JSON data.
 		rapidjson::Document data;
 	};
+
+	// Explicit template specializations
+	template <>
+	NGIN_API void JSON::Set<String>(const String& key, const String& value);
+
+	template <>
+	NGIN_API void JSON::Set<Int32>(const String& key, const Int32& value);
+
+	template <>
+	NGIN_API void JSON::Set<Int64>(const String& key, const Int64& value);
+
+	template <>
+	NGIN_API void JSON::Set<F32>(const String& key, const F32& value);
+
+	template <>
+	NGIN_API void JSON::Set<F64>(const String& key, const F64& value);
+
+	template <>
+	NGIN_API void JSON::Set<UInt64>(const String& key, const UInt64& value);
+
+	template <>
+	NGIN_API void JSON::Set<Bool>(const String& key, const Bool& value);
+
+	// Explicit template specializations
+	template <>
+	NGIN_API String JSON::Get<String>(const String& key) const;
+
+	template <>
+	NGIN_API Int32 JSON::Get<Int32>(const String& key) const;
+
+	template <>
+	NGIN_API Int64 JSON::Get<Int64>(const String& key) const;
+
+	template <>
+	NGIN_API F32 JSON::Get<F32>(const String& key) const;
+
+	template <>
+	NGIN_API F64 JSON::Get<F64>(const String& key) const;
+
+	template <>
+	NGIN_API UInt64 JSON::Get<UInt64>(const String& key) const;
+
+	template <>
+	NGIN_API Bool JSON::Get<Bool>(const String& key) const;
 
 }
