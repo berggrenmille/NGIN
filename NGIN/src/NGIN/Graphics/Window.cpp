@@ -4,21 +4,21 @@
 
 namespace NGIN::Graphics
 {
-	bool Window::Init(GraphicsBackend backend, const std::string &title, int width, int height)
+	bool Window::Init(GraphicsAPI backend, WindowSettings& settings)
 	{
 		if (isInitialized)
-			return false;
-		uint32_t flags = 0; // Add base flags here
+			return true;
+		UInt32 flags = 0; // Add base flags here
 		switch (backend)
 		{
-		case GraphicsBackend::VULKAN:
+		case GraphicsAPI::VULKAN:
 			flags |= SDL_WINDOW_VULKAN;
 			break;
-		case GraphicsBackend::OPEN_GL:
+		case GraphicsAPI::OPEN_GL:
 			flags |= SDL_WINDOW_OPENGL;
 			break;
 		}
-		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
+		window = SDL_CreateWindow(settings.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, settings.width, settings.height, flags);
 
 		if (window == nullptr)
 		{
@@ -68,26 +68,26 @@ namespace NGIN::Graphics
 	int Window::GetWidth() const
 	{
 		if (window) [[likely]]
-		{
-			int width;
-			SDL_GetWindowSize(window, &width, nullptr);
-			return width;
-		}
-		return 0;
+			{
+				int width;
+				SDL_GetWindowSize(window, &width, nullptr);
+				return width;
+			}
+			return 0;
 	}
 
 	int Window::GetHeight() const
 	{
 		if (window) [[likely]]
-		{
-			int height;
-			SDL_GetWindowSize(window, nullptr, &height);
-			return height;
-		}
-		return 0;
+			{
+				int height;
+				SDL_GetWindowSize(window, nullptr, &height);
+				return height;
+			}
+			return 0;
 	}
 
-	SDL_Window *Window::GetSDLWindow() const
+	SDL_Window* Window::GetSDLWindow() const
 	{
 		return window;
 	}

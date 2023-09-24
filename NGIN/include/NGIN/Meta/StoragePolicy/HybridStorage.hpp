@@ -25,7 +25,6 @@ namespace NGIN::Meta::StoragePolicy
 	template <std::size_t Size = 64>
 	class NGIN_HYBRID_STORAGE_ALIGNMENT_ATTRIBUTE HybridStorage
 	{
-		static_assert(Size % NGIN_HYBRID_STORAGE_ALIGNMENT == 0, "Size must be a multiple of " NGIN_HYBRID_STORAGE_TO_STRING(NGIN_HYBRID_STORAGE_ALIGNMENT) ".");
 
 	public:
 		/// \brief Default constructor.
@@ -56,6 +55,8 @@ namespace NGIN::Meta::StoragePolicy
 		/// \brief Retrieve the pointer to the stored data.
 		/// \return A pointer to the stored data.
 		void *get();
+
+		void *get() const;
 
 	private:
 		/// \union Data
@@ -156,15 +157,21 @@ namespace NGIN::Meta::StoragePolicy
 		{
 			// Using placement new here
 			new (&data.buffer[0]) StoredType(std::move(obj));
-			destructorFunc = [](void *obj)
-			{ static_cast<StoredType *>(obj)->~T(); };
+			if constexpr (std::is_destructible_v<StoredType>)
+			{
+				destructorFunc = [](void *obj)
+				{ static_cast<StoredType *>(obj)->~T(); };
+			}
 			useHeap = false;
 		}
 		else
 		{
 			data.ptr = new StoredType(std::move(obj));
-			destructorFunc = [](void *obj)
-			{ delete static_cast<StoredType *>(obj); };
+			if constexpr (std::is_destructible_v<StoredType>)
+			{
+				destructorFunc = [](void *obj)
+				{ delete static_cast<StoredType *>(obj); };
+			}
 			useHeap = true;
 		}
 

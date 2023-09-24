@@ -1,7 +1,6 @@
 #pragma once
-#include "EventListener.hpp"
-
-#include <NGIN/Meta/StoragePolicy.hpp>
+#include <NGIN/Defines.hpp>
+#include <NGIN/Util/Delegate.hpp>
 #include <NGIN/Meta/TypeID.hpp>
 #include <vector>
 #include <unordered_map>
@@ -13,22 +12,21 @@ namespace NGIN::Core
 	class EventBus
 	{
 	public:
-		using StoragePolicy = Meta::StoragePolicy::HybridStorage<64>;
-		using EventVector = std::vector<StoragePolicy>;
-		/**
-		 * @brief Subscribe to an event.
-		 *
-		 * @tparam EventType The type of event.
-		 * @param listener The function that listens for the event.
-		 */
-		template <typename EventType>
-		void Subscribe(typename EventListener<EventType>::Listener listener)
+		using EventVector = std::vector<DynamicDelegate>;
+
+		template <typename EventType, typename FuncType>
+			requires requires (FuncType t) { DynamicDelegate(std::move(t)); }
+		void Subscribe(FuncType&& func)
 		{
 			auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
 
-			auto &listeners = listenersMap[eventTypeIndex];
-			listeners.emplace_back(EventListener<EventType>(listener));
+			auto& listeners = listenersMap[eventTypeIndex];
+			//auto test = EventListener<EventType>(std::move(listener));
+
+			listeners.emplace_back(std::forward<FuncType>(func));
 		}
+
+
 
 		/**
 		 * @brief Subscribe a member function to an event.
@@ -39,18 +37,18 @@ namespace NGIN::Core
 		 * @param memberFunction Pointer to the member function.
 		 */
 		template <typename EventType, typename T>
-		void Subscribe(T *instance, void (T::*memberFunction)(EventType &))
+		void Subscribe(T* instance, void (T::* memberFunction)(EventType&))
 		{
-			auto listener = [instance, memberFunction](EventType &event)
-			{
-				(instance->*memberFunction)(event);
-			};
+			/*auto listener = [instance, memberFunction](EventType& event)
+				{
+					(instance->*memberFunction)(event);
+				};*/
 			auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
 
 			// auto test = EventListener<EventType>::Listener(listener);
-			auto &listeners = listenersMap[eventTypeIndex];
+			auto& listeners = listenersMap[eventTypeIndex];
 
-			listeners.emplace_back(EventListener<EventType>(listener));
+			listeners.emplace_back(std::move(DynamicDelegate(memberFunction, instance)));
 		}
 
 		/**
@@ -60,16 +58,15 @@ namespace NGIN::Core
 		 * @param event The event to dispatch.
 		 */
 		template <typename EventType>
-		void Publish(EventType &event)
+		void Publish(EventType& event)
 		{
 			auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
 			if (listenersMap.count(eventTypeIndex) != 0)
 			{
-				auto &listeners = listenersMap[eventTypeIndex];
-				for (auto &eventStorage : listeners)
+				auto& listeners = listenersMap[eventTypeIndex];
+				for (auto& delegate : listeners)
 				{
-					auto listener = static_cast<EventListener<EventType> *>(eventStorage.get());
-					listener->Invoke(event);
+					delegate(event);
 				}
 			}
 		}

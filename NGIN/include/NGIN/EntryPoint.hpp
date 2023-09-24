@@ -1,9 +1,11 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 
 #include <NGIN/Time/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
+
+#include <NGIN/Graphics/Context.hpp>
 
 #include <SDL2/SDL.h>
 
@@ -19,7 +21,7 @@ namespace NGIN
 	 * @return int 0 if initialization was successful, 1 otherwise.
 	 */
 	template <NGIN::is_app T>
-	int Init(int argc, char *argv[])
+	int Init(int argc, char* argv[])
 	{
 
 		// Initialize Logging
@@ -28,9 +30,8 @@ namespace NGIN
 			<< "NGIN"
 			<< "\007";
 		Logging::Init();
-		// Init Config
+
 		Config::Init();
-		Time::Timer<Time::Milliseconds> timer;
 
 		NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
 
@@ -44,10 +45,18 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
+		NGIN::Graphics::WindowSettings windowSettings;
+		windowSettings.title = "NGIN";
+		windowSettings.width = 1280;
+		windowSettings.height = 720;
+
+		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, nullptr);
+
+
 		// Initialize App
 		NGIN_WARNING("Initializing App...");
 		std::cout << "Initializing App..." << std::endl;
-		NGIN::App *app = new T();
+		NGIN::App* app = new T();
 		app->Init();
 		// Free memory after app initialization is done
 		delete app;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <Detail/ConfigHelper.hpp>
 #include <NGIN/Logging.hpp>
 
@@ -38,15 +38,14 @@ namespace NGIN
 		 * @param key The key of the configuration entry
 		 * @return The value of the configuration entry. Returns an empty string if the key is not found.
 		 */
-		NGIN_API std::string GetRawValue(const std::string& key, const std::source_location& source = std::source_location::current());
+		NGIN_API std::string GetRawValue(const std::string &key, const std::source_location &source = std::source_location::current());
 
 		/**
 		 * @brief Sets a configuration value
 		 * @param key The key of the configuration entry
 		 * @param value The new value to be set for the key
 		 */
-		NGIN_API void Set(const std::string& key, const std::string& value);
-
+		NGIN_API void Set(const std::string &key, const std::string &value);
 
 		/**
 		 * @brief Fetches a configuration value an converts it to the specified type
@@ -55,13 +54,12 @@ namespace NGIN
 		 * @return The value of the configuration entry. Returns an empty string if the key is not found.
 		 */
 		template <typename T>
-		T Get(const std::string& key, const std::source_location& source = std::source_location::current())
+		T Get(const std::string &key, const std::source_location &source = std::source_location::current())
 		{
 			std::string value = GetRawValue(key, source);
 			if (!value.empty())
 				return Detail::FromString<T>(value, source);
 			NGIN_ASSERT_SRC(false, source, "Config value not found for key: {}", key.c_str());
-
 		}
 
 	}

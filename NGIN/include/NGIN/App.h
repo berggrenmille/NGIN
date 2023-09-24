@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <type_traits>
 
 namespace NGIN
@@ -32,7 +32,7 @@ namespace NGIN
 	 *
 	 * @tparam T Type to check.
 	 */
-	template<class T>
+	template <class T>
 	concept is_app = std::is_base_of<App, T>::value;
 
 	/**
@@ -40,6 +40,6 @@ namespace NGIN
 	 *
 	 * @tparam T Type to check.
 	 */
-	template<typename T>
+	template <typename T>
 	concept is_app_ptr = std::is_base_of<App, std::remove_pointer_t<T>>::value;
 };

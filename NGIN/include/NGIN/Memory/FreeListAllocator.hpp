@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <source_location>
 #include <cstddef>
 #include <new>

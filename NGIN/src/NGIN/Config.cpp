@@ -1,6 +1,6 @@
 #include <PCH.h>
 #include <NGIN/Config.h>
-#include <HideWarnings/Json.hpp>
+#include <nlohmann/json.hpp>
 #include <fstream>
 
 namespace
@@ -14,8 +14,7 @@ namespace
 
 	nlohmann::json defaultConfigJSON = {
 		{"TEST", "TEST"},
-		{"TEST2", "TEST"}
-	};
+		{"TEST2", "TEST"} };
 
 	void CreateConfigFile()
 	{
@@ -46,12 +45,12 @@ namespace NGIN
 			NGIN_ASSERT(file.is_open(), "Failed to read config file: {}", ConfigPath);
 		}
 
-		//Create JSON object and stream the config file into it
+		// Create JSON object and stream the config file into it
 		nlohmann::json j;
 		file >> j;
 		file.close();
 
-		//Load JSON data into local map
+		// Load JSON data into local map
 		for (const auto& [key, value] : j.items())
 		{
 			configMap[key] = value.get<std::string>();
@@ -78,8 +77,6 @@ namespace NGIN
 		}
 		return "";
 	}
-
-
 
 	NGIN_API void Config::Set(const std::string& key, const std::string& value)
 	{

@@ -1,4 +1,6 @@
 #pragma once
+#include <NGIN/Defines.hpp>
+
 #include "BaseSink.hpp"
 #include <NGIN/Util/Format.hpp>
 #include <NGIN/Util/TupleUtils.hpp>

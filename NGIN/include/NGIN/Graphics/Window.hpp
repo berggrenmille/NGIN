@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <NGIN/Graphics/GraphicsBackend.hpp>
 
 #include <SDL2/SDL.h>
@@ -8,27 +8,37 @@
 namespace NGIN::Graphics
 {
 
+	struct WindowSettings
+	{
+		String title = "NGIN";
+		Int32 width = 1280;
+		Int32 height = 720;
+		Bool fullscreen = false;
+		Bool resizable = false;
+		Bool borderless = false;
+	};
+
 	class Window
 	{
 	public:
 		NGIN_API Window() = default;
 		NGIN_API ~Window() = default;
 
-		NGIN_API bool Init(GraphicsBackend backend, const std::string &title, int width, int height);
+		NGIN_API Bool Init(GraphicsAPI backend, WindowSettings& settings);
 
-		NGIN_API void Shutdown();
+		NGIN_API Void Shutdown();
 
-		NGIN_API void PollEvents();
+		NGIN_API Void PollEvents();
 
-		NGIN_API bool IsOpen() const;
+		NGIN_API Bool IsOpen() const;
 
-		NGIN_API int GetWidth() const;
-		NGIN_API int GetHeight() const;
+		NGIN_API Int32 GetWidth() const;
+		NGIN_API Int32 GetHeight() const;
 
-		NGIN_API SDL_Window *GetSDLWindow() const;
+		NGIN_API SDL_Window* GetSDLWindow() const;
 
 	private:
-		SDL_Window *window = nullptr;
+		SDL_Window* window = nullptr;
 		bool isInitialized = false;
 	};
 }

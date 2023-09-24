@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 
 namespace NGIN::Memory
 {

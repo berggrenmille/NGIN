@@ -1,11 +1,19 @@
+#pragma once
+#include <NGIN/Defines.hpp>
 #include <cstddef>
 
 namespace NGIN::Meta
 {
+    using TypeIDType = UInt64;
+
     template <typename T>
     struct TypeIDResolver
     {
-        static void ID() {}
+        static void ID()
+        {
+            volatile int dummy = 0;
+
+        }
     };
 
     /// @brief Fetches a unique type ID for a given type at runtime.
@@ -17,8 +25,9 @@ namespace NGIN::Meta
     /// @tparam T The type for which the ID should be fetched.
     /// @return The unique type ID for the specified type.
     template <typename T>
-    size_t TypeID()
+    [[nodiscard]] TypeIDType TypeID() noexcept
     {
-        return reinterpret_cast<size_t>(&TypeIDResolver<T>::ID);
+        static volatile auto id = TypeIDResolver<T>::ID;
+        return reinterpret_cast<TypeIDType>(&id);
     }
 }

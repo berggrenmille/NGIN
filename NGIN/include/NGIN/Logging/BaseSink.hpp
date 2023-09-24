@@ -1,5 +1,5 @@
 #pragma once
-#include <NGIN/Core.h>
+#include <NGIN/Defines.hpp>
 #include <string>
 #include "Defines.hpp"
 namespace NGIN::Logging
@@ -23,7 +23,11 @@ namespace NGIN::Logging
 		 *
 		 * @return true if initialization was successful, false otherwise.
 		 */
-		virtual bool Init() { LogHeader(); return true; }
+		virtual bool Init()
+		{
+			LogHeader();
+			return true;
+		}
 
 		/**
 		 * @brief Cleans up resources associated with the log sink.
@@ -37,7 +41,6 @@ namespace NGIN::Logging
 		 */
 		virtual void Log(Entry message) = 0;
 
-
 		/**
 		 * @brief Flushes the sink and ensures all pending messages are outputted.
 		 */
@@ -45,11 +48,9 @@ namespace NGIN::Logging
 
 		void LogHeader()
 		{
-			Log({ Level::Info,
-				  "Timestamp           | File:Line                  | Level    | Message\n--------------------+----------------------------+----------+"
-				});
+			Log({Level::Info,
+				 "Timestamp           | File:Line                  | Level    | Message\n--------------------+----------------------------+----------+"});
 		}
-
 	};
 
-}  // namespace NGIN
+} // namespace NGIN

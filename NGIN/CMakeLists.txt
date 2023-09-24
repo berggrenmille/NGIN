@@ -23,6 +23,7 @@ add_library(NGIN SHARED
   "src/Utils/JSON.cpp"
   "src/NGIN/Meta/UUID.cpp"
   "src/NGIN/Meta/Reflection/Registry.cpp"
+  "src/NGIN/Graphics/Context.cpp"
 )
 
 
@@ -43,7 +44,10 @@ target_include_directories(NGIN PRIVATE
     ${PROJECT_SOURCE_DIR}/include/Precompiled
 )
 # Link Thirdparty
-
+message (STATUS "RAPIDJSON_SOURCE_DIR: ${rapidjson_SOURCE_DIR}")
+target_include_directories(NGIN PUBLIC
+    ${rapidjson_SOURCE_DIR}/include
+)
 
 
 # Link to third-party libraries
