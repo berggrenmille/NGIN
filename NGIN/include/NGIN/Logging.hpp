@@ -7,8 +7,8 @@
 
 namespace NGIN::Logging
 {
-    NGIN_API BaseLogger &GetEngineLogger();
-    NGIN_API BaseLogger &GetClientLogger();
+    NGIN_API BaseLogger& GetEngineLogger();
+    NGIN_API BaseLogger& GetClientLogger();
 
     NGIN_API void Init();
     NGIN_API void Shutdown();

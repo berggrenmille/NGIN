@@ -14,7 +14,7 @@ namespace
 
 	nlohmann::json defaultConfigJSON = {
 		{"TEST", "TEST"},
-		{"TEST2", "TEST"}};
+		{"TEST2", "TEST"} };
 
 	void CreateConfigFile()
 	{
@@ -51,7 +51,7 @@ namespace NGIN
 		file.close();
 
 		// Load JSON data into local map
-		for (const auto &[key, value] : j.items())
+		for (const auto& [key, value] : j.items())
 		{
 			configMap[key] = value.get<std::string>();
 		}
@@ -68,7 +68,7 @@ namespace NGIN
 		file << j.dump(4);
 	}
 
-	NGIN_API std::string Config::GetRawValue(const std::string &key, const std::source_location &source)
+	NGIN_API std::string Config::GetRawValue(const std::string& key, const std::source_location& source)
 	{
 		std::lock_guard<std::mutex> lock(configMutex);
 		if (configMap.find(key) != configMap.end())
@@ -78,7 +78,7 @@ namespace NGIN
 		return "";
 	}
 
-	NGIN_API void Config::Set(const std::string &key, const std::string &value)
+	NGIN_API void Config::Set(const std::string& key, const std::string& value)
 	{
 		std::lock_guard<std::mutex> lock(configMutex);
 		configMap[key] = value;

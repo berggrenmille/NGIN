@@ -7,7 +7,7 @@ namespace NGIN::Graphics
     {
         VULKAN,
         OPEN_GL,
-        D3D12,
+        D3D12
         //... other backends
     };
 } // namespace NGIN::Graphics

@@ -22,8 +22,8 @@ TEST(TypeIDTests, Consistency)
 TEST(TypeIDTests, ComplexType)
 {
     // Test that the IDs are unique for complex types
-    ASSERT_NE(TypeID<int>(), TypeID<int *>());
+    ASSERT_NE(TypeID<int>(), TypeID<int*>());
     ASSERT_NE(TypeID<int>(), TypeID<const int>());
-    ASSERT_NE(TypeID<int>(), TypeID<int &>());
-    ASSERT_NE(TypeID<int>(), TypeID<int &&>());
+    ASSERT_NE(TypeID<int>(), TypeID<int&>());
+    ASSERT_NE(TypeID<int>(), TypeID<int&&>());
 }

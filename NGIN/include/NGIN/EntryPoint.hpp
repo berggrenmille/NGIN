@@ -5,6 +5,8 @@
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
 
+#include <NGIN/Graphics/Context.hpp>
+
 #include <SDL2/SDL.h>
 
 namespace NGIN
@@ -19,7 +21,7 @@ namespace NGIN
 	 * @return int 0 if initialization was successful, 1 otherwise.
 	 */
 	template <NGIN::is_app T>
-	int Init(int argc, char *argv[])
+	int Init(int argc, char* argv[])
 	{
 
 		// Initialize Logging
@@ -43,10 +45,13 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
+		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsBackend::VULKAN, "NGIN", 1280, 720);
+
+
 		// Initialize App
 		NGIN_WARNING("Initializing App...");
 		std::cout << "Initializing App..." << std::endl;
-		NGIN::App *app = new T();
+		NGIN::App* app = new T();
 		app->Init();
 		// Free memory after app initialization is done
 		delete app;

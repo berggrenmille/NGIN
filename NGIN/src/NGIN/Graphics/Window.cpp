@@ -4,10 +4,10 @@
 
 namespace NGIN::Graphics
 {
-	bool Window::Init(GraphicsBackend backend, const std::string &title, int width, int height)
+	bool Window::Init(GraphicsBackend backend, const std::string& title, int width, int height)
 	{
 		if (isInitialized)
-			return false;
+			return true;
 		uint32_t flags = 0; // Add base flags here
 		switch (backend)
 		{
@@ -68,26 +68,26 @@ namespace NGIN::Graphics
 	int Window::GetWidth() const
 	{
 		if (window) [[likely]]
-		{
-			int width;
-			SDL_GetWindowSize(window, &width, nullptr);
-			return width;
-		}
-		return 0;
+			{
+				int width;
+				SDL_GetWindowSize(window, &width, nullptr);
+				return width;
+			}
+			return 0;
 	}
 
 	int Window::GetHeight() const
 	{
 		if (window) [[likely]]
-		{
-			int height;
-			SDL_GetWindowSize(window, nullptr, &height);
-			return height;
-		}
-		return 0;
+			{
+				int height;
+				SDL_GetWindowSize(window, nullptr, &height);
+				return height;
+			}
+			return 0;
 	}
 
-	SDL_Window *Window::GetSDLWindow() const
+	SDL_Window* Window::GetSDLWindow() const
 	{
 		return window;
 	}

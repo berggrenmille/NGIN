@@ -23,6 +23,7 @@ add_library(NGIN SHARED
   "src/Utils/JSON.cpp"
   "src/NGIN/Meta/UUID.cpp"
   "src/NGIN/Meta/Reflection/Registry.cpp"
+  "src/NGIN/Graphics/Context.cpp"
 )
 
 

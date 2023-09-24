@@ -1,12 +1,21 @@
 #pragma once
+#include <NGIN/Defines.hpp>
 #include "GraphicsBackend.hpp"
 namespace NGIN::Graphics
 {
-	class Context
+	class Renderer;
+	class Window;
+
+	class NGIN_API Context
 	{
 	public:
-		Context(GraphicsBackend backend);
+		Context(GraphicsBackend backend, const std::string& title, int width, int height);
+		~Context();
 
-		// ... similarly for other components
+		Renderer* GetRenderer() const { return renderer; }
+
+	private:
+		Renderer* renderer = nullptr;
+		Window* window = nullptr;
 	};
 }

@@ -9,13 +9,13 @@ namespace NGIN::Util
 		data.SetObject();
 	}
 
-	JSON::JSON(const String &jsonString)
+	JSON::JSON(const String& jsonString)
 	{
 		Parse(jsonString);
 	}
 
 	// Copy constructor
-	JSON::JSON(const JSON &other)
+	JSON::JSON(const JSON& other)
 	{
 		// You need to implement the actual copy logic here,
 		// possibly utilizing rapidjson's functionalities for deep copying.
@@ -23,14 +23,14 @@ namespace NGIN::Util
 	}
 
 	// Move constructor
-	JSON::JSON(JSON &&other) noexcept
+	JSON::JSON(JSON&& other) noexcept
 	{
 		// Implement the move logic
 		this->data = std::move(other.data);
 	}
 
 	// Copy assignment operator
-	JSON &JSON::operator=(const JSON &other)
+	JSON& JSON::operator=(const JSON& other)
 	{
 		if (this != &other)
 		{
@@ -41,7 +41,7 @@ namespace NGIN::Util
 	}
 
 	// Move assignment operator
-	JSON &JSON::operator=(JSON &&other) noexcept
+	JSON& JSON::operator=(JSON&& other) noexcept
 	{
 		if (this != &other)
 		{
@@ -51,13 +51,13 @@ namespace NGIN::Util
 		return *this;
 	}
 
-	Bool JSON::Parse(const String &jsonString)
+	Bool JSON::Parse(const String& jsonString)
 	{
 		data.Parse(jsonString.c_str());
 		return !data.HasParseError();
 	}
 
-	Bool JSON::Contains(const String &key) const
+	Bool JSON::Contains(const String& key) const
 	{
 		return data.HasMember(key.c_str());
 	}
@@ -67,7 +67,7 @@ namespace NGIN::Util
 		return data.ObjectEmpty();
 	}
 
-	JSON JSON::GetObject(const String &key) const
+	JSON JSON::GetObject(const String& key) const
 	{
 
 		if (Contains(key) && data[key.c_str()].IsObject())
@@ -81,7 +81,7 @@ namespace NGIN::Util
 		return JSON();
 	}
 
-	void JSON::SetObject(const String &key, const JSON &value)
+	void JSON::SetObject(const String& key, const JSON& value)
 	{
 		// Return if key is empty
 		if (key.empty())
@@ -103,7 +103,7 @@ namespace NGIN::Util
 		return String(buffer.GetString());
 	}
 
-	void JSON::SetInternal(rapidjson::Value &k, rapidjson::Value &v)
+	void JSON::SetInternal(rapidjson::Value& k, rapidjson::Value& v)
 	{
 		auto memberItr = data.FindMember(k);
 
@@ -113,7 +113,7 @@ namespace NGIN::Util
 			data.AddMember(k, v, data.GetAllocator());
 	}
 	template <>
-	String JSON::Get<String>(const String &key) const
+	String JSON::Get<String>(const String& key) const
 	{
 		if (data.HasMember(key.c_str()) && data[key.c_str()].IsString())
 			return data[key.c_str()].GetString();
@@ -121,7 +121,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	Int32 JSON::Get<Int32>(const String &key) const
+	Int32 JSON::Get<Int32>(const String& key) const
 	{
 		if (data.HasMember(key.c_str()) && data[key.c_str()].IsInt())
 			return data[key.c_str()].GetInt();
@@ -129,7 +129,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	F32 JSON::Get<F32>(const String &key) const
+	F32 JSON::Get<F32>(const String& key) const
 	{
 		if (data.HasMember(key.c_str()) && data[key.c_str()].IsFloat())
 			return data[key.c_str()].GetFloat();
@@ -137,7 +137,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	F64 JSON::Get<F64>(const String &key) const
+	F64 JSON::Get<F64>(const String& key) const
 	{
 		if (data.HasMember(key.c_str()) && data[key.c_str()].IsDouble())
 			return data[key.c_str()].GetDouble();
@@ -145,7 +145,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	UInt64 JSON::Get<UInt64>(const String &key) const
+	UInt64 JSON::Get<UInt64>(const String& key) const
 	{
 		if (data.HasMember(key.c_str()) && data[key.c_str()].IsUint64())
 			return data[key.c_str()].GetUint64();
@@ -153,7 +153,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	Bool JSON::Get<Bool>(const String &key) const
+	Bool JSON::Get<Bool>(const String& key) const
 	{
 		if (data.HasMember(key.c_str()) && data[key.c_str()].IsBool())
 			return data[key.c_str()].GetBool();
@@ -161,7 +161,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<String>(const String &key, const String &value)
+	void JSON::Set<String>(const String& key, const String& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value.c_str(), data.GetAllocator());
@@ -170,7 +170,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<Int32>(const String &key, const Int32 &value)
+	void JSON::Set<Int32>(const String& key, const Int32& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
@@ -178,7 +178,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<Int64>(const String &key, const Int64 &value)
+	void JSON::Set<Int64>(const String& key, const Int64& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
@@ -186,7 +186,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<F32>(const String &key, const F32 &value)
+	void JSON::Set<F32>(const String& key, const F32& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
@@ -194,7 +194,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<F64>(const String &key, const F64 &value)
+	void JSON::Set<F64>(const String& key, const F64& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
@@ -202,7 +202,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<UInt64>(const String &key, const UInt64 &value)
+	void JSON::Set<UInt64>(const String& key, const UInt64& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
@@ -210,7 +210,7 @@ namespace NGIN::Util
 	}
 
 	template <>
-	void JSON::Set<Bool>(const String &key, const Bool &value)
+	void JSON::Set<Bool>(const String& key, const Bool& value)
 	{
 		rapidjson::Value k(key.c_str(), data.GetAllocator());
 		rapidjson::Value v(value);
