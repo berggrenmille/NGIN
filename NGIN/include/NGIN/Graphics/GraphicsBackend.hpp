@@ -3,8 +3,9 @@
 
 namespace NGIN::Graphics
 {
-    enum class GraphicsBackend : UInt8
+    enum class GraphicsAPI : UInt8
     {
+        NONE = 0,
         VULKAN,
         OPEN_GL,
         D3D12

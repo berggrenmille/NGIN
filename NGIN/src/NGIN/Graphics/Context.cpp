@@ -9,10 +9,16 @@ namespace NGIN::Graphics
 {
 
 
-    Context::Context(GraphicsBackend backend, const std::string& title, int width, int height)
+    Context::Context(GraphicsAPI backend, WindowSettings* windowSettings, const SourceLocation& srcLocation)
     {
+        if (!windowSettings)
+        {
+            NGIN_LOG_SRC(srcLocation, NGIN::Logging::Level::Warning, "Window settings are null. Cannot initialize window.");
+            return;
+        }
         window = new Window();
-        if (!window->Init(backend, title, width, height))
+
+        if (!window->Init(backend, *windowSettings))
         {
             NGIN_ERROR("Failed to initialize window!");
             return;
@@ -22,9 +28,9 @@ namespace NGIN::Graphics
 
         switch (backend)
         {
-        case GraphicsBackend::OPEN_GL:
-        case GraphicsBackend::D3D12:
-        case GraphicsBackend::VULKAN:
+        case GraphicsAPI::OPEN_GL:
+        case GraphicsAPI::D3D12:
+        case GraphicsAPI::VULKAN:
             renderer = new VulkanRenderer(*window);
             break;
 

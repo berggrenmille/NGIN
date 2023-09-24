@@ -45,7 +45,12 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
-		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsBackend::VULKAN, "NGIN", 1280, 720);
+		NGIN::Graphics::WindowSettings windowSettings;
+		windowSettings.title = "NGIN";
+		windowSettings.width = 1280;
+		windowSettings.height = 720;
+
+		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, nullptr);
 
 
 		// Initialize App
