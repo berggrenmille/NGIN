@@ -86,7 +86,7 @@ TEST_F(DynamicDelegateTest, ConstMemberFunctionTest)
 TEST_F(DynamicDelegateTest, ReturnTypeMismatchTest)
 {
     DynamicDelegate del(Sum);
-    ASSERT_ANY_THROW(del.Return<void>(2, 3));
+    ASSERT_ANY_THROW(del.Return<std::string>(2, 3));
 }
 
 /// \brief Test if capturing lambdas can be wrapped.
@@ -94,7 +94,7 @@ TEST_F(DynamicDelegateTest, CapturingLambdaTest)
 {
     int a = 1;
     auto lambda = [a](int x) -> int
-    { return x + a; };
+        { return x + a; };
     DynamicDelegate del(lambda);
     EXPECT_EQ(del.Return<int>(2), 3);
 }

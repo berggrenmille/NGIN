@@ -9,7 +9,11 @@ namespace NGIN::Meta
     template <typename T>
     struct TypeIDResolver
     {
-        static void ID() {}
+        static void ID()
+        {
+            volatile int dummy = 0;
+
+        }
     };
 
     /// @brief Fetches a unique type ID for a given type at runtime.
@@ -23,6 +27,7 @@ namespace NGIN::Meta
     template <typename T>
     [[nodiscard]] TypeIDType TypeID() noexcept
     {
-        return reinterpret_cast<TypeIDType>(&TypeIDResolver<T>::ID);
+        static volatile auto id = TypeIDResolver<T>::ID;
+        return reinterpret_cast<TypeIDType>(&id);
     }
 }

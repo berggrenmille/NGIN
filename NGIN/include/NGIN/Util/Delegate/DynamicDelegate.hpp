@@ -7,144 +7,152 @@
 #include <functional>
 namespace NGIN::Util
 {
+    /// \class DynamicDelegate
+    /// \brief A dynamic delegate class for type-erased, fast callable invocation.
     class DynamicDelegate
     {
-
     public:
-        DynamicDelegate() : storage(), invoker(nullptr), destroyer(nullptr) {};
+        /// \brief Default constructor.
+        DynamicDelegate() noexcept;
 
-        // Move constructor
-        DynamicDelegate(DynamicDelegate&& other) noexcept
-        {
-            storage = std::move(other.storage);
-            invoker = other.invoker;
-            destroyer = other.destroyer;
-            returnTypeID = other.returnTypeID;
+        /// \brief Move constructor.
+        DynamicDelegate(DynamicDelegate&& other) noexcept;
 
-            other.invoker = nullptr;
-            other.destroyer = nullptr;
-        }
-
-        // Handling Free Functions and Non-capturing Lambdas
+        /// \brief Templated constructor.
         template <typename F>
-            requires (!std::is_same_v<std::decay_t<F>, DynamicDelegate>)
         DynamicDelegate(F&& f) noexcept
-        {
-            using CallableType = std::decay_t<F>;
-            using Traits = Meta::FunctionTraits<CallableType>;
-            using ArgumentTuple = typename Traits::ArgsTupleType;
+            requires (!std::is_same_v<std::decay_t<F>, DynamicDelegate>);
 
-            returnTypeID = Meta::TypeID<typename Traits::ReturnType>();
-            storage = StorageType(CallableType(std::forward<F>(f)));
-            SetInvokerFromArgsTuple<CallableType, ArgumentTuple>(Traits::argsIndexSequence);
-        }
-
+        /// \brief Constructs from function pointers.
         template <typename R, typename... Args>
-        DynamicDelegate(R(*func)(Args...)) noexcept
-            : returnTypeID(Meta::TypeID<R>())
-        {
+        DynamicDelegate(R(*func)(Args...)) noexcept;
 
-            using FuncType = R(*)(Args...);
-            storage = StorageType(FuncType(func));
-
-            invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<FuncType, Args...>);
-        }
-
-        // Handling Member Functions
+        /// \brief Constructs from member function pointers.
         template <class T, typename R, typename... Args>
-        DynamicDelegate(R(T::* func)(Args...), T* obj) noexcept
-            : returnTypeID(Meta::TypeID<R>())
-        {
-            auto wrapper = [func, obj](Args &&...args)
-                {
-                    return (obj->*func)(std::forward<Args>(args)...);
-                };
+        DynamicDelegate(R(T::* func)(Args...), T* obj) noexcept;
 
-            using WrapperType = decltype(wrapper);
-
-            storage = StorageType(std::move(wrapper));
-            invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<WrapperType, Args...>);
-        }
-
+        /// \brief Constructs from const member function pointers.
         template <class T, typename R, typename... Args>
-        DynamicDelegate(R(T::* func)(Args...) const, const T* obj) noexcept
-            : returnTypeID(Meta::TypeID<R>())
-        {
-            auto wrapper = [func, obj](Args &&...args)
-                {
-                    return (obj->*func)(std::forward<Args>(args)...);
-                };
+        DynamicDelegate(R(T::* func)(Args...) const, const T* obj) noexcept;
 
-            using WrapperType = decltype(wrapper);
+        /// \brief Destructor
+        ~DynamicDelegate() = default;
 
-            storage = StorageType(std::move(wrapper));
-            invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<WrapperType, Args...>);
-        }
-
-        ~DynamicDelegate()
-        {}
-
+        /// \brief Invokes the stored callable.
         template <typename... Args>
-        void operator()(Args&&... args)
-        {
+        void operator()(Args&&... args);
 
-            reinterpret_cast<InvokerFunc<void, Args...>>(invoker)(storage.get(), std::forward<Args>(args)...);
-            //   return invoker(storage.get(), args_arr);
-        }
-
+        /// \brief Invokes the stored callable with a specified return type.
         template <typename R, typename... Args>
-        R Return(Args&&... args)
-        {
-            static UInt64 localReturnTypeID = Meta::TypeID<R>();
-            if (localReturnTypeID != returnTypeID)
-                throw std::bad_cast();
-
-            return reinterpret_cast<InvokerFunc<R, Args...>>(invoker)(storage.get(), std::forward<Args>(args)...);
-        }
+        R Return(Args&&... args);
 
     private:
         static constexpr size_t BUFFER_SIZE = sizeof(void*) * 4;
 
         using StorageType = Meta::StoragePolicy::HybridStorage<BUFFER_SIZE>;
+
         template <typename R, typename... Args>
         using InvokerFunc = R(*)(void*, Args &&...);
-        using DestroyerFunc = void (*)(void*);
 
+        /// \brief Storage for any callable object fitting within BUFFER_SIZE.
         StorageType storage;
+
+        /// \brief Function pointer to invoker.
         InvokerFunc<void> invoker = nullptr;
-        DestroyerFunc destroyer = nullptr;
+
+        /// \brief ID for the return type.
         UInt64 returnTypeID = 0;
 
+        /// \brief Invokes a callable.
         template <typename Callable, typename... Args>
-        inline static auto InvokeCallable(void* storage, Args &&...args) -> decltype(auto)
-        {
-            auto& callable = *static_cast<Callable*>(storage);
-            return InvokeImpl<Callable, Args...>(callable, std::forward<Args>(args)...);
-        }
+        static auto InvokeCallable(void* storage, Args &&...args) -> decltype(auto);
 
-        template <typename Callable, typename First, typename... Rest>
-        inline static auto InvokeImpl(Callable& callable, First&& first, Rest &&...rest) -> decltype(auto)
-        {
-            return callable(std::forward<First>(first), std::forward<Rest>(rest)...);
-        }
-
-        template <typename Callable>
-        inline static auto InvokeImpl(Callable& callable) -> decltype(auto)
-        {
-            return callable();
-        }
-
-        template <typename Callable>
-        static void DestroyCallable(void* storage)
-        {
-            auto& callable = *static_cast<Callable*>(storage);
-            callable.~Callable();
-        }
-
+        /// \brief Sets the invoker based on the argument tuple.
         template <typename Callable, typename Tuple, std::size_t... I>
-        void SetInvokerFromArgsTuple(std::index_sequence<I...>)
-        {
-            invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<Callable, std::tuple_element_t<I, Tuple>...>);
-        }
+        void SetInvokerFromArgsTuple(std::index_sequence<I...>);
     };
+    inline DynamicDelegate::DynamicDelegate() noexcept : storage(), invoker(nullptr), returnTypeID(0) {}
+
+    inline DynamicDelegate::DynamicDelegate(DynamicDelegate&& other) noexcept
+    {
+        storage = std::move(other.storage);
+        invoker = other.invoker;
+        returnTypeID = other.returnTypeID;
+        other.invoker = nullptr;
+    }
+
+    template <typename F>
+    inline DynamicDelegate::DynamicDelegate(F&& f) noexcept
+        requires (!std::is_same_v<std::decay_t<F>, DynamicDelegate>)
+    {
+        using CallableType = std::decay_t<F>;
+        using Traits = Meta::FunctionTraits<CallableType>;
+        using ArgumentTuple = typename Traits::ArgsTupleType;
+
+        returnTypeID = Meta::TypeID<typename Traits::ReturnType>();
+        storage = StorageType(CallableType(std::forward<F>(f)));
+        SetInvokerFromArgsTuple<CallableType, ArgumentTuple>(Traits::argsIndexSequence);
+    }
+
+    template <typename R, typename... Args>
+    inline DynamicDelegate::DynamicDelegate(R(*func)(Args...)) noexcept
+        : returnTypeID(Meta::TypeID<R>())
+    {
+        using FuncType = R(*)(Args...);
+        storage = StorageType(FuncType(func));
+        invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<FuncType, Args...>);
+    }
+
+    template <class T, typename R, typename... Args>
+    inline DynamicDelegate::DynamicDelegate(R(T::* func)(Args...), T* obj) noexcept
+        : returnTypeID(Meta::TypeID<R>())
+    {
+        auto wrapper = [func, obj](Args &&...args) {
+            return (obj->*func)(std::forward<Args>(args)...);
+            };
+
+        using WrapperType = decltype(wrapper);
+        storage = StorageType(std::move(wrapper));
+        invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<WrapperType, Args...>);
+    }
+
+    template <class T, typename R, typename... Args>
+    inline DynamicDelegate::DynamicDelegate(R(T::* func)(Args...) const, const T* obj) noexcept
+        : returnTypeID(Meta::TypeID<R>())
+    {
+        auto wrapper = [func, obj](Args &&...args) {
+            return (obj->*func)(std::forward<Args>(args)...);
+            };
+
+        using WrapperType = decltype(wrapper);
+        storage = StorageType(std::move(wrapper));
+        invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<WrapperType, Args...>);
+    }
+
+    template <typename... Args>
+    inline void DynamicDelegate::operator()(Args&&... args)
+    {
+        reinterpret_cast<InvokerFunc<void, Args...>>(invoker)(storage.get(), std::forward<Args>(args)...);
+    }
+
+    template <typename R, typename... Args>
+    inline R DynamicDelegate::Return(Args&&... args)
+    {
+        static UInt64 localReturnTypeID = Meta::TypeID<R>();
+        if (localReturnTypeID != returnTypeID)
+            throw std::bad_cast();
+        return reinterpret_cast<InvokerFunc<R, Args...>>(invoker)(storage.get(), std::forward<Args>(args)...);
+    }
+
+    template <typename Callable, typename... Args>
+    inline auto DynamicDelegate::InvokeCallable(void* storage, Args &&...args) -> decltype(auto)
+    {
+        return (*static_cast<Callable*>(storage))(std::forward<Args>(args)...);
+    }
+
+    template <typename Callable, typename Tuple, std::size_t... I>
+    inline void DynamicDelegate::SetInvokerFromArgsTuple(std::index_sequence<I...>)
+    {
+        invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<Callable, std::tuple_element_t<I, Tuple>...>);
+    }
 }
