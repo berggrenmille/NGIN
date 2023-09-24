@@ -6,6 +6,7 @@
 namespace NGIN
 {
     template <typename FuncType>
-    using StaticDelegate = NGIN::Util::StaticDelegate<FyncType>;
+    using StaticDelegate = NGIN::Util::StaticDelegate<FuncType>;
+
     using DynamicDelegate = NGIN::Util::DynamicDelegate;
 }

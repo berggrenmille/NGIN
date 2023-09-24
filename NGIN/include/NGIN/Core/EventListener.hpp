@@ -1,5 +1,6 @@
 #pragma once
-
+#include <NGIN/Defines.hpp>
+#include <NGIN/Util/Delegate.hpp>
 namespace NGIN::Core
 {
 	template <typename EventType>
@@ -7,7 +8,7 @@ namespace NGIN::Core
 	{
 	public:
 		/// @brief Function type for listening to events.
-		using Listener = std::function<void(EventType &)>;
+		using Listener = StaticDelegate<void(EventType&)>;
 
 		/**
 		 * @brief Construct an event listener.
@@ -16,27 +17,18 @@ namespace NGIN::Core
 		 */
 		EventListener() = delete;
 
-		EventListener(const Listener &other)
-			: listener(other)
-		{
-		}
 
-		EventListener(Listener &&other) noexcept
+		EventListener(Listener&& other) noexcept
 			: listener(std::move(other))
-		{
-		}
+		{}
 
-		EventListener(const EventListener &other)
-			: listener(other.listener)
-		{
-		}
 
-		EventListener(EventListener &&other) noexcept
+
+		EventListener(EventListener&& other) noexcept
 			: listener(std::move(other.listener))
-		{
-		}
+		{}
 
-		EventListener &operator=(EventListener &&other)
+		EventListener& operator=(EventListener&& other) noexcept
 		{
 			listener = std::move(other.listener);
 			return *this;
@@ -47,7 +39,7 @@ namespace NGIN::Core
 		 *
 		 * @param event The event to handle.
 		 */
-		void Invoke(EventType &event) const
+		void Invoke(EventType& event)
 		{
 			if (listener)
 				listener(event);

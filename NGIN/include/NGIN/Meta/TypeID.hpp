@@ -1,3 +1,4 @@
+#pragma once
 #include <NGIN/Defines.hpp>
 #include <cstddef>
 
