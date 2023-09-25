@@ -20,7 +20,7 @@ namespace NGIN::Graphics
 	class VulkanRenderer : public Renderer
 	{
 	public:
-		NGIN_API VulkanRenderer(Window &window);
+		NGIN_API VulkanRenderer(Window& window);
 		NGIN_API ~VulkanRenderer();
 
 		NGIN_API virtual bool Initialize() override;
@@ -33,14 +33,22 @@ namespace NGIN::Graphics
 		bool SetupInstance();
 		bool SetupSurface();
 		bool SetupDevice();
+		bool SetupSwapchain();
 
-		int RateDeviceSuitability(const vk::PhysicalDevice &device) const;
 
-		Window &window;
+		int RateDeviceSuitability(const vk::PhysicalDevice& device) const;
+
+		Window& window;
 		vk::Instance vkInstance;
 		vk::SurfaceKHR vkSurface;
 		vk::PhysicalDevice vkPhysicalDevice;
 		vk::Device vkDevice;
+		vk::SwapchainKHR vkSwapchain;
+		vk::Format vkSwapchainImageFormat;
+		std::vector<vk::Image> swapchainImages;
+		std::vector<vk::ImageView> swapchainImageViews;
+
+
 
 		// ... Other Vulkan-specific resources (e.g., command buffers, pipeline states, etc.)
 	};

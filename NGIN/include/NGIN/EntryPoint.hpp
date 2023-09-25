@@ -50,8 +50,11 @@ namespace NGIN
 		windowSettings.width = 1280;
 		windowSettings.height = 720;
 
-		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, nullptr);
 
+
+		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, &windowSettings);
+		while (context.GetWindow())
+			context.GetWindow()->PollEvents();
 
 		// Initialize App
 		NGIN_WARNING("Initializing App...");
