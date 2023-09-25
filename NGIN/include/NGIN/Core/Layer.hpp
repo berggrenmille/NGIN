@@ -6,8 +6,8 @@ namespace NGIN::Core
     class Layer
     {
     public:
-        Layer();
-        virtual ~Layer();
+        Layer() = default;
+        virtual ~Layer() = default;
 
 
         virtual void OnAttach() {}

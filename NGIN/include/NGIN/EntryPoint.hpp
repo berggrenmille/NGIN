@@ -6,7 +6,6 @@
 #include <NGIN/Logging.hpp>
 
 #include <NGIN/Graphics/Context.hpp>
-
 #include <SDL2/SDL.h>
 
 namespace NGIN
@@ -53,6 +52,8 @@ namespace NGIN
 
 
 		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, &windowSettings);
+
+
 		while (context.GetWindow())
 			context.GetWindow()->PollEvents();
 

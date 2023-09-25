@@ -1,4 +1,5 @@
 #pragma once
+#include <NGIN/Defines.hpp>
 
 namespace NGIN::Core
 {

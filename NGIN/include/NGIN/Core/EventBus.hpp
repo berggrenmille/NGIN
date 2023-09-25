@@ -39,15 +39,8 @@ namespace NGIN::Core
 		template <typename EventType, typename T>
 		void Subscribe(T* instance, void (T::* memberFunction)(EventType&))
 		{
-			/*auto listener = [instance, memberFunction](EventType& event)
-				{
-					(instance->*memberFunction)(event);
-				};*/
 			auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
-
-			// auto test = EventListener<EventType>::Listener(listener);
 			auto& listeners = listenersMap[eventTypeIndex];
-
 			listeners.emplace_back(std::move(DynamicDelegate(memberFunction, instance)));
 		}
 
@@ -76,17 +69,12 @@ namespace NGIN::Core
 		 */
 		~EventBus()
 		{
-			// for (auto &pair : listenersMap)
-			//	{
-			// auto listeners = static_cast<EventVectorPtr>(pair.second);
 
-			// delete listeners;
-			//}
 		}
 
 	private:
 		/// @brief Map of event listeners indexed by event type.
-		std::unordered_map<size_t, EventVector> listenersMap;
+		std::unordered_map<UInt64, EventVector> listenersMap;
 	};
 
 }
