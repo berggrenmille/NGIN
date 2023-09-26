@@ -5,6 +5,7 @@
 #include <NGIN/Meta/TypeName.hpp>
 #include "Module.hpp"
 #include <NGIN/Time.hpp>
+#include <NGIN/Core/EventBus.hpp>
 namespace NGIN::Core
 {
     //  class Layer;
@@ -21,11 +22,16 @@ namespace NGIN::Core
             requires std::is_base_of_v<Module, T>
         void AddModule();
 
+        template <typename T>
+            requires std::is_base_of_v<Module, T>
+        T* GetModule();
+
 
     private:
         std::unordered_map<String, Int32> moduleIndexMap;
         std::vector<Module*> moduleVector;
         Time::Timer timer = Time::Timer();
+        EventBus eventBus = EventBus();
     };
 
 
@@ -52,5 +58,15 @@ namespace NGIN::Core
         // Create layer
         moduleIndexMap[TName] = moduleVector.size();
         moduleVector.emplace_back(new T());
+    }
+
+    template <typename T>
+        requires std::is_base_of_v<Module, T>
+    T* Engine::GetModule()
+    {
+        const String TName = String(NGIN::Meta::TypeName<T>::Class());
+        if (!moduleIndexMap.contains(TName))
+            return nullptr;
+        return static_cast<T*>(moduleVector[moduleIndexMap[TName]]);
     }
 }
