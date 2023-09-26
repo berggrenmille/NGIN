@@ -3,27 +3,29 @@
 #include <vector>
 #include <unordered_map>
 #include <NGIN/Meta/TypeName.hpp>
-#include "Layer.hpp"
+#include "Module.hpp"
+#include <NGIN/Time.hpp>
 namespace NGIN::Core
 {
     //  class Layer;
 
-    NGIN_API class Engine
+    class Engine
     {
     public:
-        Engine() = default;
-        ~Engine() = default;
+        NGIN_API Engine() = default;
+        NGIN_API  ~Engine() = default;
 
-        void Run();
+        NGIN_API void Tick();
 
         template <typename T>
-            requires std::is_base_of_v<Layer, T>
-        void AddLayer();
+            requires std::is_base_of_v<Module, T>
+        void AddModule();
 
 
     private:
-        std::unordered_map<String, Int32> layerIndexMap;
-        std::vector<Layer*> layersVector;
+        std::unordered_map<String, Int32> moduleIndexMap;
+        std::vector<Module*> moduleVector;
+        Time::Timer timer = Time::Timer();
     };
 
 
@@ -31,21 +33,24 @@ namespace NGIN::Core
 
 
     //Template Implementations
+    /// TODO: AddModule() should allocate the module from an allocator
     template <typename T>
-    void AddLayer()
+        requires std::is_base_of_v<Module, T>
+    void Engine::AddModule()
     {
+        const String TName = String(NGIN::Meta::TypeName<T>::Class());
         // Check if layer already exists
-        if (!layerIndexMap.contains(String(NGIN::Meta::TypeName<T>::Class())))
+        if (moduleIndexMap.contains(TName))
             return;
         // Check if layer has dependencies
         if constexpr (requires {T::Dependencies(nullptr);})
             T::Dependencies(this);
         // Check if layer already exists again in case of circular dependencies
-        if (!layerIndexMap.contains(String(NGIN::Meta::TypeName<T>::Class())))
+        if (moduleIndexMap.contains(TName))
             return;
 
         // Create layer
-        layerIndexMap[String(NGIN::Meta::TypeName<T>::Class())] = LayersVector.size();
-        layers.emplace_back(new T());
+        moduleIndexMap[TName] = moduleVector.size();
+        moduleVector.emplace_back(new T());
     }
 }

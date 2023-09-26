@@ -3,19 +3,17 @@
 
 namespace NGIN::Core
 {
-    class Layer
+    class Module
     {
     public:
-        Layer() = default;
-        virtual ~Layer() = default;
+        Module() = default;
+        virtual ~Module() = default;
 
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate() {}
+        virtual void OnTick(const F64 deltaTime) {}
 
-
-    protected:
 
     };
 }

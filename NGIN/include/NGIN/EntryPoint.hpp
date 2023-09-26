@@ -1,12 +1,15 @@
 #pragma once
 #include <NGIN/Defines.hpp>
 
-#include <NGIN/Time/Time.hpp>
+#include <NGIN/Time.hpp>
 #include <NGIN/Logging/FileSink.hpp>
 #include <NGIN/Logging.hpp>
-
+#include <NGIN/Core/Engine.hpp>
+#include <NGIN/Core/TestModule.hpp>
 #include <NGIN/Graphics/Context.hpp>
 #include <SDL2/SDL.h>
+
+#include <thread>
 
 namespace NGIN
 {
@@ -53,9 +56,13 @@ namespace NGIN
 
 		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, &windowSettings);
 
-
+		NGIN::Core::Engine engine = NGIN::Core::Engine();
+		engine.AddModule<NGIN::Core::TestModule>();
 		while (context.GetWindow())
+		{
 			context.GetWindow()->PollEvents();
+			engine.Tick();
+		}
 
 		// Initialize App
 		NGIN_WARNING("Initializing App...");

@@ -24,6 +24,7 @@ add_library(NGIN SHARED
   "src/NGIN/Meta/UUID.cpp"
   "src/NGIN/Meta/Reflection/Registry.cpp"
   "src/NGIN/Graphics/Context.cpp"
+  "src/NGIN/Core/Engine.cpp"
 )
 
 
