@@ -9,6 +9,7 @@
 #include <NGIN/Meta/TypeID.hpp>
 #include <NGIN/Meta/TypeName.hpp>
 #include <NGIN/Graphics/Context.hpp>
+#include <NGIN/Core/Modules/WindowModule.hpp>
 #include <SDL2/SDL.h>
 
 #include <thread>
@@ -49,29 +50,22 @@ namespace NGIN
 		}
 		NGIN_INFO("SDL initialized");
 
-		NGIN::Graphics::WindowSettings windowSettings;
-		windowSettings.title = "NGIN";
-		windowSettings.width = 1280;
-		windowSettings.height = 720;
 
 
 
 
 
-		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, &windowSettings);
+
 
 		NGIN::Core::Engine engine = NGIN::Core::Engine();
-		engine.AddModule<NGIN::Core::TestModule>();
+		engine.AddModule<NGIN::Core::WindowModule>();
 
-		std::cout << Meta::TypeName<NGIN::Core::EventBus>::Full() << " : " << Meta::hashFNV1a<UInt64>(Meta::TypeName<NGIN::Core::EventBus>::Full()) << std::endl;
-		std::cout << Meta::TypeName<NGIN::Core::Module>::Full() << " : " << Meta::hashFNV1a<UInt64>(Meta::TypeName<NGIN::Core::Module>::Full()) << std::endl;
-		std::cout << Meta::TypeName<UInt32>::Full() << " : " << Meta::hashFNV1a<UInt64>(Meta::TypeName<UInt32>::Full()) << std::endl;
-		std::cout << "test: 'a' 'b'" << Meta::hashFNV1a<UInt64>("a") << " : " << Meta::hashFNV1a<UInt64>("b") << std::endl;
-		while (context.GetWindow())
-		{
-			context.GetWindow()->PollEvents();
-			//engine.Tick();
-		}
+
+
+
+
+		engine.Tick();
+
 
 		// Initialize App
 		NGIN_WARNING("Initializing App...");

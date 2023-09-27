@@ -1,15 +1,27 @@
 #include <NGIN/Core/Engine.hpp>
+#include <iostream>
 
 namespace NGIN::Core
 {
     void Engine::Tick()
     {
-        F64 delta = timer.ElapsedSeconds();
-        timer.Reset();
+        eventBus.Subscribe<Events::Quit>(this, &Engine::Quit);
+        isRunning = true;
+        F64 delta = 0.0;
+        while (!shouldQuit)
+        {
+            timer.Reset();
+            for (auto& module : moduleVector)
+            {
+                module->OnTick(delta);
+            }
+            delta = timer.ElapsedSeconds();
+        }
         for (auto& module : moduleVector)
         {
-            module->OnTick(delta);
+            module->OnShutdown();
         }
+        isRunning = false;
     }
 
     EventBus& Engine::GetEventBus()
@@ -17,5 +29,15 @@ namespace NGIN::Core
         return eventBus;
     }
 
-}
 
+
+    void Engine::Quit()
+    {
+        shouldQuit = true;
+    }
+
+    void Engine::Quit(Events::Quit& event)
+    {
+        shouldQuit = true;
+    }
+}

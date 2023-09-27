@@ -6,6 +6,7 @@
 #include "Module.hpp"
 #include <NGIN/Time.hpp>
 #include <NGIN/Core/EventBus.hpp>
+#include <NGIN/Core/Events/Quit.hpp>
 namespace NGIN::Core
 {
     //  class Layer;
@@ -31,13 +32,18 @@ namespace NGIN::Core
         T* GetModule();
 
 
+        NGIN_API void Quit();
 
+
+        NGIN_API void Quit(Events::Quit& event);
 
     private:
         std::unordered_map<String, Int32> moduleIndexMap;
         std::vector<Module*> moduleVector;
         Time::Timer timer = Time::Timer();
         EventBus eventBus = EventBus();
+        Bool shouldQuit = false;
+        Bool isRunning = false;
     };
 
 
@@ -64,6 +70,7 @@ namespace NGIN::Core
         // Create layer
         moduleIndexMap[TName] = moduleVector.size();
         moduleVector.emplace_back(new T(std::forward<Args>(args)...));
+        moduleVector.back()->OnInit(this);
     }
 
     template <typename T>
