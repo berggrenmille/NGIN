@@ -11,13 +11,13 @@ namespace NGIN::Core
 
     protected:
         friend class Engine;
-        virtual void OnAttach() {}
-        virtual void OnDetach() {}
+
+        virtual void OnInit(Engine* engine) {}
+        virtual void OnShutdown() {}
         virtual void OnPreTick(const F64 deltaTime) {}
         virtual void OnTick(const F64 deltaTime) {}
         virtual void OnPostTick(const F64 deltaTime) {}
 
-        Engine* enginePtr = nullptr;
 
     };
 }

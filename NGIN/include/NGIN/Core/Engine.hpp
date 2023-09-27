@@ -18,6 +18,10 @@ namespace NGIN::Core
 
         NGIN_API void Tick();
 
+
+
+        NGIN_API EventBus& GetEventBus();
+
         template <typename T, typename ... Args>
             requires std::is_base_of_v<Module, T>
         void AddModule(Args&& ... args);
@@ -26,7 +30,7 @@ namespace NGIN::Core
             requires std::is_base_of_v<Module, T>
         T* GetModule();
 
-        EventBus& GetEventBus();
+
 
 
     private:
