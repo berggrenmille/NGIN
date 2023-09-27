@@ -6,6 +6,8 @@
 #include <NGIN/Logging.hpp>
 #include <NGIN/Core/Engine.hpp>
 #include <NGIN/Core/TestModule.hpp>
+#include <NGIN/Meta/TypeID.hpp>
+#include <NGIN/Meta/TypeName.hpp>
 #include <NGIN/Graphics/Context.hpp>
 #include <SDL2/SDL.h>
 
@@ -54,14 +56,21 @@ namespace NGIN
 
 
 
+
+
 		NGIN::Graphics::Context context = NGIN::Graphics::Context(NGIN::Graphics::GraphicsAPI::VULKAN, &windowSettings);
 
 		NGIN::Core::Engine engine = NGIN::Core::Engine();
 		engine.AddModule<NGIN::Core::TestModule>();
+
+		std::cout << Meta::TypeName<NGIN::Core::EventBus>::Full() << " : " << Meta::hashFNV1a<UInt64>(Meta::TypeName<NGIN::Core::EventBus>::Full()) << std::endl;
+		std::cout << Meta::TypeName<NGIN::Core::Module>::Full() << " : " << Meta::hashFNV1a<UInt64>(Meta::TypeName<NGIN::Core::Module>::Full()) << std::endl;
+		std::cout << Meta::TypeName<UInt32>::Full() << " : " << Meta::hashFNV1a<UInt64>(Meta::TypeName<UInt32>::Full()) << std::endl;
+		std::cout << "test: 'a' 'b'" << Meta::hashFNV1a<UInt64>("a") << " : " << Meta::hashFNV1a<UInt64>("b") << std::endl;
 		while (context.GetWindow())
 		{
 			context.GetWindow()->PollEvents();
-			engine.Tick();
+			//engine.Tick();
 		}
 
 		// Initialize App

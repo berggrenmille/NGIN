@@ -18,13 +18,15 @@ namespace NGIN::Core
 
         NGIN_API void Tick();
 
-        template <typename T>
+        template <typename T, typename ... Args>
             requires std::is_base_of_v<Module, T>
-        void AddModule();
+        void AddModule(Args&& ... args);
 
         template <typename T>
             requires std::is_base_of_v<Module, T>
         T* GetModule();
+
+        EventBus& GetEventBus();
 
 
     private:
@@ -40,9 +42,9 @@ namespace NGIN::Core
 
     //Template Implementations
     /// TODO: AddModule() should allocate the module from an allocator
-    template <typename T>
+    template <typename T, typename ... Args>
         requires std::is_base_of_v<Module, T>
-    void Engine::AddModule()
+    void Engine::AddModule(Args&& ... args)
     {
         const String TName = String(NGIN::Meta::TypeName<T>::Class());
         // Check if layer already exists
@@ -57,7 +59,7 @@ namespace NGIN::Core
 
         // Create layer
         moduleIndexMap[TName] = moduleVector.size();
-        moduleVector.emplace_back(new T());
+        moduleVector.emplace_back(new T(std::forward<Args>(args)...));
     }
 
     template <typename T>

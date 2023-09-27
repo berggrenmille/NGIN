@@ -11,4 +11,11 @@ namespace NGIN::Core
             module->OnTick(delta);
         }
     }
+
+    EventBus& Engine::GetEventBus()
+    {
+        return eventBus;
+    }
+
 }
+
