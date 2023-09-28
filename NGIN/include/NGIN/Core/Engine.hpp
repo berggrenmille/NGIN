@@ -38,7 +38,7 @@ namespace NGIN::Core
         NGIN_API void Quit(Events::Quit& event);
 
     private:
-        std::unordered_map<String, Int32> moduleIndexMap;
+        std::unordered_map<String, UInt64> moduleIndexMap;
         std::vector<Module*> moduleVector;
         Time::Timer timer = Time::Timer();
         EventBus eventBus = EventBus();
