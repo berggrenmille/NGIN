@@ -1,6 +1,7 @@
 build
 .vs
 .vscode
+.idea
 ignore
 .vscode/settings.json
 
