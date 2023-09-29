@@ -1,4 +1,5 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
 
 #include <NGIN/Time.hpp>
@@ -17,63 +18,55 @@
 namespace NGIN
 {
 
-	/**
-	 * @brief Template function to initialize an NGIN application.
-	 *
-	 * @tparam T A subclass of App to be initialized.
-	 * @param argc The argument count from the command line.
-	 * @param argv The argument values from the command line.
-	 * @return int 0 if initialization was successful, 1 otherwise.
-	 */
-	template <NGIN::is_app T>
-	int Init(int argc, char* argv[])
-	{
+    /**
+     * @brief Template function to initialize an NGIN application.
+     *
+     * @tparam T A subclass of App to be initialized.
+     * @param argc The argument count from the command line.
+     * @param argv The argument values from the command line.
+     * @return int 0 if initialization was successful, 1 otherwise.
+     */
+    template<NGIN::is_app T>
+    int Init(int argc, char *argv[])
+    {
 
-		// Initialize Logging
-		std::cout
-			<< "\033]0;"
-			<< "NGIN"
-			<< "\007";
-		Logging::Init();
+        // Initialize Logging
+        std::cout
+                << "\033]0;"
+                << "NGIN"
+                << "\007"
+                << std::endl;
+        Logging::Init();
 
-		Config::Init();
+        Config::Init();
 
-		NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
+        NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
 
-		// Initialize SDL and log the initialization process
-		NGIN_WARNING("Initializing SDL... ");
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
-		{
-			// NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
+        // Initialize SDL and log the initialization process
+        NGIN_WARNING("Initializing SDL... ");
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
+        {
+            // NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
 
-			return 1;
-		}
-		NGIN_INFO("SDL initialized");
-
-
-
+            return 1;
+        }
+        NGIN_INFO("SDL initialized");
 
 
+        NGIN::Core::Engine engine = NGIN::Core::Engine();
+        engine.AddModule<NGIN::Core::WindowModule>();
 
 
-
-		NGIN::Core::Engine engine = NGIN::Core::Engine();
-		engine.AddModule<NGIN::Core::WindowModule>();
+        engine.Tick();
 
 
-
-
-
-		engine.Tick();
-
-
-		// Initialize App
-		NGIN_WARNING("Initializing App...");
-		std::cout << "Initializing App..." << std::endl;
-		NGIN::App* app = new T();
-		app->Init();
-		// Free memory after app initialization is done
-		delete app;
-		return 0;
-	}
+        // Initialize App
+        NGIN_WARNING("Initializing App...");
+        std::cout << "Initializing App..." << std::endl;
+        NGIN::App *app = new T();
+        app->Init();
+        // Free memory after app initialization is done
+        delete app;
+        return 0;
+    }
 }

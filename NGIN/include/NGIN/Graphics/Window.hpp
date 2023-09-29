@@ -1,4 +1,5 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
 #include <NGIN/Graphics/GraphicsBackend.hpp>
 
@@ -8,37 +9,39 @@
 namespace NGIN::Graphics
 {
 
-	struct WindowSettings
-	{
-		String title = "NGIN";
-		Int32 width = 1280;
-		Int32 height = 720;
-		Bool fullscreen = false;
-		Bool resizable = false;
-		Bool borderless = false;
-	};
+    struct WindowSettings
+    {
+        String title = "NGIN";
+        Int32 width = 1280;
+        Int32 height = 720;
+        Bool fullscreen = false;
+        Bool resizable = false;
+        Bool borderless = false;
+    };
 
-	class Window
-	{
-	public:
-		NGIN_API Window() = default;
-		NGIN_API ~Window() = default;
+    class Window
+    {
+    public:
+        NGIN_API Window() = default;
 
-		NGIN_API Bool Init(GraphicsAPI backend, WindowSettings& settings);
+        NGIN_API ~Window() = default;
 
-		NGIN_API Void Shutdown();
+        NGIN_API Bool Init(GraphicsAPI backend, WindowSettings& settings);
 
-		NGIN_API Void PollEvents();
+        NGIN_API Void Shutdown();
 
-		NGIN_API Bool IsOpen() const;
+        NGIN_API Void Resize(UInt32 width, UInt32 height);
 
-		NGIN_API Int32 GetWidth() const;
-		NGIN_API Int32 GetHeight() const;
+        [[nodiscard]] NGIN_API Bool IsOpen() const;
 
-		NGIN_API SDL_Window* GetSDLWindow() const;
+        [[nodiscard]] NGIN_API Int32 GetWidth() const;
 
-	private:
-		SDL_Window* window = nullptr;
-		bool isInitialized = false;
-	};
+        [[nodiscard]] NGIN_API Int32 GetHeight() const;
+
+        [[nodiscard]] NGIN_API SDL_Window* GetSDLWindow() const;
+
+    private:
+        SDL_Window* window = nullptr;
+        bool isInitialized = false;
+    };
 }

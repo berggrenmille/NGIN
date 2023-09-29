@@ -1,4 +1,5 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
 
 namespace NGIN::Core
@@ -8,10 +9,12 @@ namespace NGIN::Core
     {
     public:
         World();
+
         ~World();
 
 
     private:
+
 
     };
 }
