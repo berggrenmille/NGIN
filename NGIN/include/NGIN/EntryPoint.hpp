@@ -10,7 +10,7 @@
 #include <NGIN/Meta/TypeID.hpp>
 #include <NGIN/Meta/TypeName.hpp>
 #include <NGIN/Graphics/Context.hpp>
-#include <NGIN/Core/Modules/WindowModule.hpp>
+#include <NGIN/Core/Modules/GraphicsModule.hpp>
 #include <SDL2/SDL.h>
 
 #include <thread>
@@ -27,7 +27,7 @@ namespace NGIN
      * @return int 0 if initialization was successful, 1 otherwise.
      */
     template<NGIN::is_app T>
-    int Init(int argc, char *argv[])
+    int Init(int argc, char* argv[])
     {
 
         // Initialize Logging
@@ -54,7 +54,7 @@ namespace NGIN
 
 
         NGIN::Core::Engine engine = NGIN::Core::Engine();
-        engine.AddModule<NGIN::Core::WindowModule>();
+        engine.AddModule<NGIN::Core::Modules::GraphicsModule>();
 
 
         engine.Tick();
@@ -63,10 +63,8 @@ namespace NGIN
         // Initialize App
         NGIN_WARNING("Initializing App...");
         std::cout << "Initializing App..." << std::endl;
-        NGIN::App *app = new T();
-        app->Init();
-        // Free memory after app initialization is done
-        delete app;
+
+
         return 0;
     }
 }

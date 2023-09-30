@@ -15,14 +15,19 @@ namespace NGIN::Util
     {
     public:
         /// \brief Default constructor.
-        DynamicDelegate() noexcept;
+        DynamicDelegate() = default;
 
         /// \brief Move constructor.
         DynamicDelegate(DynamicDelegate&& other) noexcept;
 
-        DynamicDelegate(DynamicDelegate&);
+        DynamicDelegate(const DynamicDelegate& other);
 
-        DynamicDelegate& operator=(DynamicDelegate&);
+        DynamicDelegate& operator=(const DynamicDelegate& other);
+
+        template<typename F>
+        DynamicDelegate& operator=(F&& f) noexcept
+        requires (!std::is_same_v<std::decay_t<F>, DynamicDelegate>);
+
 
         /// \brief Templated constructor.
         template<typename F>
@@ -79,8 +84,6 @@ namespace NGIN::Util
         void SetInvokerFromArgsTuple(std::index_sequence<I...>);
     };
 
-    inline DynamicDelegate::DynamicDelegate() noexcept: storage(), invoker(nullptr), returnTypeID(0)
-    {}
 
     inline DynamicDelegate::DynamicDelegate(DynamicDelegate&& other) noexcept
     {
@@ -101,6 +104,20 @@ namespace NGIN::Util
         returnTypeID = Meta::TypeID<typename Traits::ReturnType>();
         storage = StorageType(CallableType(std::forward<F>(f)));
         SetInvokerFromArgsTuple<CallableType, ArgumentTuple>(Traits::argsIndexSequence);
+    }
+
+    template<typename F>
+    inline DynamicDelegate& DynamicDelegate::operator=(F&& f) noexcept
+    requires (!std::is_same_v<std::decay_t<F>, DynamicDelegate>)
+    {
+        using CallableType = std::decay_t<F>;
+        using Traits = Meta::FunctionTraits<CallableType>;
+        using ArgumentTuple = typename Traits::ArgsTupleType;
+
+        returnTypeID = Meta::TypeID<typename Traits::ReturnType>();
+        storage = StorageType(CallableType(std::forward<F>(f)));
+        SetInvokerFromArgsTuple<CallableType, ArgumentTuple>(Traits::argsIndexSequence);
+        return *this;
     }
 
     template<typename R, typename... Args>
@@ -167,18 +184,20 @@ namespace NGIN::Util
         invoker = reinterpret_cast<InvokerFunc<void>>(InvokeCallable<Callable, std::tuple_element_t<I, Tuple>...>);
     }
 
-    inline DynamicDelegate& DynamicDelegate::operator=(DynamicDelegate& other)
+
+    inline DynamicDelegate::DynamicDelegate(const DynamicDelegate& other)
+    {
+        storage = other.storage;
+        invoker = other.invoker;
+        returnTypeID = other.returnTypeID;
+
+    }
+
+    inline DynamicDelegate& DynamicDelegate::operator=(const DynamicDelegate& other)
     {
         storage = other.storage;
         invoker = other.invoker;
         returnTypeID = other.returnTypeID;
         return *this;
-    }
-
-    inline DynamicDelegate::DynamicDelegate(DynamicDelegate& other)
-    {
-        storage = other.storage;
-        invoker = other.invoker;
-        returnTypeID = other.returnTypeID;
     }
 }

@@ -9,7 +9,6 @@ namespace NGIN::Core
     class WindowModule : public Module
     {
     public:
-        [[nodiscard]] NGIN_API Graphics::Window* GetWindow() const;
 
     protected:
         NGIN_API void OnInit(Engine* engine) override;
@@ -26,8 +25,7 @@ namespace NGIN::Core
 
         void HandleSdlWindowEvent(const SDL_Event& event);
 
-        Engine* engine;
-        Graphics::Window* window;
+        Engine* engine = nullptr;
 
     };
 }

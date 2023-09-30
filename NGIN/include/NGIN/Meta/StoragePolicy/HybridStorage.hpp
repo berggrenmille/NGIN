@@ -29,13 +29,13 @@ namespace NGIN::Meta::StoragePolicy
 
     public:
         /// \brief Default constructor.
-        HybridStorage();
+        HybridStorage() = default;
 
         /// \brief Copy constructor.
-        HybridStorage(HybridStorage& other);
+        HybridStorage(const HybridStorage& other);
 
         /// \brief Copy assignment operator
-        HybridStorage& operator=(HybridStorage& other);
+        HybridStorage& operator=(const HybridStorage& other);
 
         /// \brief Move constructor.
         /// \param other The object to move from.
@@ -60,6 +60,8 @@ namespace NGIN::Meta::StoragePolicy
         /// \return A pointer to the stored data.
         void* get();
 
+        [[nodiscard]] void* get() const;
+
 
     private:
         /// \union Data
@@ -67,7 +69,7 @@ namespace NGIN::Meta::StoragePolicy
         union Data
         {
             /// \brief Pointer to heap-allocated data.
-            void* ptr;
+            void* ptr = nullptr;
 
             /// \brief Static buffer for data.
             std::byte buffer[Size];
@@ -75,7 +77,7 @@ namespace NGIN::Meta::StoragePolicy
             /// \brief Default constructor for the union which initializes the buffer.
             Data() : buffer {}
             {}
-        } data;
+        } data {};
 
         /// \brief Pointer to the function responsible for destructing the stored object.
         void (* destructorFunc)(void*) = nullptr;
@@ -90,14 +92,9 @@ namespace NGIN::Meta::StoragePolicy
         bool useHeap = false;
     };
 
-    template<std::size_t Size>
-    HybridStorage<Size>::HybridStorage()
-            : data {}
-    {
-    }
 
     template<std::size_t Size>
-    HybridStorage<Size>::HybridStorage(HybridStorage& other)
+    HybridStorage<Size>::HybridStorage(const HybridStorage& other)
             : data {}
     {
         if (this == &other)
@@ -111,18 +108,18 @@ namespace NGIN::Meta::StoragePolicy
         if (useHeap)
         {
             data.ptr = new std::byte[Size];
-            std::memcpy(get(), other.get(), Size);
+            std::memcpy(get(), const_cast<void*>(other.get()), Size);
         } else if (cloneFunc)
         {
             cloneFunc(get(), other.get());
         } else
         {
-            std::memcpy(get(), other.get(), Size);
+            std::memcpy(get(), const_cast<void*>(other.get()), Size);
         }
     }
 
     template<std::size_t Size>
-    HybridStorage<Size>& HybridStorage<Size>::operator=(HybridStorage& other)
+    HybridStorage<Size>& HybridStorage<Size>::operator=(const HybridStorage& other)
     {
         if (this == &other)
             return *this;
@@ -135,13 +132,13 @@ namespace NGIN::Meta::StoragePolicy
         if (useHeap)
         {
             data.ptr = new std::byte[Size];
-            std::memcpy(get(), other.get(), Size);
+            std::memcpy(get(), const_cast<void*>(other.get()), Size);
         } else if (cloneFunc)
         {
             cloneFunc(get(), other.get());
         } else
         {
-            std::memcpy(get(), other.get(), Size);
+            std::memcpy(get(), const_cast<void*>(other.get()), Size);
         }
         return *this;
     }
@@ -262,6 +259,12 @@ namespace NGIN::Meta::StoragePolicy
     void* HybridStorage<Size>::get()
     {
         return useHeap ? data.ptr : &data.buffer[0];
+    }
+
+    template<std::size_t Size>
+    void* HybridStorage<Size>::get() const
+    {
+        return const_cast<void*>(useHeap ? data.ptr : &data.buffer[0]);
     }
 
 

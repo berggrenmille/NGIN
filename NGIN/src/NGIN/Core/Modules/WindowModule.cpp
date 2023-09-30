@@ -6,20 +6,10 @@
 namespace NGIN::Core
 {
 
-    Graphics::Window* WindowModule::GetWindow() const
-    {
-        return window;
-    }
 
     void WindowModule::OnInit(Engine* engine)
     {
         this->engine = engine;
-        window = new Graphics::Window();
-        Graphics::WindowSettings windowSettings;
-        windowSettings.title = "NGIN";
-        windowSettings.width = 1280;
-        windowSettings.height = 720;
-        window->Init(Graphics::GraphicsAPI::VULKAN, windowSettings);
     }
 
     void WindowModule::OnPreTick(F64 deltaTime)
@@ -52,13 +42,11 @@ namespace NGIN::Core
 
     }
 
-    void WindowModule::OnPostTick(F64 deltaTime)
-    {}
+    void WindowModule::OnPostTick(F64 deltaTime) {}
 
     void WindowModule::OnShutdown()
     {
-        window->Shutdown();
-        delete window;
+
     }
 
     void WindowModule::HandleSdlWindowEvent(const SDL_Event& event)
