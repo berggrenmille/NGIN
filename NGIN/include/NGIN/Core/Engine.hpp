@@ -1,4 +1,5 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
 #include <vector>
 #include <unordered_map>
@@ -7,6 +8,7 @@
 #include <NGIN/Time.hpp>
 #include <NGIN/Core/EventBus.hpp>
 #include <NGIN/Core/Events/Quit.hpp>
+
 namespace NGIN::Core
 {
     //  class Layer;
@@ -15,27 +17,27 @@ namespace NGIN::Core
     {
     public:
         NGIN_API Engine() = default;
+
         NGIN_API  ~Engine() = default;
 
         NGIN_API void Tick();
 
 
-
         NGIN_API EventBus& GetEventBus();
 
-        template <typename T, typename ... Args>
-            requires std::is_base_of_v<Module, T>
+        template<typename T, typename ... Args>
+        requires std::is_base_of_v<Module, T>
         void AddModule(Args&& ... args);
 
-        template <typename T>
-            requires std::is_base_of_v<Module, T>
+        template<typename T>
+        requires std::is_base_of_v<Module, T>
         T* GetModule();
 
 
         NGIN_API void Quit();
 
 
-        NGIN_API void Quit(Events::Quit& event);
+        NGIN_API void Quit(const Events::Quit& event);
 
     private:
         std::unordered_map<String, UInt64> moduleIndexMap;
@@ -47,13 +49,10 @@ namespace NGIN::Core
     };
 
 
-
-
-
     //Template Implementations
     /// TODO: AddModule() should allocate the module from an allocator
-    template <typename T, typename ... Args>
-        requires std::is_base_of_v<Module, T>
+    template<typename T, typename ... Args>
+    requires std::is_base_of_v<Module, T>
     void Engine::AddModule(Args&& ... args)
     {
         const String TName = String(NGIN::Meta::TypeName<T>::Class());
@@ -61,7 +60,7 @@ namespace NGIN::Core
         if (moduleIndexMap.contains(TName))
             return;
         // Check if layer has dependencies
-        if constexpr (requires {T::Dependencies(nullptr);})
+        if constexpr (requires { T::Dependencies(nullptr); })
             T::Dependencies(this);
         // Check if layer already exists again in case of circular dependencies
         if (moduleIndexMap.contains(TName))
@@ -73,8 +72,8 @@ namespace NGIN::Core
         moduleVector.back()->OnInit(this);
     }
 
-    template <typename T>
-        requires std::is_base_of_v<Module, T>
+    template<typename T>
+    requires std::is_base_of_v<Module, T>
     T* Engine::GetModule()
     {
         const String TName = String(NGIN::Meta::TypeName<T>::Class());

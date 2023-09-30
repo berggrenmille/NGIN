@@ -11,28 +11,28 @@ namespace NGIN::Core
         while (!shouldQuit)
         {
             timer.Reset();
-            for (auto &module: moduleVector)
+            for (auto& module: moduleVector)
             {
                 module->OnPreTick(delta);
             }
-            for (auto &module: moduleVector)
+            for (auto& module: moduleVector)
             {
                 module->OnTick(delta);
             }
-            for (auto &module: moduleVector)
+            for (auto& module: moduleVector)
             {
                 module->OnPostTick(delta);
             }
             delta = timer.ElapsedSeconds();
         }
-        for (auto &module: moduleVector)
+        for (auto& module: moduleVector)
         {
             module->OnShutdown();
         }
         isRunning = false;
     }
 
-    EventBus &Engine::GetEventBus()
+    EventBus& Engine::GetEventBus()
     {
         return eventBus;
     }
@@ -43,7 +43,7 @@ namespace NGIN::Core
         shouldQuit = true;
     }
 
-    void Engine::Quit(Events::Quit &event)
+    void Engine::Quit(const Events::Quit& event)
     {
         shouldQuit = true;
     }

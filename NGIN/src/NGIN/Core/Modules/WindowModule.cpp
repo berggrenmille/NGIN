@@ -24,7 +24,6 @@ namespace NGIN::Core
 
     void WindowModule::OnPreTick(F64 deltaTime)
     {
-        std::cout << "WindowModule::OnPreTick" << std::endl;
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
