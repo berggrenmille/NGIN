@@ -24,7 +24,7 @@ add_library(NGIN SHARED
         "src/NGIN/Meta/Reflection/Registry.cpp"
         "src/NGIN/Graphics/Context.cpp"
         "src/NGIN/Core/Engine.cpp"
-        "src/NGIN/Core/Modules/WindowModule.cpp"
+        "src/NGIN/Core/Modules/SDLModule.cpp"
         "src/NGIN/Core/Modules/GraphicsModule.cpp"
 )
 

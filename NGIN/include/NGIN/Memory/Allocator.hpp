@@ -63,7 +63,7 @@ namespace NGIN::Memory
         template <IsAllocator T>
         Allocator(T &&alloc)
             requires IsNotSame<Allocator, T>
-            : pImpl(std::move(alloc))
+            : pImpl(std::forward<T>(alloc))
         {
             SetupFunctionPointers<T>();
         }

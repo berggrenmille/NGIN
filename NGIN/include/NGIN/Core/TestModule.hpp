@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Module.hpp"
 #include "Engine.hpp"
 
@@ -8,20 +9,19 @@ namespace NGIN::Core
     {
     public:
         TestModule2() = default;
+
         virtual ~TestModule2() = default;
 
-        virtual void OnTick(const F64 deltaTime) override
-        {};
+        virtual void OnTick(const F64 deltaTime) override {};
     };
 
     class TestModule : public Module
     {
     public:
-        static void Dependencies(Engine* engine)
-        {
-            engine->AddModule<TestModule2>();
-        }
+        using Dependencies = Meta::TypeWrapper<TestModule2>;
+
         TestModule() = default;
+
         virtual ~TestModule() = default;
 
         virtual void OnTick(const F64 deltaTime) override

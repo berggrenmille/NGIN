@@ -5,7 +5,7 @@
 //Precompiled include
 #include <Precompiled/PCH.h>
 #include <NGIN/Core/Modules/GraphicsModule.hpp>
-#include <NGIN/Core/Modules/WindowModule.hpp>
+#include <NGIN/Core/Modules/SDLModule.hpp>
 
 #include <NGIN/Core/Engine.hpp>
 
@@ -17,10 +17,6 @@
 namespace NGIN::Core::Modules
 {
 
-    void Modules::GraphicsModule::Dependencies(Engine* engine)
-    {
-        engine->AddModule<WindowModule>();
-    }
 
     void GraphicsModule::OnInit(Engine* enginePtr)
     {

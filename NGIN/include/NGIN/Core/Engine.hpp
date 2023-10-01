@@ -1,13 +1,18 @@
 #pragma once
 
 #include <NGIN/Defines.hpp>
-#include <vector>
-#include <unordered_map>
+
+
 #include <NGIN/Meta/TypeName.hpp>
+#include <NGIN/Meta/TypeWrapper.hpp>
+
 #include "Module.hpp"
 #include <NGIN/Time.hpp>
 #include <NGIN/Core/EventBus.hpp>
 #include <NGIN/Core/Events/Quit.hpp>
+
+#include <unordered_map>
+#include <vector>
 
 namespace NGIN::Core
 {
@@ -40,10 +45,19 @@ namespace NGIN::Core
         NGIN_API void Quit(const Events::Quit& event);
 
     private:
+
+        template<typename... Ts>
+        void UnpackModuleDependencies(Meta::TypeWrapper<Ts...>);
+
+        void UnpackModuleDependencies(Meta::TypeWrapper<void>) {}
+
         std::unordered_map<String, UInt64> moduleIndexMap;
         std::vector<Module*> moduleVector;
+
         Time::Timer timer = Time::Timer();
+
         EventBus eventBus = EventBus();
+
         Bool shouldQuit = false;
         Bool isRunning = false;
     };
@@ -55,17 +69,21 @@ namespace NGIN::Core
     requires std::is_base_of_v<Module, T>
     void Engine::AddModule(Args&& ... args)
     {
+
         const String TName = String(NGIN::Meta::TypeName<T>::Class());
         // Check if layer already exists
         if (moduleIndexMap.contains(TName))
             return;
-        // Check if layer has dependencies
-        if constexpr (requires { T::Dependencies(nullptr); })
-            T::Dependencies(this);
-        // Check if layer already exists again in case of circular dependencies
-        if (moduleIndexMap.contains(TName))
-            return;
 
+        // Check if layer has dependencies
+        if constexpr (requires { typename T::Dependencies; })
+        {
+            using Deps = typename T::Dependencies;
+            UnpackModuleDependencies(Deps());
+            // Check if layer was created due to circular dependencies
+            if (moduleIndexMap.contains(TName))
+                return;
+        }
         // Create layer
         moduleIndexMap[TName] = moduleVector.size();
         moduleVector.emplace_back(new T(std::forward<Args>(args)...));
@@ -80,5 +98,11 @@ namespace NGIN::Core
         if (!moduleIndexMap.contains(TName))
             return nullptr;
         return static_cast<T*>(moduleVector[moduleIndexMap[TName]]);
+    }
+
+    template<typename... Ts>
+    void Engine::UnpackModuleDependencies(Meta::TypeWrapper<Ts...>)
+    {
+        (AddModule<Ts>(), ...);
     }
 }

@@ -47,4 +47,6 @@ namespace NGIN::Core
     {
         shouldQuit = true;
     }
+
+
 }

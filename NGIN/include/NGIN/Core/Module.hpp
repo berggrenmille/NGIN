@@ -2,14 +2,23 @@
 
 #include <NGIN/Defines.hpp>
 
+#include <NGIN/Meta/TypeWrapper.hpp>
+
+
 namespace NGIN::Core
 {
     class Engine;
+
+    template<typename... Ts>
+    struct DependencyWrapper {};
+
 
     class Module
     {
     public:
         friend class Engine;
+
+        using Dependencies = Meta::TypeWrapper<void>;
 
         Module() = default;
 

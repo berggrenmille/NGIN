@@ -1,4 +1,4 @@
-#include <NGIN/Core/Modules/WindowModule.hpp>
+#include <NGIN/Core/Modules/SDLModule.hpp>
 #include <NGIN/Core/Events/Quit.hpp>
 #include <NGIN/Core/Engine.hpp>
 #include <NGIN/Core/Events/WindowEvents.hpp>
@@ -7,12 +7,12 @@ namespace NGIN::Core
 {
 
 
-    void WindowModule::OnInit(Engine* engine)
+    void SDLModule::OnInit(Engine* engine)
     {
         this->engine = engine;
     }
 
-    void WindowModule::OnPreTick(F64 deltaTime)
+    void SDLModule::OnPreTick(F64 deltaTime)
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -37,19 +37,19 @@ namespace NGIN::Core
         }
     }
 
-    void WindowModule::OnTick(F64 deltaTime)
+    void SDLModule::OnTick(F64 deltaTime)
     {
 
     }
 
-    void WindowModule::OnPostTick(F64 deltaTime) {}
+    void SDLModule::OnPostTick(F64 deltaTime) {}
 
-    void WindowModule::OnShutdown()
+    void SDLModule::OnShutdown()
     {
 
     }
 
-    void WindowModule::HandleSdlWindowEvent(const SDL_Event& event)
+    void SDLModule::HandleSdlWindowEvent(const SDL_Event& event)
     {
         switch (event.window.event)
         {

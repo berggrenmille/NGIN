@@ -6,10 +6,9 @@
 
 namespace NGIN::Core
 {
-    class WindowModule : public Module
+    class SDLModule : public Module
     {
     public:
-
     protected:
         NGIN_API void OnInit(Engine* engine) override;
 

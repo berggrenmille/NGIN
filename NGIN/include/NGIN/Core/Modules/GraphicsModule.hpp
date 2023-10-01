@@ -6,6 +6,7 @@
 // NGIN Include(s)
 #include <NGIN/Defines.hpp>
 #include <NGIN/Core/Module.hpp>
+#include "SDLModule.hpp"
 
 #include <NGIN/Graphics/Window.hpp>
 #include <NGIN/Graphics/Context.hpp>
@@ -17,7 +18,7 @@ namespace NGIN::Core::Modules
     class GraphicsModule : public Module
     {
     public:
-        NGIN_API static void Dependencies(Engine* engine);
+        using Dependencies = Meta::TypeWrapper<SDLModule>;
 
     protected:
         NGIN_API void OnInit(Engine* engine) override;
