@@ -6,51 +6,59 @@
 
 namespace NGIN::Graphics
 {
-	// Forward declaration of the Window class.
-	class Window;
+    // Forward declaration of the Window class.
+    class Window;
 
-	/**
-	 * @class VulkanRenderer
-	 * @brief A Renderer implementation using the Vulkan Graphics API.
-	 *
-	 * This class provides functionalities for rendering using Vulkan.
-	 * It manages Vulkan resources such as instances, devices, and surfaces, and provides
-	 * core rendering functionalities like viewport setting, frame clearing, and more.
-	 */
-	class VulkanRenderer : public Renderer
-	{
-	public:
-		NGIN_API VulkanRenderer(Window& window);
-		NGIN_API ~VulkanRenderer();
+    /**
+     * @class VulkanRenderer
+     * @brief A Renderer implementation using the Vulkan Graphics API.
+     *
+     * This class provides functionalities for rendering using Vulkan.
+     * It manages Vulkan resources such as instances, devices, and surfaces, and provides
+     * core rendering functionalities like viewport setting, frame clearing, and more.
+     */
+    class VulkanRenderer final : public Renderer
+    {
+    public:
+        NGIN_API explicit VulkanRenderer(Window& window);
 
-		NGIN_API virtual bool Initialize() override;
-		NGIN_API virtual void BeginFrame() override;
-		NGIN_API virtual void EndFrame() override;
-		NGIN_API virtual void SetViewport(int width, int height) override;
-		NGIN_API virtual void Clear(float r, float g, float b, float a) override;
+        NGIN_API ~VulkanRenderer() override;
 
-	private:
-		bool SetupInstance();
-		bool SetupSurface();
-		bool SetupDevice();
-		bool SetupSwapchain();
+        NGIN_API bool Initialize() override;
 
+        NGIN_API void BeginFrame() override;
 
-		int RateDeviceSuitability(const vk::PhysicalDevice& device) const;
+        NGIN_API void EndFrame() override;
 
-		Window& window;
-		vk::Instance vkInstance;
-		vk::SurfaceKHR vkSurface;
-		vk::PhysicalDevice vkPhysicalDevice;
-		vk::Device vkDevice;
-		vk::SwapchainKHR vkSwapchain;
-		vk::Format vkSwapchainImageFormat;
-		std::vector<vk::Image> swapchainImages;
-		std::vector<vk::ImageView> swapchainImageViews;
+        NGIN_API void SetViewport(int width, int height) override;
+
+        NGIN_API void Clear(float r, float g, float b, float a) override;
+
+    private:
+        bool SetupInstance();
+
+        bool SetupSurface();
+
+        bool SetupDevice();
+
+        bool SetupSwapchain();
 
 
+        [[nodiscard]] int RateDeviceSuitability(const vk::PhysicalDevice& device) const;
 
-		// ... Other Vulkan-specific resources (e.g., command buffers, pipeline states, etc.)
-	};
+        Window& window;
+        vk::Instance vkInstance;
+        vk::SurfaceKHR vkSurface;
+        vk::PhysicalDevice vkPhysicalDevice;
+        vk::Device vkDevice;
+        vk::SwapchainKHR vkSwapchain;
+        vk::Format vkSwapchainImageFormat;
+        std::vector<vk::Image> swapchainImages;
+        std::vector<vk::ImageView> swapchainImageViews;
+
+
+
+        // ... Other Vulkan-specific resources (e.g., command buffers, pipeline states, etc.)
+    };
 
 }

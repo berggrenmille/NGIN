@@ -69,21 +69,20 @@ namespace NGIN::Core
     requires std::is_base_of_v<Module, T>
     void Engine::AddModule(Args&& ... args)
     {
-
         const String TName = String(NGIN::Meta::TypeName<T>::Class());
+
         // Check if layer already exists
         if (moduleIndexMap.contains(TName))
             return;
 
-        // Check if layer has dependencies
-        if constexpr (requires { typename T::Dependencies; })
-        {
-            using Deps = typename T::Dependencies;
-            UnpackModuleDependencies(Deps());
-            // Check if layer was created due to circular dependencies
-            if (moduleIndexMap.contains(TName))
-                return;
-        }
+        // Unpack dependencies with compiler magic. Passing empty struct with compile time type information it just makes sense.
+        UnpackModuleDependencies(typename T::Dependencies {});
+
+        // Check if layer was created due to circular dependencies
+        //TODO: Check if this is the correct way to handle circular dependencies
+        if (moduleIndexMap.contains(TName))
+            return;
+
         // Create layer
         moduleIndexMap[TName] = moduleVector.size();
         moduleVector.emplace_back(new T(std::forward<Args>(args)...));

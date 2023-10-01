@@ -18,8 +18,9 @@ namespace NGIN::Core::Modules
     class GraphicsModule : public Module
     {
     public:
-        using Dependencies = Meta::TypeWrapper<SDLModule>;
 
+        using Dependencies = Meta::TypeWrapper<SDLModule>;
+        
     protected:
         NGIN_API void OnInit(Engine* engine) override;
 
