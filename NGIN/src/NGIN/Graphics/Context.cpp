@@ -1,7 +1,7 @@
 #include <Precompiled/PCH.h>
 #include <NGIN/Graphics/Context.hpp>
 #include <NGIN/Graphics/Renderer.hpp>
-#include <NGIN/Graphics/Vulkan/VulkanRenderer.hpp>
+#include <NGIN/Graphics/Vulkan/Renderer.hpp>
 #include <NGIN/Graphics/Window.hpp>
 #include <NGIN/Logging.hpp>
 
@@ -25,14 +25,14 @@ namespace NGIN::Graphics
             case GraphicsAPI::OPEN_GL:
             case GraphicsAPI::D3D12:
             case GraphicsAPI::VULKAN:
-                renderer = new VulkanRenderer(*window);
+                renderer = new Vulkan::Renderer(*window);
                 break;
 
 
             default:
                 break;
         }
-        return renderer->Initialize();
+        return renderer->Init();
     }
 
     void Context::Shutdown()

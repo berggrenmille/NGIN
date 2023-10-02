@@ -30,7 +30,7 @@ namespace NGIN
     int Init(int argc, char* argv[])
     {
 
-        // Initialize Logging
+        // Init Logging
         std::cout
                 << "\033]0;"
                 << "NGIN"
@@ -42,7 +42,7 @@ namespace NGIN
 
         NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
 
-        // Initialize SDL and log the initialization process
+        // Init SDL and log the initialization process
         NGIN_WARNING("Initializing SDL... ");
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
         {
@@ -60,7 +60,7 @@ namespace NGIN
         engine.Tick();
 
 
-        // Initialize App
+        // Init App
         NGIN_WARNING("Initializing App...");
         std::cout << "Initializing App..." << std::endl;
 

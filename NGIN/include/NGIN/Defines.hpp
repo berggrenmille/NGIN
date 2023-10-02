@@ -1,4 +1,5 @@
 #pragma once
+
 #include <source_location>
 #include <cstddef>
 #include <cstdint>
@@ -28,6 +29,8 @@
 #endif
 namespace NGIN
 {
+    // TODO: Add documentation
+
     using UInt64 = std::uint64_t;
     using UInt32 = std::uint32_t;
     using UInt16 = std::uint16_t;
@@ -42,22 +45,56 @@ namespace NGIN
 
     using Void = void;
 
-
     using F32 = float;
     using F64 = double;
+
+    using Size = std::size_t;
+    using IntPtr = std::intptr_t;
+    using UIntPtr = std::uintptr_t;
 
     using String = std::string;
     using StringView = std::string_view;
 
+    using Char = char;
+    using WChar = wchar_t;
+
+    using Int = int;
+    using UInt = unsigned int;
+
+    using Long = long;
+    using ULong = unsigned long;
+
+
     using Bool = bool;
 
     using SourceLocation = std::source_location;
-    template <typename T>
+
+    template<typename T>
     using Scope = std::unique_ptr<T>;
 
-    template <typename T>
+    template<typename T>
     using Ref = std::shared_ptr<T>;
 
-    template <typename T>
-    using WeakRef = std::weak_ptr<T>;
+    template<typename T>
+    using Ticket = std::weak_ptr<T>;
+    
+    //wrapper function for std::make_unique
+    template<typename T, typename... Args>
+    constexpr Scope<T> CreateScope(Args&& ... args)
+    {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
+
+    //wrapper function for std::make_shared
+    template<typename T, typename... Args>
+    constexpr Ref<T> CreateRef(Args&& ... args)
+    {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
+
+    template<typename T>
+    constexpr Ticket<T> CreateTicket(const Ref<T>& ptr)
+    {
+        return TicketPtr<T>(ptr);
+    }
 }

@@ -44,7 +44,7 @@ namespace NGIN::Meta::Reflection
     EnumRegistrar<EnumType>::EnumRegistrar()
     {
         enumData.name = TypeName<EnumType>::Class();
-        // Initialize the enumData structure here if needed
+        // Init the enumData structure here if needed
     }
 
     template<typename EnumType>
