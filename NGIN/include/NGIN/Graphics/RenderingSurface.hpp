@@ -10,16 +10,29 @@
 
 namespace NGIN::Graphics
 {
-    class RenderingSurface 
+    /// @class RenderingSurface
+    /// @brief Interface for a rendering target surface.
+    class NGIN_API RenderingSurface
     {
     public:
-        NGIN_API RenderingSurface() = default;
-        NGIN_API RenderingSurface(const RenderingSurface& other) = default;
-        NGIN_API RenderingSurface& operator=(const RenderingSurface& other) = default;
-        NGIN_API RenderingSurface(RenderingSurface&& other) = default;
-        NGIN_API RenderingSurface& operator=(RenderingSurface&& other) = default;
-    protected:
-    private:
+        /// @brief Virtual destructor to ensure proper cleanup for derived classes.
+        virtual ~RenderingSurface() = default;
+
+        /// @brief Initializes the surface.
+        /// @return true if initialization succeeded, false otherwise.
+        virtual bool Init() = 0;
+
+        /// @brief Shutdown the surface, releasing any resources.
+        virtual void Shutdown() = 0;
+
+        /// @brief Retrieves the native handle of the surface.
+        /// @return A pointer to the native surface handle.
+        [[nodiscard]] virtual void* GetNativeHandle() const = 0;
+
+        /// @brief Gets the dimensions of the surface.
+        /// @param[out] width The width of the surface.
+        /// @param[out] height The height of the surface.
+        virtual void GetDimensions(int& width, int& height) const = 0;
     };
 }
 
