@@ -1,19 +1,19 @@
 #pragma once
 
 #include <NGIN/Defines.hpp>
-#include <NGIN/Graphics/GraphicsBackend.hpp>
+#include <NGIN/Graphics/GraphicsAPI.hpp>
 
 #include <SDL2/SDL.h>
 #include <string>
 
 namespace NGIN::Graphics
 {
-
     struct WindowSettings
     {
         String title = "NGIN";
         Int32 width = 1280;
         Int32 height = 720;
+        UInt32 overrideFlags = 0;
         Bool fullscreen = false;
         Bool resizable = false;
         Bool borderless = false;
@@ -26,7 +26,7 @@ namespace NGIN::Graphics
 
         NGIN_API ~Window() = default;
 
-        NGIN_API Bool Init(GraphicsAPI backend, WindowSettings& settings);
+        NGIN_API Bool Init(WindowSettings& settings);
 
         NGIN_API Void Shutdown();
 

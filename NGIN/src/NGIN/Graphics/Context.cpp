@@ -9,23 +9,42 @@ namespace NGIN::Graphics
 {
 
 
-    Context::~Context()
+    bool Context::Init(GraphicsAPI backend, WindowSettings* windowSettings)
     {
-        if (renderer)
-            delete renderer;
-    }
+        if (!windowSettings)
+        {
+            NGIN_ERROR("Window settings is nullptr");
+            return false;
+        };
 
-    bool Context::Init(GraphicsAPI backend, Window* window)
-    {
-        this->window = window;
+        switch (backend)
+        {
+            case GraphicsAPI::OPEN_GL:
+                windowSettings->overrideFlags |= SDL_WINDOW_OPENGL;
+                break;
+            case GraphicsAPI::VULKAN:
+                windowSettings->overrideFlags |= SDL_WINDOW_VULKAN;
+                break;
+            case GraphicsAPI::D3D12:
+            default:
+                NGIN_ERROR("Invalid graphics API");
+                return false;
+        }
 
+        window = CreateRef<Window>();
+
+        if (!window->Init(*windowSettings))
+        {
+            NGIN_ERROR("Failed to initialize window");
+            return false;
+        }
 
         switch (backend)
         {
             case GraphicsAPI::OPEN_GL:
             case GraphicsAPI::D3D12:
             case GraphicsAPI::VULKAN:
-                renderer = new Vulkan::Renderer(*window);
+                renderer = CreateRef<Vulkan::Renderer>(window);
                 break;
 
 
@@ -37,10 +56,9 @@ namespace NGIN::Graphics
 
     void Context::Shutdown()
     {
-        if (renderer)
-            delete renderer;
-        renderer = nullptr;
-        window = nullptr;
+        //Release all resources
+        renderer.reset();
+        window.reset();
     }
 
 }

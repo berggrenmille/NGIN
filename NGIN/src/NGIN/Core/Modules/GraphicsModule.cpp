@@ -20,8 +20,7 @@ namespace NGIN::Core::Modules
 
     void GraphicsModule::OnInit(Engine* enginePtr)
     {
-        this->engine = enginePtr;
-        this->window = new Graphics::Window();
+        engine = enginePtr;
 
         Graphics::WindowSettings settings {};
         settings.borderless = false;
@@ -31,10 +30,9 @@ namespace NGIN::Core::Modules
         settings.height = 720;
         settings.title = "NGIN";
 
-        window->Init(Graphics::GraphicsAPI::VULKAN, settings);
 
         this->context = new Graphics::Context();
-        context->Init(Graphics::GraphicsAPI::VULKAN, window);
+        context->Init(Graphics::GraphicsAPI::VULKAN, &settings);
     }
 
 

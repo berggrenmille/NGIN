@@ -20,14 +20,13 @@ namespace NGIN::Core::Modules
     public:
 
         using Dependencies = Meta::TypeWrapper<SDLModule>;
-        
+
     protected:
         NGIN_API void OnInit(Engine* engine) override;
 
 
     private:
         Engine* engine = nullptr;
-        Graphics::Window* window = nullptr;
         Graphics::Context* context = nullptr;
     };
 }

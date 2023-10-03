@@ -1,7 +1,7 @@
 #pragma once
 
 #include <NGIN/Defines.hpp>
-#include "GraphicsBackend.hpp"
+#include "GraphicsAPI.hpp"
 #include <NGIN/Graphics/Window.hpp>
 
 namespace NGIN::Graphics
@@ -15,21 +15,21 @@ namespace NGIN::Graphics
         Context() = default;
 
 
-        ~Context();
+        ~Context() = default;
 
-        bool Init(GraphicsAPI backend, Window* windowSettings);
+        bool Init(GraphicsAPI backend, WindowSettings* windowSettings);
 
         void Shutdown();
 
         void Tick();
 
 
-        [[nodiscard]] inline Window* GetWindow() const { return window; }
+        [[nodiscard]] inline Ref<Window> GetWindow() const { return window; }
 
-        [[nodiscard]] inline Renderer* GetRenderer() const { return renderer; }
+        [[nodiscard]] inline Ref<Renderer> GetRenderer() const { return renderer; }
 
     private:
-        Renderer* renderer = nullptr;
-        Window* window = nullptr;
+        Ref<Renderer> renderer {nullptr};
+        Ref<Window> window {nullptr};
     };
 }

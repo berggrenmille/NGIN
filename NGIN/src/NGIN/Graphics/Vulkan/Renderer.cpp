@@ -8,7 +8,7 @@
 
 namespace NGIN::Graphics::Vulkan
 {
-    Renderer::Renderer(Window& window)
+    Renderer::Renderer(Ref <Window> window)
             : window(window)
     {
         // Init other members as necessary
@@ -95,9 +95,9 @@ namespace NGIN::Graphics::Vulkan
 
         // Get the required extensions from SDL and add them to the createInfo
         uint32_t extensionCount = 0;
-        SDL_Vulkan_GetInstanceExtensions(window.GetSDLWindow(), &extensionCount, nullptr);
+        SDL_Vulkan_GetInstanceExtensions(window->GetSDLWindow(), &extensionCount, nullptr);
         std::vector<const char*> extensions(extensionCount);
-        SDL_Vulkan_GetInstanceExtensions(window.GetSDLWindow(), &extensionCount, extensions.data());
+        SDL_Vulkan_GetInstanceExtensions(window->GetSDLWindow(), &extensionCount, extensions.data());
 #if defined(NGIN_DEBUG)
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 #endif
@@ -391,7 +391,7 @@ namespace NGIN::Graphics::Vulkan
         VkSurfaceKHR tempSurface;
 
         // Attempt to create a Vulkan surface using SDL
-        if (!SDL_Vulkan_CreateSurface(window.GetSDLWindow(), static_cast<VkInstance>(vkInstance), &tempSurface))
+        if (!SDL_Vulkan_CreateSurface(window->GetSDLWindow(), static_cast<VkInstance>(vkInstance), &tempSurface))
         {
             NGIN_ERROR("Failed to create Vulkan surface. SDL: {}", SDL_GetError());
             return false;

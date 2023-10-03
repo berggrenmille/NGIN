@@ -5,24 +5,16 @@
 
 namespace NGIN::Graphics
 {
-    bool Window::Init(GraphicsAPI backend, WindowSettings &settings)
+    bool Window::Init(WindowSettings& settings)
     {
         if (isInitialized)
             return true;
         UInt32 flags = 0; // Add base flags here
-        switch (backend)
-        {
-            case GraphicsAPI::VULKAN:
-                flags |= SDL_WINDOW_VULKAN;
-                break;
-            case GraphicsAPI::OPEN_GL:
-                flags |= SDL_WINDOW_OPENGL;
-                break;
-            default:
-                NGIN_ERROR("Graphics API not implemented!");
-                return false;
-        }
-        flags |= SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN;
+
+        flags |= settings.borderless ? SDL_WINDOW_BORDERLESS : 0;
+        flags |= settings.fullscreen ? SDL_WINDOW_FULLSCREEN : 0;
+        flags |= settings.resizable ? SDL_WINDOW_RESIZABLE : 0;
+        flags |= settings.overrideFlags;
         window = SDL_CreateWindow(settings.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   settings.width, settings.height, flags);
 
@@ -78,7 +70,7 @@ namespace NGIN::Graphics
         return 0;
     }
 
-    SDL_Window *Window::GetSDLWindow() const
+    SDL_Window* Window::GetSDLWindow() const
     {
         return window;
     }
