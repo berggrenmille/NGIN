@@ -3,29 +3,49 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # Include Dependencies 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeDependencies.cmake)
 
-# Add all your source files here
-add_library(NGIN SHARED
+set(NGIN_CORE_SRC
         "src/NGIN/App.cpp"
         "src/NGIN/Config.cpp"
+        "src/NGIN/Core/Engine.cpp"
+        "src/NGIN/Core/Modules/GraphicsModule.cpp"
+        "src/NGIN/Core/Modules/SDLModule.cpp"
+)
+
+set(NGIN_GRAPHICS_SRC
+        "src/NGIN/Graphics/Vulkan/Renderer.cpp"
+        "src/NGIN/Graphics/Window.cpp"
+        "src/NGIN/Graphics/Context.cpp"
+)
+
+set(NGIN_LOGGING_SRC
+        "src/NGIN/Logging/ConsoleSink.cpp"
+        "src/NGIN/Logging/AsyncLogger.cpp"
+        "src/NGIN/Logging/FileSink.cpp"
+        "src/NGIN/Logging.cpp"
+        "src/NGIN/Logging/BaseLogger.cpp"
+)
+
+set(NGIN_MEMORY_SRC
         "src/NGIN/Memory/LinearAllocator.cpp"
         "src/NGIN/Memory/StackAllocator.cpp"
         "src/NGIN/Memory/FreeListAllocator.cpp"
         "src/NGIN/Memory/Mallocator.cpp"
-        "src/Precompiled/PCH.cpp"
-        "src/NGIN/Logging/ConsoleSink.cpp"
-        "src/NGIN/Logging/AsyncLogger.cpp"
-        "src/NGIN/Logging/FileSink.cpp"
-        "src/NGIN/Graphics/Vulkan/Renderer.cpp"
-        "src/NGIN/Graphics/Window.cpp"
-        "src/NGIN/Logging.cpp"
-        "src/NGIN/Logging/BaseLogger.cpp"
-        "src/Utils/JSON.cpp"
+)
+
+set(NGIN_META_SRC
         "src/NGIN/Meta/UUID.cpp"
         "src/NGIN/Meta/Reflection/Registry.cpp"
-        "src/NGIN/Graphics/Context.cpp"
-        "src/NGIN/Core/Engine.cpp"
-        "src/NGIN/Core/Modules/SDLModule.cpp"
-        "src/NGIN/Core/Modules/GraphicsModule.cpp"
+)
+
+
+# Add all your source files here
+add_library(NGIN SHARED
+        ${NGIN_CORE_SRC}
+        ${NGIN_GRAPHICS_SRC}
+        ${NGIN_LOGGING_SRC}
+        ${NGIN_MEMORY_SRC}
+        ${NGIN_META_SRC}
+        "src/Precompiled/PCH.cpp"
 )
 
 
