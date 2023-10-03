@@ -12,10 +12,6 @@ namespace NGIN::Graphics
     class NGIN_API Context
     {
     public:
-        Context() = default;
-
-
-        ~Context() = default;
 
         bool Init(GraphicsAPI backend, WindowSettings* windowSettings);
 

@@ -31,6 +31,7 @@ namespace NGIN
 {
     // TODO: Add documentation
 
+
     using UInt64 = std::uint64_t;
     using UInt32 = std::uint32_t;
     using UInt16 = std::uint16_t;
@@ -77,21 +78,22 @@ namespace NGIN
 
     template<typename T>
     using Ticket = std::weak_ptr<T>;
-    
-    //wrapper function for std::make_unique
+
+    /// @brief Constructs an object and creates a Scope.
     template<typename T, typename... Args>
     constexpr Scope<T> CreateScope(Args&& ... args)
     {
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-    //wrapper function for std::make_shared
+    /// @brief Constructs an object and creates a Ref.
     template<typename T, typename... Args>
     constexpr Ref<T> CreateRef(Args&& ... args)
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
 
+    /// @brief Creates a Ticket from a Ref.
     template<typename T>
     constexpr Ticket<T> CreateTicket(const Ref<T>& ptr)
     {
