@@ -1,8 +1,11 @@
 #pragma once
 
-#include <NGIN/Defines.hpp>
-#include <NGIN/Core/Module.hpp>
-#include <NGIN/Graphics/Window.hpp>
+#include "NGIN/Defines.hpp"
+#include "NGIN/Core/Module.hpp"
+#include "NGIN/Graphics/Window.hpp"
+
+#include "SDL2/SDL.h"
+
 
 namespace NGIN::Core
 {
@@ -15,8 +18,6 @@ namespace NGIN::Core
         NGIN_API void OnPreTick(F64 deltaTime) override;
 
         NGIN_API void OnTick(F64 deltaTime) override;
-
-        NGIN_API void OnPostTick(F64 deltaTime) override;
 
         NGIN_API void OnShutdown() override;
 

@@ -1,8 +1,8 @@
 #include <Precompiled/PCH.h>
 #include <NGIN/Graphics/Context.hpp>
 #include <NGIN/Graphics/Renderer.hpp>
-#include <NGIN/Graphics/Vulkan/Renderer.hpp>
-#include <NGIN/Graphics/Window.hpp>
+
+#include <NGIN/Graphics/Platform/SDL/SDLWindow.hpp>
 #include <NGIN/Logging.hpp>
 
 namespace NGIN::Graphics
@@ -19,19 +19,21 @@ namespace NGIN::Graphics
 
         switch (backend)
         {
-            case GraphicsAPI::OPEN_GL:
-                windowSettings->overrideFlags |= SDL_WINDOW_OPENGL;
+            case GraphicsAPI::OPENGL:
+                windowSettings->api = GraphicsAPI::OPENGL;
                 break;
             case GraphicsAPI::VULKAN:
-                windowSettings->overrideFlags |= SDL_WINDOW_VULKAN;
+                windowSettings->api = GraphicsAPI::VULKAN;
                 break;
-            case GraphicsAPI::D3D12:
+            case GraphicsAPI::DX12:
+                windowSettings->api = GraphicsAPI::DX12;
+                break;
             default:
                 NGIN_ERROR("Invalid graphics API");
                 return false;
         }
 
-        window = CreateRef<Window>();
+        window = Ref<Window>(new SDLWindow());
 
         if (!window->Init(*windowSettings))
         {
@@ -41,17 +43,18 @@ namespace NGIN::Graphics
 
         switch (backend)
         {
-            case GraphicsAPI::OPEN_GL:
-            case GraphicsAPI::D3D12:
+            case GraphicsAPI::OPENGL:
+            case GraphicsAPI::DX12:
             case GraphicsAPI::VULKAN:
-                renderer = CreateRef<Vulkan::Renderer>(window);
+                //renderer = CreateRef<Vulkan::Renderer>(window);
                 break;
 
 
             default:
                 break;
         }
-        return renderer->Init();
+        return true;
+        // return renderer->Init();
     }
 
     void Context::Shutdown()

@@ -11,60 +11,27 @@
 #include <NGIN/Meta/TypeName.hpp>
 #include <NGIN/Graphics/Context.hpp>
 #include <NGIN/Core/Modules/GraphicsModule.hpp>
-#include <SDL2/SDL.h>
+
 
 #include <thread>
 
-namespace NGIN
+// Declare client application's main function
+extern int NGINMain(int argc, char* argv[]);
+
+
+int main(int argc, char* argv[])
 {
 
-    /**
-     * @brief Template function to initialize an NGIN application.
-     *
-     * @tparam T A subclass of App to be initialized.
-     * @param argc The argument count from the command line.
-     * @param argv The argument values from the command line.
-     * @return int 0 if initialization was successful, 1 otherwise.
-     */
-    template<NGIN::is_app T>
-    int Init(int argc, char* argv[])
-    {
+    // Initialize Global subsystems
+    NGIN::Logging::Init();
+    NGIN::Config::Init();
+//  NGIN::VFS::Init();
 
-        // Init Logging
-        std::cout
-                << "\033]0;"
-                << "NGIN"
-                << "\007"
-                << std::endl;
-        Logging::Init();
-
-        Config::Init();
-
-        NGIN_WARNING("Initializing MTETSTTST {}", Config::GetRawValue("TEST"));
-
-        // Init SDL and log the initialization process
-        NGIN_WARNING("Initializing SDL... ");
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
-        {
-            // NGIN_ERROR("SDL failed to initialize: {}", SDL_GetError());
-
-            return 1;
-        }
-        NGIN_INFO("SDL initialized");
-
-
-        NGIN::Core::Engine engine = NGIN::Core::Engine();
-        engine.AddModule<NGIN::Core::Modules::GraphicsModule>();
-
-
-        engine.Tick();
-
-
-        // Init App
-        NGIN_WARNING("Initializing App...");
-        std::cout << "Initializing App..." << std::endl;
-
-
-        return 0;
-    }
+    // Call client application's main function
+    return NGINMain(argc, argv);
 }
+
+// Undefined main to avoid conflicts with SDL
+#undef main
+#define main NGINMain
+

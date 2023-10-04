@@ -1,7 +1,7 @@
 #pragma once
 
-#include <NGIN/Core.h>
-#include <NGIN/Graphics/Renderer.hpp>
+#include "NGIN/Core.h"
+#include "NGIN/Graphics/Renderer.hpp"
 #include <vulkan/vulkan.hpp>
 
 namespace NGIN::Graphics
@@ -22,7 +22,7 @@ namespace NGIN::Graphics::Vulkan
     class Renderer final : public ::NGIN::Graphics::Renderer
     {
     public:
-        NGIN_API explicit Renderer(Ref<Window> window);
+        NGIN_API explicit Renderer(Ref <Window> window);
 
         NGIN_API ~Renderer() override;
 
@@ -48,7 +48,7 @@ namespace NGIN::Graphics::Vulkan
 
         [[nodiscard]] int RateDeviceSuitability(const vk::PhysicalDevice& device) const;
 
-        Ref<Window> window;
+        Ref <Window> window;
         vk::Instance vkInstance;
         vk::SurfaceKHR vkSurface;
         vk::PhysicalDevice vkPhysicalDevice;

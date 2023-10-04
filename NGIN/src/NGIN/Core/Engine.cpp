@@ -25,9 +25,10 @@ namespace NGIN::Core
             }
             delta = timer.ElapsedSeconds();
         }
-        for (auto& module: moduleVector)
+        //Shutdown modules in reverse order
+        for (auto it = moduleVector.rbegin(); it != moduleVector.rend(); ++it)
         {
-            module->OnShutdown();
+            (*it)->OnShutdown();
         }
         isRunning = false;
     }

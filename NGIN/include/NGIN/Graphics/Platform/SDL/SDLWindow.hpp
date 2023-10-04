@@ -4,11 +4,11 @@
 
 #pragma once
 // NGIN Include(s)
-#include <NGIN/Defines.hpp>
-#include <NGIN/Graphics/Window.hpp>
+#include "NGIN/Defines.hpp"
+#include "NGIN/Graphics/Window.hpp"
 // STL Include(s)
 // Other Include(s)
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 
 namespace NGIN::Graphics
 {
@@ -38,6 +38,10 @@ namespace NGIN::Graphics
         /// @param[out] width The width of the SDL window.
         /// @param[out] height The height of the SDL window.
         void GetDimensions(int& outWidth, int& outHeight) const override;
+
+        void Resize(UInt32 width, UInt32 height) override;
+
+        Bool IsOpen() const override;
 
     private:
         void ShutdownImpl();

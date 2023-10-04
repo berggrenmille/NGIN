@@ -5,7 +5,7 @@
 //Precompiled include
 #include <Precompiled/PCH.h>
 #include <NGIN/Core/Modules/GraphicsModule.hpp>
-#include <NGIN/Core/Modules/SDLModule.hpp>
+#include <NGIN/Core/Platform/SDL/SDLModule.hpp>
 
 #include <NGIN/Core/Engine.hpp>
 
@@ -14,7 +14,7 @@
 // STL Include(s)
 // Other Include(s)
 
-namespace NGIN::Core::Modules
+namespace NGIN::Core
 {
 
 

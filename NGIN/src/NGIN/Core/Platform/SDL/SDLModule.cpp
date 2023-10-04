@@ -1,7 +1,8 @@
-#include <NGIN/Core/Modules/SDLModule.hpp>
+#include <NGIN/Core/Platform/SDL/SDLModule.hpp>
 #include <NGIN/Core/Events/Quit.hpp>
 #include <NGIN/Core/Engine.hpp>
 #include <NGIN/Core/Events/WindowEvents.hpp>
+
 
 namespace NGIN::Core
 {
@@ -10,6 +11,7 @@ namespace NGIN::Core
     void SDLModule::OnInit(Engine* engine)
     {
         this->engine = engine;
+        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     }
 
     void SDLModule::OnPreTick(F64 deltaTime)
@@ -42,11 +44,10 @@ namespace NGIN::Core
 
     }
 
-    void SDLModule::OnPostTick(F64 deltaTime) {}
 
     void SDLModule::OnShutdown()
     {
-
+        SDL_Quit();
     }
 
     void SDLModule::HandleSdlWindowEvent(const SDL_Event& event)

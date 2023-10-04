@@ -3,9 +3,9 @@
 //
 
 //Precompiled include
-#include <Precompiled/PCH.h>
+#include "Precompiled/PCH.h"
 // NGIN Include(s)
-#include <NGIN/Graphics/SDLWindow.hpp>
+#include "NGIN/Graphics/Platform/SDL/SDLWindow.hpp"
 // STL Include(s)
 // Other Include(s)
 
@@ -68,5 +68,15 @@ namespace NGIN::Graphics
     {
         if (!sdlWindow)
             return;
+    }
+
+    void SDLWindow::Resize(UInt32 width, UInt32 height)
+    {
+        SDL_SetWindowSize(sdlWindow, static_cast<Int32>(width), static_cast<Int32>(height));
+    }
+
+    Bool SDLWindow::IsOpen() const
+    {
+        return sdlWindow != nullptr;
     }
 }

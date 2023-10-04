@@ -1,14 +1,14 @@
-#include <Precompiled/PCH.h>
-#include <NGIN/Graphics/Vulkan/Renderer.hpp>
-#include <NGIN/Graphics/Window.hpp>
-#include <SDL2/SDL_vulkan.h>
+#include "Precompiled/PCH.h"
+#include "NGIN/Graphics/Platform/Vulkan/Renderer.hpp"
+#include "NGIN/Graphics/Window.hpp"
+#include "SDL2/SDL_vulkan.h"
 
-#include <NGIN/Logging.hpp>
+#include "NGIN/Logging.hpp"
 
 
 namespace NGIN::Graphics::Vulkan
 {
-    Renderer::Renderer(Ref <Window> window)
+    Renderer::Renderer(Ref<Window> window)
             : window(window)
     {
         // Init other members as necessary
