@@ -1,14 +1,15 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
 
 namespace NGIN::Graphics
 {
+    /// @brief Enumerates the supported graphics APIs.
     enum class GraphicsAPI : UInt8
     {
         NONE = 0,
         VULKAN,
-        OPEN_GL,
-        D3D12
-        //... other backends
+        OPENGL,
+        DX12
     };
 } // namespace NGIN::Graphics

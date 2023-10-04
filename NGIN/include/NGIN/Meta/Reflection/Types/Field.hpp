@@ -11,5 +11,6 @@ namespace NGIN::Meta::Reflection::Types
         std::string name;
         std::string type;
         size_t offset;
+
     };
 }

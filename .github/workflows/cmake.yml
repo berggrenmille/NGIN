@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 
- # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
@@ -15,29 +15,39 @@ env:
   BUILD_PRESET: buildTestsRelease
   TEST_PRESET: default-release
 
-jobs:   
+jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Install Vulkan SDK
-      uses: humbletim/install-vulkan-sdk@v1.1.1
-      with:
-        version: latest
-        cache: true
-        quiet: true
-        
-    - name: Setup CMake, Ninja, and GCC
-      uses: lukka/get-cmake@latest
+      - uses: actions/checkout@v3
 
-    - name: Configure CMake
-      run: cmake -S . --preset ${{env.CONFIG_PRESET}}
+      - name: Make Code Badge
+        uses: DeathSy/GHA-LoC-Badge@1.0.3
+        id: locBadge
+        with:
+          debug: true
+          directory: ./
+          badge: ./output/locBadge.svg
+          patterns: '*.hpp|*.h|*.cpp|*.c'  # Patterns in the format of a '.gitignore' file, separated by pipes.
+          ignore: '.github'
 
-    - name: Build
-      run: cmake --build --preset ${{env.BUILD_PRESET}}
+      - name: Install Vulkan SDK
+        uses: humbletim/install-vulkan-sdk@v1.1.1
+        with:
+          version: latest
+          cache: true
+          quiet: true
 
-    - name: Test
-      run: ctest --preset ${{env.TEST_PRESET}}
+      - name: Setup CMake, Ninja, and GCC
+        uses: lukka/get-cmake@latest
+
+      - name: Configure CMake
+        run: cmake -S . --preset ${{env.CONFIG_PRESET}}
+
+      - name: Build
+        run: cmake --build --preset ${{env.BUILD_PRESET}}
+
+      - name: Test
+        run: ctest --preset ${{env.TEST_PRESET}}
 

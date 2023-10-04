@@ -1,89 +1,174 @@
 #include <gtest/gtest.h>
 #include <NGIN/Core/EventBus.hpp>
+#include <thread>
+#include <chrono>
 
 using namespace NGIN::Core;
 
-class EventBusTest : public ::testing::Test
+// Define a simple event structure for testing
+struct TestEvent
 {
-protected:
-	EventBus bus;
-
-	// Structure for a mock event.
-	struct TestEvent
-	{
-		int data;
-	};
-
-	// This will serve as a global event handler.
-	static void GlobalHandler(TestEvent &event)
-	{
-		event.data += 1;
-	}
-
-	// A mock class with a member event handler.
-	class MockListener
-	{
-	public:
-		int value = 0;
-
-		void MemberHandler(TestEvent &event)
-		{
-			event.data += 2;
-			value += 2;
-		}
-	};
+    int value;
 };
 
-TEST_F(EventBusTest, GlobalSubscription)
+struct AnotherTestEvent
 {
-	TestEvent e{0};
-	bus.Subscribe<TestEvent>(GlobalHandler);
-	bus.Publish(e);
-	EXPECT_EQ(e.data, 1);
+    int value;
+};
+
+// Define a class to test member function subscriptions
+class DummyClass
+{
+public:
+    void OnTestEvent(const TestEvent& event)
+    {
+        receivedValue = event.value;
+    }
+
+    int receivedValue = 0;
+};
+
+// Define a static function for testing
+static void StaticTestEventFunction(const TestEvent& event, int& storage)
+{
+    storage = event.value;
 }
 
-TEST_F(EventBusTest, MemberFunctionSubscription)
+TEST(EventBusTest, SubscribeAndPublish)
 {
-	TestEvent e{0};
-	MockListener listener;
-	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
-	bus.Publish(e);
-	EXPECT_EQ(e.data, 2);
-	EXPECT_EQ(listener.value, 2);
+    EventBus bus;
+    int observedValue = 0;
+
+    bus.Subscribe<TestEvent>([&](const TestEvent& event)
+                             {
+                                 observedValue = event.value;
+                             });
+
+    TestEvent event {42};
+    bus.Publish(event);
+
+    ASSERT_EQ(observedValue, 42);
 }
 
-TEST_F(EventBusTest, MultipleSubscriptions)
+TEST(EventBusTest, MultipleSubscribers)
 {
-	TestEvent e{0};
-	MockListener listener;
-	bus.Subscribe<TestEvent>(GlobalHandler);
-	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
-	bus.Publish(e);
-	EXPECT_EQ(e.data, 3); // 1 from GlobalHandler and 2 from MemberHandler
-	EXPECT_EQ(listener.value, 2);
+    EventBus bus;
+    int sum = 0;
+
+    bus.Subscribe<TestEvent>([&](const TestEvent& event)
+                             {
+                                 sum += event.value;
+                             });
+
+    bus.Subscribe<TestEvent>([&](const TestEvent& event)
+                             {
+                                 sum += event.value;
+                             });
+
+    TestEvent event {10};
+    bus.Publish(event);
+
+    ASSERT_EQ(sum, 20);
 }
 
-// Test that checks if the event bus is able to handle events with no subscribers
-TEST_F(EventBusTest, ZeroSubscriptionsEvents)
+TEST(EventBusTest, MultipleEventTypes)
 {
-	TestEvent e{0};
-	bus.Publish(e);
-	EXPECT_EQ(e.data, 0);
+    EventBus bus;
+    int testEventSum = 0;
+    int anotherTestEventSum = 0;
+
+    bus.Subscribe<TestEvent>([&](const TestEvent& event)
+                             {
+                                 testEventSum += event.value;
+                             });
+
+    bus.Subscribe<AnotherTestEvent>([&](const AnotherTestEvent& event)
+                                    {
+                                        anotherTestEventSum += event.value;
+                                    });
+
+    TestEvent testEvent {5};
+    AnotherTestEvent anotherTestEvent {10};
+
+    bus.Publish(testEvent);
+    bus.Publish(anotherTestEvent);
+
+    ASSERT_EQ(testEventSum, 5);
+    ASSERT_EQ(anotherTestEventSum, 10);
 }
 
-// Test that checks if the event bus is able to handle multiple events
-TEST_F(EventBusTest, MultipleSubscriptionsAndEvents)
+TEST(EventBusTest, UnsubscribedEvents)
 {
-	TestEvent e1{0};
-	TestEvent e2{0};
-	MockListener listener;
-	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
-	bus.Subscribe<TestEvent>(&listener, &MockListener::MemberHandler);
-	bus.Publish(e1);
-	bus.Publish(e2);
-	EXPECT_EQ(e1.data, 4);
-	EXPECT_EQ(e2.data, 4);
-	EXPECT_EQ(listener.value, 8);
+    EventBus bus;
+    int observedValue = 0;
+
+    // No subscription for TestEvent
+    TestEvent event {42};
+    bus.Publish(event);
+
+    ASSERT_EQ(observedValue, 0);
 }
 
-// Additional tests can be added here to cover more scenarios.
+TEST(EventBusTest, StaticFunction)
+{
+    EventBus bus;
+    int observedValue = 0;
+
+    bus.Subscribe<TestEvent>([&](const TestEvent& event)
+                             {
+                                 StaticTestEventFunction(event, observedValue);
+                             });
+
+    TestEvent event {20};
+    bus.Publish(event);
+
+    ASSERT_EQ(observedValue, 20);
+}
+
+TEST(EventBusTest, MemberFunction)
+{
+    EventBus bus;
+    DummyClass dummy;
+
+    bus.Subscribe<TestEvent>(&dummy, &DummyClass::OnTestEvent);
+
+    TestEvent event {15};
+    bus.Publish(event);
+
+    ASSERT_EQ(dummy.receivedValue, 15);
+}
+
+// Edge Case: Empty EventBus
+TEST(EventBusTest, EmptyEventBus)
+{
+    EventBus bus;
+    int observedValue = 0;
+
+    // No subscription or publishing
+    ASSERT_EQ(observedValue, 0);
+}
+
+// Test Queued Events
+TEST(EventBusTest, QueuedEvents)
+{
+    EventBus bus;
+    int sum = 0;
+
+    bus.Subscribe<TestEvent>([&](const TestEvent& event)
+                             {
+                                 sum += event.value;
+                             });
+
+    TestEvent event {5};
+    bus.Publish(event, EventMode::Queued);
+    ASSERT_EQ(sum, 0); // Should still be 0 because event is queued
+    bus.Publish(event, EventMode::Queued);
+    
+    bus.FlushEvents();
+    ASSERT_EQ(sum, 10); // Should be 10 because event was flushed
+
+}
+
+// Add more edge cases as necessary, like handling of invalid arguments, etc.
+
+

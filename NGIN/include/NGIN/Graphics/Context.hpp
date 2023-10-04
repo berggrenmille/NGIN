@@ -1,30 +1,31 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
-#include "GraphicsBackend.hpp"
+#include "GraphicsAPI.hpp"
 #include <NGIN/Graphics/Window.hpp>
+
 namespace NGIN::Graphics
 {
-	class Renderer;
+    class Renderer;
 
 
-	class NGIN_API Context
-	{
-	public:
-		Context(GraphicsAPI backend, WindowSettings* windowSettings, const SourceLocation& srcLocation = SourceLocation::current());
-		~Context();
+    class NGIN_API Context
+    {
+    public:
 
-		bool Init(GraphicsAPI backend, WindowSettings* windowSettings, const SourceLocation& srcLocation = SourceLocation::current());
-		void Shutdown();
+        bool Init(GraphicsAPI backend, WindowConfig* windowSettings);
 
-		void Tick();
+        void Shutdown();
 
+        void Tick();
 
 
-		inline Window* GetWindow() const { return window; }
-		inline Renderer* GetRenderer() const { return renderer; }
+        [[nodiscard]] inline Ref<Window> GetWindow() const { return window; }
 
-	private:
-		Renderer* renderer = nullptr;
-		Window* window = nullptr;
-	};
+        [[nodiscard]] inline Ref<Renderer> GetRenderer() const { return renderer; }
+
+    private:
+        Ref<Renderer> renderer {nullptr};
+        Ref<Window> window {nullptr};
+    };
 }

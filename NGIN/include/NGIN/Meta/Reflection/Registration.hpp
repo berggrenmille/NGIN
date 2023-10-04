@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClassRegistrar.hpp"
+#include "EnumRegistrar.hpp"
 
 #if defined(__clang__)
 #define NGIN_DECLARE_SHARED_CTOR __attribute__((__constructor__))
@@ -31,9 +32,15 @@
 
 namespace NGIN::Meta::Reflection
 {
-    template <typename T>
+    template<typename T>
     static ClassRegistrar<T> RegisterClass()
     {
         return ClassRegistrar<T>();
+    }
+
+    template<typename T>
+    static EnumRegistrar<T> RegisterEnum()
+    {
+        return EnumRegistrar<T>();
     }
 } // namespace NGIN::Meta::Reflection

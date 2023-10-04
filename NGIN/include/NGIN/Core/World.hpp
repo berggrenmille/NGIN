@@ -1,5 +1,7 @@
 #pragma once
 
+#include <NGIN/Defines.hpp>
+
 namespace NGIN::Core
 {
     //Contains all the data for the game world, including ECS, WorldData, scenegraph, etc.
@@ -7,10 +9,12 @@ namespace NGIN::Core
     {
     public:
         World();
+
         ~World();
 
 
     private:
+
 
     };
 }

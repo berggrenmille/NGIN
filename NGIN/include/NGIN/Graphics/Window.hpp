@@ -1,44 +1,44 @@
 #pragma once
-#include <NGIN/Defines.hpp>
-#include <NGIN/Graphics/GraphicsBackend.hpp>
 
-#include <SDL2/SDL.h>
+#include <NGIN/Defines.hpp>
+#include <NGIN/Graphics/GraphicsAPI.hpp>
+#include <NGIN/Graphics/Surface.hpp>
+
 #include <string>
+#include <vector>
 
 namespace NGIN::Graphics
 {
+    struct WindowConfig
+    {
+        String title = "NGIN";
+        Int32 width = 1280;
+        Int32 height = 720;
+        GraphicsAPI api = GraphicsAPI::VULKAN;
+        Bool fullscreen = false;
+        Bool resizable = false;
+        Bool borderless = false;
+    };
 
-	struct WindowSettings
-	{
-		String title = "NGIN";
-		Int32 width = 1280;
-		Int32 height = 720;
-		Bool fullscreen = false;
-		Bool resizable = false;
-		Bool borderless = false;
-	};
+    class Window : public Surface
+    {
+    public:
+        NGIN_API Window() = default;
 
-	class Window
-	{
-	public:
-		NGIN_API Window() = default;
-		NGIN_API ~Window() = default;
+        NGIN_API  ~Window() override = default;
 
-		NGIN_API Bool Init(GraphicsAPI backend, WindowSettings& settings);
+        [[nodiscard]] NGIN_API void* GetNativeHandle() const override = 0;
 
-		NGIN_API Void Shutdown();
+        NGIN_API void GetDimensions(int& width, int& height) const override = 0;
 
-		NGIN_API Void PollEvents();
+        NGIN_API virtual Bool Init(WindowConfig& config) = 0;
 
-		NGIN_API Bool IsOpen() const;
+        NGIN_API virtual Void Shutdown() = 0;
 
-		NGIN_API Int32 GetWidth() const;
-		NGIN_API Int32 GetHeight() const;
+        NGIN_API virtual Void Resize(UInt32 width, UInt32 height) = 0;
 
-		NGIN_API SDL_Window* GetSDLWindow() const;
+        [[nodiscard]] NGIN_API virtual Bool IsOpen() const = 0;
 
-	private:
-		SDL_Window* window = nullptr;
-		bool isInitialized = false;
-	};
+
+    };
 }

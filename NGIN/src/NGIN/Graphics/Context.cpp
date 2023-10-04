@@ -1,49 +1,67 @@
 #include <Precompiled/PCH.h>
 #include <NGIN/Graphics/Context.hpp>
 #include <NGIN/Graphics/Renderer.hpp>
-#include <NGIN/Graphics/Vulkan/VulkanRenderer.hpp>
-#include <NGIN/Graphics/Window.hpp>
+
+#include <NGIN/Graphics/Platform/SDL/SDLWindow.hpp>
 #include <NGIN/Logging.hpp>
 
 namespace NGIN::Graphics
 {
 
 
-    Context::Context(GraphicsAPI backend, WindowSettings* windowSettings, const SourceLocation& srcLocation)
+    bool Context::Init(GraphicsAPI backend, WindowConfig* windowSettings)
     {
         if (!windowSettings)
         {
-            NGIN_LOG_SRC(srcLocation, NGIN::Logging::Level::Warning, "Window settings are null. Cannot initialize window.");
-            return;
-        }
-        window = new Window();
-
-        if (!window->Init(backend, *windowSettings))
-        {
-            NGIN_ERROR("Failed to initialize window!");
-            return;
-        }
-
-
+            NGIN_ERROR("Window settings is nullptr");
+            return false;
+        };
 
         switch (backend)
         {
-        case GraphicsAPI::OPEN_GL:
-        case GraphicsAPI::D3D12:
-        case GraphicsAPI::VULKAN:
-            renderer = new VulkanRenderer(*window);
-            break;
-
-
-        default:
-            break;
+            case GraphicsAPI::OPENGL:
+                windowSettings->api = GraphicsAPI::OPENGL;
+                break;
+            case GraphicsAPI::VULKAN:
+                windowSettings->api = GraphicsAPI::VULKAN;
+                break;
+            case GraphicsAPI::DX12:
+                windowSettings->api = GraphicsAPI::DX12;
+                break;
+            default:
+                NGIN_ERROR("Invalid graphics API");
+                return false;
         }
+
+        window = Ref<Window>(new SDLWindow());
+
+        if (!window->Init(*windowSettings))
+        {
+            NGIN_ERROR("Failed to initialize window");
+            return false;
+        }
+
+        switch (backend)
+        {
+            case GraphicsAPI::OPENGL:
+            case GraphicsAPI::DX12:
+            case GraphicsAPI::VULKAN:
+                //renderer = CreateRef<Vulkan::Renderer>(window);
+                break;
+
+
+            default:
+                break;
+        }
+        return true;
+        // return renderer->Init();
     }
 
-    Context::~Context()
+    void Context::Shutdown()
     {
-        if (renderer)
-            delete renderer;
+        //Release all resources
+        renderer.reset();
+        window.reset();
     }
 
 }

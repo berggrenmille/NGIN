@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <NGIN/Meta/StoragePolicy/AllocatedStorage.hpp> // Replace with the actual path
 #include <cstring>                                      // for std::memcpy
-#include <cstddef>
-#include <new>
+
+
 using namespace NGIN;
 
 namespace
@@ -16,13 +16,14 @@ namespace
         void *Allocate(size_t size, size_t alignment)
         {
             ++allocateCount;
-            return ::operator new(size, std::align_val_t(alignment));
+            return ::operator new(size);
         }
 
         void Deallocate(void *ptr)
         {
             ++deallocateCount;
-            std::free(ptr);
+            ::operator delete(ptr);
+
         }
     };
 
@@ -37,6 +38,7 @@ namespace
             std::fill_n(data, 200, 'a');
             destroyed = false;
         }
+
         ~LargeType()
         {
             destroyed = true;
@@ -47,6 +49,7 @@ namespace
             std::memcpy(data, other.data, 200);
             other.data[0] = 0;
         }
+
         LargeType &operator=(LargeType &&other)
         {
             std::memcpy(data, other.data, 200);
@@ -58,10 +61,16 @@ namespace
     struct SmallType
     {
         int x;
-        SmallType() : x(42) { destroyed = false; }
-        ~SmallType() { destroyed = true; }
 
-        SmallType(SmallType &&other) noexcept : x(other.x) { other.x = 0; }
+        SmallType() : x(42)
+        { destroyed = false; }
+
+        ~SmallType()
+        { destroyed = true; }
+
+        SmallType(SmallType &&other) noexcept: x(other.x)
+        { other.x = 0; }
+
         SmallType &operator=(SmallType &&other) = default;
     };
 }
@@ -74,7 +83,7 @@ protected:
 
 TEST_F(AllocatedStorageTest, HandlesSmallTypeByValue)
 {
-    Meta::StoragePolicy::AllocatedStorage policy{SmallType(), allocator};
+    Meta::StoragePolicy::AllocatedStorage policy {SmallType(), allocator};
 
     SmallType *ptr = static_cast<SmallType *>(policy.get());
     EXPECT_EQ(ptr->x, 42);
@@ -82,7 +91,7 @@ TEST_F(AllocatedStorageTest, HandlesSmallTypeByValue)
 
 TEST_F(AllocatedStorageTest, HandlesLargeTypeByValue)
 {
-    Meta::StoragePolicy::AllocatedStorage policy{LargeType(), allocator};
+    Meta::StoragePolicy::AllocatedStorage policy {LargeType(), allocator};
 
     LargeType *ptr = static_cast<LargeType *>(policy.get());
     EXPECT_EQ(ptr->data[0], 'a');
@@ -91,7 +100,7 @@ TEST_F(AllocatedStorageTest, HandlesLargeTypeByValue)
 TEST_F(AllocatedStorageTest, DestructorForSmallType)
 {
     {
-        Meta::StoragePolicy::AllocatedStorage policy{SmallType(), allocator};
+        Meta::StoragePolicy::AllocatedStorage policy {SmallType(), allocator};
         SmallType *ptr = static_cast<SmallType *>(policy.get());
         EXPECT_EQ(ptr->x, 42);
     }
@@ -101,7 +110,7 @@ TEST_F(AllocatedStorageTest, DestructorForSmallType)
 TEST_F(AllocatedStorageTest, DestructorForLargeType)
 {
     {
-        Meta::StoragePolicy::AllocatedStorage policy{LargeType(), allocator};
+        Meta::StoragePolicy::AllocatedStorage policy {LargeType(), allocator};
         LargeType *ptr = static_cast<LargeType *>(policy.get());
         EXPECT_EQ(ptr->data[0], 'a');
     }
@@ -111,7 +120,7 @@ TEST_F(AllocatedStorageTest, DestructorForLargeType)
 TEST_F(AllocatedStorageTest, MoveConstructorForSmallType)
 {
     {
-        Meta::StoragePolicy::AllocatedStorage policy{SmallType(), allocator};
+        Meta::StoragePolicy::AllocatedStorage policy {SmallType(), allocator};
         Meta::StoragePolicy::AllocatedStorage policy2(std::move(policy));
 
         SmallType *ptr = static_cast<SmallType *>(policy2.get());
@@ -123,7 +132,7 @@ TEST_F(AllocatedStorageTest, MoveConstructorForSmallType)
 TEST_F(AllocatedStorageTest, MoveConstructorForLargeType)
 {
     {
-        Meta::StoragePolicy::AllocatedStorage policy{LargeType(), allocator};
+        Meta::StoragePolicy::AllocatedStorage policy {LargeType(), allocator};
         Meta::StoragePolicy::AllocatedStorage policy2(std::move(policy));
 
         LargeType *ptr = static_cast<LargeType *>(policy2.get());
@@ -134,20 +143,20 @@ TEST_F(AllocatedStorageTest, MoveConstructorForLargeType)
 
 TEST_F(AllocatedStorageTest, AllocateIsCalledForSmallType)
 {
-    Meta::StoragePolicy::AllocatedStorage policy{SmallType(), allocator};
+    Meta::StoragePolicy::AllocatedStorage policy {SmallType(), allocator};
     EXPECT_EQ(allocator.allocateCount, 1);
 }
 
 TEST_F(AllocatedStorageTest, AllocateIsCalledForLargeType)
 {
-    Meta::StoragePolicy::AllocatedStorage policy{LargeType(), allocator};
+    Meta::StoragePolicy::AllocatedStorage policy {LargeType(), allocator};
     EXPECT_EQ(allocator.allocateCount, 1);
 }
 
 TEST_F(AllocatedStorageTest, DeallocateIsCalledForSmallType)
 {
     {
-        Meta::StoragePolicy::AllocatedStorage policy{SmallType(), allocator};
+        Meta::StoragePolicy::AllocatedStorage policy {SmallType(), allocator};
     }
     EXPECT_EQ(allocator.deallocateCount, 1);
 }
@@ -155,21 +164,23 @@ TEST_F(AllocatedStorageTest, DeallocateIsCalledForSmallType)
 TEST_F(AllocatedStorageTest, DeallocateIsCalledForLargeType)
 {
     {
-        Meta::StoragePolicy::AllocatedStorage policy{LargeType(), allocator};
+        Meta::StoragePolicy::AllocatedStorage policy {LargeType(), allocator};
     }
     EXPECT_EQ(allocator.deallocateCount, 1);
 }
 
 TEST_F(AllocatedStorageTest, DeallocateNotCalledAfterMoveForSmallType)
 {
-    Meta::StoragePolicy::AllocatedStorage policy{SmallType(), allocator};
+    Meta::StoragePolicy::AllocatedStorage policy {SmallType(), allocator};
     Meta::StoragePolicy::AllocatedStorage policy2(std::move(policy));
     EXPECT_EQ(allocator.deallocateCount, 0);
 }
 
 TEST_F(AllocatedStorageTest, DeallocateNotCalledAfterMoveForLargeType)
 {
-    Meta::StoragePolicy::AllocatedStorage policy{LargeType(), allocator};
+    Meta::StoragePolicy::AllocatedStorage policy {LargeType(), allocator};
     Meta::StoragePolicy::AllocatedStorage policy2(std::move(policy));
     EXPECT_EQ(allocator.deallocateCount, 0);
 }
+
+
