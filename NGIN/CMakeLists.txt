@@ -13,7 +13,6 @@ set(NGIN_CORE_SRC
 
 set(NGIN_GRAPHICS_SRC
         "src/NGIN/Graphics/Vulkan/Renderer.cpp"
-        "src/NGIN/Graphics/Window.cpp"
         "src/NGIN/Graphics/Context.cpp"
 )
 

@@ -9,7 +9,7 @@ namespace NGIN::Graphics
 {
 
 
-    bool Context::Init(GraphicsAPI backend, WindowSettings* windowSettings)
+    bool Context::Init(GraphicsAPI backend, WindowConfig* windowSettings)
     {
         if (!windowSettings)
         {

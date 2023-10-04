@@ -5,7 +5,7 @@
 #pragma once
 // NGIN Include(s)
 #include <NGIN/Defines.hpp>
-#include <NGIN/Graphics/RenderingSurface.hpp>
+#include <NGIN/Graphics/Surface.hpp>
 // STL Include(s)
 // Other Include(s)
 #include <SDL2/SDL.h>
@@ -13,8 +13,8 @@
 namespace NGIN::Graphics
 {
     /// @class SDLWindow
-    /// @brief SDL-specific implementation of the RenderingSurface interface.
-    class SDLWindow : public RenderingSurface
+    /// @brief SDL-specific implementation of the Surface interface.
+    class SDLWindow : public Surface
     {
     public:
         /// @brief Constructs an SDL window with the given title and dimensions.

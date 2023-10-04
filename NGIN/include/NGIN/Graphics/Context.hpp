@@ -13,7 +13,7 @@ namespace NGIN::Graphics
     {
     public:
 
-        bool Init(GraphicsAPI backend, WindowSettings* windowSettings);
+        bool Init(GraphicsAPI backend, WindowConfig* windowSettings);
 
         void Shutdown();
 

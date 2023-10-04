@@ -22,7 +22,7 @@ namespace NGIN::Core::Modules
     {
         engine = enginePtr;
 
-        Graphics::WindowSettings settings {};
+        Graphics::WindowConfig settings {};
         settings.borderless = false;
         settings.fullscreen = false;
         settings.resizable = true;

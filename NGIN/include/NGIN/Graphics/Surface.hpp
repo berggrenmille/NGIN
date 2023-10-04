@@ -10,20 +10,13 @@
 
 namespace NGIN::Graphics
 {
-    /// @class RenderingSurface
+    /// @class Surface
     /// @brief Interface for a rendering target surface.
-    class NGIN_API RenderingSurface
+    class NGIN_API Surface
     {
     public:
         /// @brief Virtual destructor to ensure proper cleanup for derived classes.
-        virtual ~RenderingSurface() = default;
-
-        /// @brief Initializes the surface.
-        /// @return true if initialization succeeded, false otherwise.
-        virtual bool Init() = 0;
-
-        /// @brief Shutdown the surface, releasing any resources.
-        virtual void Shutdown() = 0;
+        virtual ~Surface() = default;
 
         /// @brief Retrieves the native handle of the surface.
         /// @return A pointer to the native surface handle.
