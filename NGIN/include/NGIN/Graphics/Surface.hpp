@@ -25,7 +25,7 @@ namespace NGIN::Graphics
         /// @brief Gets the dimensions of the surface.
         /// @param[out] width The width of the surface.
         /// @param[out] height The height of the surface.
-        virtual void GetDimensions(int& width, int& height) const = 0;
+        virtual void GetDimensions(int& outWidth, int& outHeight) const = 0;
     };
 }
 

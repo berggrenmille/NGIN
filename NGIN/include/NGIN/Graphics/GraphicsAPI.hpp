@@ -1,4 +1,5 @@
 #pragma once
+
 #include <NGIN/Defines.hpp>
 
 namespace NGIN::Graphics
@@ -7,8 +8,8 @@ namespace NGIN::Graphics
     {
         NONE = 0,
         VULKAN,
-        OPEN_GL,
-        D3D12
+        OPENGL,
+        DX12
         //... other backends
     };
 } // namespace NGIN::Graphics

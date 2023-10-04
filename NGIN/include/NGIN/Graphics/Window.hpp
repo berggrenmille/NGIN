@@ -25,7 +25,11 @@ namespace NGIN::Graphics
     public:
         NGIN_API Window() = default;
 
-        NGIN_API virtual  ~Window() = default;
+        NGIN_API  ~Window() override = default;
+
+        [[nodiscard]] NGIN_API void* GetNativeHandle() const override = 0;
+
+        NGIN_API void GetDimensions(int& width, int& height) const override = 0;
 
         NGIN_API virtual Bool Init(WindowConfig& config) = 0;
 
@@ -33,11 +37,7 @@ namespace NGIN::Graphics
 
         NGIN_API virtual Void Resize(UInt32 width, UInt32 height) = 0;
 
-        [[nodiscard]] NGIN_API virtual Bool IsOpen() const;
-
-        [[nodiscard]] NGIN_API virtual void* GetNativeHandle() const = 0;
-
-        NGIN_API virtual void GetDimensions(int& width, int& height) const = 0;
+        [[nodiscard]] NGIN_API virtual Bool IsOpen() const = 0;
 
 
     };
