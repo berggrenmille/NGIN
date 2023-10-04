@@ -1,0 +1,6 @@
+<map id="NGIN::Memory::FreeListAllocator" name="NGIN::Memory::FreeListAllocator">
+<area shape="rect" id="Node000001" title="An allocator utilizing the free list strategy for memory management." alt="" coords="5,148,232,513"/>
+<area shape="rect" id="Node000002" href="$structNGIN_1_1Memory_1_1FreeListAllocator_1_1FreeBlock.html" title="Structure for each free block in the list." alt="" coords="5,5,232,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,85,121,131,116,131,116,85"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="233,31,251,36,259,45,250,55,246,51,253,45,248,41,232,37"/>
+</map>

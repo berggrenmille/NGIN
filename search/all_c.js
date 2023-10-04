@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['config_0',['Config',['../namespaceNGIN_1_1Config.html',1,'NGIN']]],
+  ['hasclose_1',['HasClose',['../conceptNGIN_1_1IO_1_1FileConcepts_1_1HasClose.html',1,'NGIN::IO::FileConcepts']]],
+  ['hasopen_2',['HasOpen',['../conceptNGIN_1_1IO_1_1FileConcepts_1_1HasOpen.html',1,'NGIN::IO::FileConcepts']]],
+  ['hasread_3',['HasRead',['../conceptNGIN_1_1IO_1_1FileConcepts_1_1HasRead.html',1,'NGIN::IO::FileConcepts']]],
+  ['hasseek_4',['HasSeek',['../conceptNGIN_1_1IO_1_1FileConcepts_1_1HasSeek.html',1,'NGIN::IO::FileConcepts']]],
+  ['haswrite_5',['HasWrite',['../conceptNGIN_1_1IO_1_1FileConcepts_1_1HasWrite.html',1,'NGIN::IO::FileConcepts']]],
+  ['io_6',['IO',['../namespaceNGIN_1_1IO.html',1,'NGIN']]],
+  ['is_5fapp_7',['is_app',['../conceptNGIN_1_1is__app.html',1,'NGIN']]],
+  ['is_5fapp_5fptr_8',['is_app_ptr',['../conceptNGIN_1_1is__app__ptr.html',1,'NGIN']]],
+  ['logging_9',['Logging',['../namespaceNGIN_1_1Logging.html',1,'NGIN']]],
+  ['memory_10',['Memory',['../namespaceNGIN_1_1Memory.html',1,'NGIN']]],
+  ['meta_11',['Meta',['../namespaceNGIN_1_1Meta.html',1,'NGIN']]],
+  ['namespace_12',['Namespace',['../structNGIN_1_1Meta_1_1TypeName_ac0437cab4dfe1faea702e425659a6ec9.html#ac0437cab4dfe1faea702e425659a6ec9',1,'NGIN::Meta::TypeName']]],
+  ['nanoseconds_13',['Nanoseconds',['../namespaceNGIN_1_1Time.html#a289750049daedbe691610594bd7e612b',1,'NGIN::Time']]],
+  ['new_14',['New',['../classNGIN_1_1Memory_1_1Allocator_a50c9853f29c7bcf2f000a60195db23db.html#a50c9853f29c7bcf2f000a60195db23db',1,'NGIN::Memory::Allocator']]],
+  ['next_15',['next',['../structNGIN_1_1Memory_1_1FreeListAllocator_1_1FreeBlock.html#a9f576d2fdc405b30e19178cefc72fc8f',1,'NGIN::Memory::FreeListAllocator::FreeBlock']]],
+  ['ngin_16',['NGIN',['../namespaceNGIN.html',1,'']]],
+  ['now_17',['Now',['../namespaceNGIN_1_1Time_a9ad19f49e8b85d2a15d2112a25043e51.html#a9ad19f49e8b85d2a15d2112a25043e51',1,'NGIN::Time']]],
+  ['time_18',['Time',['../namespaceNGIN_1_1Time.html',1,'NGIN']]],
+  ['types_19',['Types',['../namespaceNGIN_1_1Meta_1_1Reflection_1_1Types.html',1,'NGIN::Meta::Reflection']]],
+  ['util_20',['Util',['../namespaceNGIN_1_1Util.html',1,'NGIN']]]
+];

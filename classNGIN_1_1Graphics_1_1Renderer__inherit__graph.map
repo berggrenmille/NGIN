@@ -1,0 +1,5 @@
+<map id="NGIN::Graphics::Renderer" name="NGIN::Graphics::Renderer">
+<area shape="rect" id="Node000001" title="Represents a common rendering interface that abstracts the specifics of any graphics API." alt="" coords="16,5,196,171"/>
+<area shape="rect" id="Node000002" href="$classNGIN_1_1Graphics_1_1Vulkan_1_1Renderer.html" title="A Renderer implementation using the Vulkan Graphics API." alt="" coords="5,219,207,679"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,184,109,218,103,218,103,184"/>
+</map>

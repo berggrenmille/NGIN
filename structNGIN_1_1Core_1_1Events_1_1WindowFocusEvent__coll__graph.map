@@ -1,0 +1,3 @@
+<map id="NGIN::Core::Events::WindowFocusEvent" name="NGIN::Core::Events::WindowFocusEvent">
+<area shape="rect" id="Node000001" title="Event that is fired when the window gains focus." alt="" coords="5,5,171,85"/>
+</map>

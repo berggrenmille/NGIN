@@ -1,0 +1,5 @@
+<map id="NGIN::Logging::ConsoleSink" name="NGIN::Logging::ConsoleSink">
+<area shape="rect" id="Node000001" title="A log sink that prints log messages to the standard output or error." alt="" coords="5,219,200,364"/>
+<area shape="rect" id="Node000002" href="$classNGIN_1_1Logging_1_1BaseSink.html" title="Interface for all log sinks within the NGIN framework." alt="" coords="15,5,190,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,185,105,218,100,218,100,185"/>
+</map>

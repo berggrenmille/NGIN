@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['hybridstorage_0',['HybridStorage',['../classNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage.html#a39f5943af34bea667aaedb4ef5284a81',1,'NGIN::Meta::StoragePolicy::HybridStorage::HybridStorage()=default'],['../classNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage.html#aedfbedb610a8d3c9ba4fa98950b6f7cd',1,'NGIN::Meta::StoragePolicy::HybridStorage::HybridStorage(const HybridStorage &amp;other)'],['../classNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage_a6980d3f60418ebbea350904dd47850eb.html#a6980d3f60418ebbea350904dd47850eb',1,'NGIN::Meta::StoragePolicy::HybridStorage::HybridStorage(HybridStorage &amp;&amp;other) noexcept'],['../classNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage_a983c73472db69a871a39fa1dd2941255.html#a983c73472db69a871a39fa1dd2941255',1,'NGIN::Meta::StoragePolicy::HybridStorage::HybridStorage(T &amp;&amp;obj)']]]
+];

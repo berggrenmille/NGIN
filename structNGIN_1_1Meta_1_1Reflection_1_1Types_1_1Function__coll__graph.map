@@ -1,0 +1,12 @@
+<map id="NGIN::Meta::Reflection::Types::Function" name="NGIN::Meta::Reflection::Types::Function">
+<area shape="rect" id="Node000001" title="Represents metadata for a function within the reflection system." alt="" coords="41,1321,203,1621"/>
+<area shape="rect" id="Node000002" href="$classNGIN_1_1Util_1_1DynamicDelegate.html" title="A dynamic delegate class for type&#45;erased, fast callable invocation." alt="" coords="20,893,224,1259"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,1259,125,1305,119,1305,119,1259"/>
+<area shape="rect" id="Node000003" href="$classNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage.html" title=" " alt="" coords="5,531,239,831"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,831,125,877,119,877,119,831"/>
+<area shape="rect" id="Node000004" href="$unionNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage_1_1Data.html" title="Union for either holding a pointer to heap&#45;allocated data or a static buffer." alt="" coords="17,5,227,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="120,106,115,168,113,347,117,514,111,514,107,347,110,168,114,105"/>
+<area shape="rect" id="Node000005" href="$classNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage.html" title="A class for dynamic and static storage management." alt="" coords="163,168,350,468"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="150,104,174,152,170,154,145,107"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="199,482,180,531,175,529,194,480"/>
+</map>

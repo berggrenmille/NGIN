@@ -1,0 +1,3 @@
+<map id="NGIN::Memory::StackAllocator" name="NGIN::Memory::StackAllocator">
+<area shape="rect" id="Node000001" title="Allocator that uses a stack&#45;like LIFO strategy for memory allocation." alt="" coords="5,5,216,271"/>
+</map>

@@ -1,0 +1,3 @@
+<map id="NGIN::Meta::StoragePolicy::AllocatedStorage" name="NGIN::Meta::StoragePolicy::AllocatedStorage">
+<area shape="rect" id="Node000001" title="A storage policy that allocates memory using an NGIN Allocator. This storage policy is useful for sto..." alt="" coords="5,5,192,265"/>
+</map>

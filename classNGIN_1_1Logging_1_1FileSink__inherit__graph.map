@@ -1,0 +1,5 @@
+<map id="NGIN::Logging::FileSink" name="NGIN::Logging::FileSink">
+<area shape="rect" id="Node000001" title="A log sink that writes log entries to a file." alt="" coords="9,219,176,404"/>
+<area shape="rect" id="Node000002" href="$classNGIN_1_1Logging_1_1BaseSink.html" title="Interface for all log sinks within the NGIN framework." alt="" coords="5,5,180,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,184,95,218,90,218,90,184"/>
+</map>

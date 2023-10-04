@@ -1,0 +1,3 @@
+<map id="NGIN::Core::Events::WindowRestoreEvent" name="NGIN::Core::Events::WindowRestoreEvent">
+<area shape="rect" id="Node000001" title="Event that is fired when the window is restored." alt="" coords="5,5,183,85"/>
+</map>

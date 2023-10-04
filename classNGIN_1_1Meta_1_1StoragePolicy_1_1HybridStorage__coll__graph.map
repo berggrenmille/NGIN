@@ -1,0 +1,5 @@
+<map id="NGIN::Meta::StoragePolicy::HybridStorage&lt; Size &gt;" name="NGIN::Meta::StoragePolicy::HybridStorage&lt; Size &gt;">
+<area shape="rect" id="Node000001" title="A class for dynamic and static storage management." alt="" coords="17,168,204,468"/>
+<area shape="rect" id="Node000002" href="$unionNGIN_1_1Meta_1_1StoragePolicy_1_1HybridStorage_1_1Data.html" title="Union for either holding a pointer to heap&#45;allocated data or a static buffer." alt="" coords="5,5,216,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,106,113,152,108,152,108,106"/>
+</map>
