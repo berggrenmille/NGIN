@@ -49,6 +49,14 @@ endif ()
 if (NGIN_USE_GLFW)
     add_compile_definitions(NGIN_USE_GLFW)
 endif ()
+
+#Add platform define
+if (WIN32)
+    add_compile_definitions(NGIN_PLATFORM_WINDOWS)
+elseif (UNIX)
+    add_compile_definitions(NGIN_PLATFORM_LINUX)
+endif ()
+
 #---------------------------------------------------------------------------------------------------------
 # Specify different compiler flags and settings based on the build type
 # Debug specific settings

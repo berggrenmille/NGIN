@@ -42,6 +42,10 @@ set(NGIN_META_SRC
         "src/NGIN/Meta/Reflection/Registry.cpp"
 )
 
+set(NGIN_VFS_SRC
+        "src/NGIN/VFS/Path.cpp"
+)
+
 
 # Add all your source files here
 add_library(NGIN SHARED
@@ -50,6 +54,7 @@ add_library(NGIN SHARED
         ${NGIN_LOGGING_SRC}
         ${NGIN_MEMORY_SRC}
         ${NGIN_META_SRC}
+        ${NGIN_VFS_SRC}
         "src/Precompiled/PCH.cpp"
 )
 

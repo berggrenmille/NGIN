@@ -4,61 +4,59 @@
 
 namespace NGIN::Core::Events
 {
-    ///Event that is fired when the window is closed.
-    struct WindowCloseEvent
+    /// that is fired when the window is closed.
+    struct WindowClose
     {
-        WindowCloseEvent() = default;
+        WindowClose() = default;
     };
 
 
-    ///Event that is fired when the window is resized.
-    struct WindowResizeEvent
+    /// that is fired when the window is resized.
+    struct WindowResize
     {
-        WindowResizeEvent(UInt32 width, UInt32 height) : width(width), height(height)
-        {}
+        WindowResize(UInt32 width, UInt32 height) : width(width), height(height) {}
 
         UInt32 width = 0;
         UInt32 height = 0;
     };
 
-    ///Event that is fired when the window is moved.
-    struct WindowMoveEvent
+    /// that is fired when the window is moved.
+    struct WindowMove
     {
-        WindowMoveEvent(UInt32 x, UInt32 y) : x(x), y(y)
-        {}
+        WindowMove(UInt32 x, UInt32 y) : x(x), y(y) {}
 
         UInt32 x = 0;
         UInt32 y = 0;
     };
 
-    ///Event that is fired when the window is minimized.
-    struct WindowMinimizeEvent
+    /// that is fired when the window is minimized.
+    struct WindowMinimize
     {
-        WindowMinimizeEvent() = default;
+        WindowMinimize() = default;
     };
 
-    ///Event that is fired when the window is maximized.
-    struct WindowMaximizeEvent
+    /// that is fired when the window is maximized.
+    struct WindowMaximize
     {
-        WindowMaximizeEvent() = default;
+        WindowMaximize() = default;
     };
 
-    ///Event that is fired when the window is restored.
-    struct WindowRestoreEvent
+    /// that is fired when the window is restored.
+    struct WindowRestore
     {
-        WindowRestoreEvent() = default;
+        WindowRestore() = default;
     };
 
-    ///Event that is fired when the window gains focus.
-    struct WindowFocusEvent
+    /// that is fired when the window gains focus.
+    struct WindowFocus
     {
-        WindowFocusEvent() = default;
+        WindowFocus() = default;
     };
 
-    ///Event that is fired when the window loses focus.
-    struct WindowLostFocusEvent
+    /// that is fired when the window loses focus.
+    struct WindowLostFocus
     {
-        WindowLostFocusEvent() = default;
+        WindowLostFocus() = default;
     };
 
 

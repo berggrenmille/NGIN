@@ -86,8 +86,8 @@ namespace NGIN::Core
         {
             while (!eventQueue.empty())
             {
-                eventQueue.front()();
-                eventQueue.pop_front();
+                eventQueue.front()();   //Call the delegate
+                eventQueue.pop_front(); //Remove the delegate
             }
         }
 
