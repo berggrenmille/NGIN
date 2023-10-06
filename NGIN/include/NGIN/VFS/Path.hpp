@@ -22,8 +22,15 @@ namespace NGIN::VFS
         using StringType = std::basic_string<CharType>;
 #endif
     public:
+        NGIN_API Path();
+
         NGIN_API explicit Path(const String& path);
 
+#ifdef NGIN_PLATFORM_WINDOWS
+
+        NGIN_API explicit Path(StringType path);
+
+#endif
 
         NGIN_API Path(const Path& other) = default;
 
@@ -35,24 +42,22 @@ namespace NGIN::VFS
 
         NGIN_API ~Path() = default;
 
-        NGIN_API String ToString() const;
+        [[nodiscard]] NGIN_API String ToString() const;
 
-        NGIN_API Bool IsAbsolute() const;
+        [[nodiscard]] NGIN_API Bool IsAbsolute() const;
 
-        NGIN_API Bool IsRelative() const;
+        [[nodiscard]] NGIN_API Bool IsRelative() const;
 
-        NGIN_API Bool IsRoot() const;
+        [[nodiscard]] NGIN_API Bool IsRoot() const;
 
-        NGIN_API Bool IsDirectory() const;
+        [[nodiscard]] NGIN_API Bool IsDirectory() const;
 
-        NGIN_API Bool IsFile() const;
+        [[nodiscard]] NGIN_API Bool IsFile() const;
 
-        NGIN_API Bool IsEmpty() const;
+        [[nodiscard]] NGIN_API Bool IsEmpty() const;
 
         //Append operator /
-        NGIN_API Path& operator/=(const Path& other) const;
 
-        NGIN_API Path& operator+=(const Path& other);
 
     protected:
         StringType pathStr;

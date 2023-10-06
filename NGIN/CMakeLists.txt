@@ -46,6 +46,10 @@ set(NGIN_VFS_SRC
         "src/NGIN/VFS/Path.cpp"
 )
 
+set(NGIN_UTIL_SRC
+        "src/NGIN/Util/JSON.cpp"
+)
+
 
 # Add all your source files here
 add_library(NGIN SHARED
@@ -55,6 +59,7 @@ add_library(NGIN SHARED
         ${NGIN_MEMORY_SRC}
         ${NGIN_META_SRC}
         ${NGIN_VFS_SRC}
+        ${NGIN_UTIL_SRC}
         "src/Precompiled/PCH.cpp"
 )
 

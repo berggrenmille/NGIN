@@ -16,31 +16,79 @@
 
 namespace NGIN::VFS
 {
+    Path::Path()
+            : pathStr(emptyPath)
+    {
+    }
+
     Path::Path(const String& path)
             : pathStr(ConvertToNative(path))
     {
         Normalize();
     }
 
+#ifdef NGIN_PLATFORM_WINDOWS
+
+    Path::Path(StringType path)
+            : pathStr(std::move(path))
+    {
+        Normalize();
+    }
+
+#endif
+
 
     String Path::ToString() const
     {
-        return ConvertFromNative(pathStr);
+        String temp = ConvertFromNative(pathStr);
+
+#if defined(NGIN_PLATFORM_WINDOWS)
+
+        std::replace(temp.begin(), temp.end(), '\\', '/');
+#endif
+        return temp;
     }
 
     Bool Path::IsAbsolute() const
     {
+        // can be absolute in two ways:
+        // "C:/some/path"
+        // "/some/path"
+
+        // If the path is empty, it is not absolute
+        if (pathStr.empty())
+            return false;
+
+        // If the path is root, it is absolute
+        if (IsRoot())
+            return true;
+
+        // check begining
 #ifdef NGIN_PLATFORM_WINDOWS
-        return pathStr.length() >= 3 && std::isalpha(pathStr[0]) && pathStr[1] == ':' && pathStr[2] == separator;
+        if (pathStr.size() > 2 &&
+            std::isalpha(pathStr[0]) &&
+            pathStr[1] == ':' &&
+            pathStr[2] == separator)
+        {
+            return true;
+        }
 #else
-        return !pathStr.empty() && pathStr[0] == separator;
+        if (pathStr[0] == separator)
+            return true;
 #endif
+        return false;
     }
 
 /// Determines if the path is a relative path
     Bool Path::IsRelative() const
     {
-        return !IsAbsolute();
+        // can be relative in two ways:
+        // "some/path"
+        // "./some/path"
+
+        // If the path is not empty and not absolute, it is not relative
+        return !pathStr.empty() && !IsAbsolute();
+
     }
 
 /// Determines if the path represents a root directory

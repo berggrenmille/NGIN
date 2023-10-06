@@ -11,6 +11,7 @@
 #include <NGIN/Meta/TypeName.hpp>
 #include <NGIN/Graphics/Context.hpp>
 #include <NGIN/Core/Modules/GraphicsModule.hpp>
+#include <NGIN/Config.h>
 
 
 #include <thread>

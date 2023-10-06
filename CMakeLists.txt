@@ -57,6 +57,7 @@ elseif (UNIX)
     add_compile_definitions(NGIN_PLATFORM_LINUX)
 endif ()
 
+
 #---------------------------------------------------------------------------------------------------------
 # Specify different compiler flags and settings based on the build type
 # Debug specific settings
