@@ -20,6 +20,12 @@ namespace NGIN::Core
         Queued
     };
 
+    struct ListenerHandle
+    {
+        UInt64 eventID;
+        UInt64 listenerIndex;
+    };
+
 
     class EventBus
     {
@@ -29,7 +35,7 @@ namespace NGIN::Core
 
         template<typename EventType, typename FuncType>
         requires std::is_same_v<typename Meta::FunctionTraits<FuncType>::template ArgNType<0>, const EventType&>
-        void Subscribe(FuncType&& func)
+        ListenerHandle Subscribe(FuncType&& func)
         {
             auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
 
@@ -37,6 +43,7 @@ namespace NGIN::Core
             //auto test = EventListener<EventType>(std::move(listener));
 
             listeners.emplace_back(std::forward<FuncType>(func));
+            return {eventTypeIndex, listeners.size() - 1};
         }
 
 
@@ -49,11 +56,18 @@ namespace NGIN::Core
          * @param memberFunction Pointer to the member function.
          */
         template<typename EventType, typename T>
-        void Subscribe(T* instance, void (T::* memberFunction)(const EventType&))
+        ListenerHandle Subscribe(T* instance, void (T::* memberFunction)(const EventType&))
         {
             constexpr auto eventTypeIndex = Meta::TypeID<EventType>();
             auto& listeners = listenersMap[eventTypeIndex];
             listeners.emplace_back(std::move(DynamicDelegate(memberFunction, instance)));
+            return {eventTypeIndex, listeners.size() - 1};
+        }
+
+        void Unsubscribe(const ListenerHandle& handle)
+        {
+            auto& listeners = listenersMap[handle.eventID];
+            listeners.erase(listeners.begin() + static_cast<UInt>(handle.listenerIndex));
         }
 
         /**

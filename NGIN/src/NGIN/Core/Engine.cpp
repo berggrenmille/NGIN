@@ -1,36 +1,48 @@
 #include <NGIN/Core/Engine.hpp>
 #include <iostream>
+#include <NGIN/Logging.hpp>
 
 namespace NGIN::Core
 {
-    void Engine::Tick()
+    void Engine::Run()
     {
-        eventBus.Subscribe<Events::Quit>(this, &Engine::Quit);
+        if (!isInitialized)
+        {
+            NGIN_ERROR("Engine not initialized");
+            return;
+        }
+
         isRunning = true;
         F64 delta = 0.0;
         while (!shouldQuit)
         {
             timer.Reset();
-            for (auto& module: moduleVector)
-            {
-                module->OnPreTick(delta);
-            }
-            for (auto& module: moduleVector)
-            {
-                module->OnTick(delta);
-            }
-            for (auto& module: moduleVector)
-            {
-                module->OnPostTick(delta);
-            }
+            Tick(delta);
             delta = timer.ElapsedSeconds();
         }
+
         //Shutdown modules in reverse order
         for (auto it = moduleVector.rbegin(); it != moduleVector.rend(); ++it)
         {
             (*it)->OnShutdown();
         }
         isRunning = false;
+    }
+
+    void Engine::Tick(F64 delta)
+    {
+        for (auto& module: moduleVector)
+        {
+            module->OnPreTick(delta);
+        }
+        for (auto& module: moduleVector)
+        {
+            module->OnTick(delta);
+        }
+        for (auto& module: moduleVector)
+        {
+            module->OnPostTick(delta);
+        }
     }
 
     EventBus& Engine::GetEventBus()
@@ -47,6 +59,14 @@ namespace NGIN::Core
     void Engine::Quit(const Events::Quit& event)
     {
         shouldQuit = true;
+    }
+
+    Bool Engine::Init()
+    {
+        eventBus.Subscribe<Events::Quit>(this, &Engine::Quit);
+        isInitialized = true;
+        NGIN_INFO("Engine initialized");
+        return true;
     }
 
 

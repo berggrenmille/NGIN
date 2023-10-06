@@ -13,19 +13,26 @@ namespace NGIN::Graphics
     {
     public:
 
-        bool Init(GraphicsAPI backend, WindowConfig* windowSettings);
+        Context() = default;
 
-        void Shutdown();
-
-        void Tick();
+        virtual ~Context() = default;
 
 
-        [[nodiscard]] inline Ref<Window> GetWindow() const { return window; }
+        /// @brief Initialize the context.
+        /// @return True if the context was initialized successfully, false otherwise.
+        virtual Bool Init() = 0;
 
-        [[nodiscard]] inline Ref<Renderer> GetRenderer() const { return renderer; }
+        /// @brief Shutdown the context.
+        /// @return True if the context was shutdown successfully, false otherwise.
+        virtual Bool Shutdown() = 0;
 
-    private:
-        Ref<Renderer> renderer {nullptr};
-        Ref<Window> window {nullptr};
+        /// @brief Set up a swapchain for the given window.
+        /// @param window The window for which to set up a swapchain.
+        virtual Bool SetupSwapchain(Ref<Window> window) = 0;
+
+        /// @brief Get the renderer
+        /// @return The renderer
+        [[nodiscard]] virtual Renderer& GetRenderer() const = 0;
+
     };
 }

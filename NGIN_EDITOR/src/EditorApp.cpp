@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
     std::cout << "TEST" << std::endl;
     NGIN::Core::Engine engine {};
     engine.AddModule<NGIN::Core::WindowModule>();
-    engine.Tick();
+    engine.Init();
+    engine.Run();
     return 0;
 }

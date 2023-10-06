@@ -30,11 +30,10 @@ namespace NGIN::Core
 #elif NGIN_USE_GLFW
         //using Dependencies = Meta::TypeWrapper<GLFWModule>
 #endif
-
-
     protected:
-    protected:
+
     private:
+        
     };
 }
 

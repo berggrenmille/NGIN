@@ -25,7 +25,11 @@ namespace NGIN::Core
 
         NGIN_API  ~Engine() = default;
 
-        NGIN_API void Tick();
+        NGIN_API Bool Init();
+
+        NGIN_API void Tick(F64 delta);
+
+        NGIN_API void Run();
 
 
         NGIN_API EventBus& GetEventBus();
@@ -51,8 +55,8 @@ namespace NGIN::Core
 
         void UnpackModuleDependencies(Meta::TypeWrapper<void>) {}
 
-        std::unordered_map<String, UInt64> moduleIndexMap;
-        std::vector<Module*> moduleVector;
+        std::unordered_map<String, UInt64> moduleIndexMap = {};
+        std::vector<Module*> moduleVector = {};
 
         Time::Timer timer = Time::Timer();
 
@@ -60,6 +64,7 @@ namespace NGIN::Core
 
         Bool shouldQuit = false;
         Bool isRunning = false;
+        Bool isInitialized = false;
     };
 
 
