@@ -75,7 +75,7 @@ namespace NGIN::VFS
 #else
         static constexpr Char separator = '/';
         static constexpr Char altSeparator = '\\';
-        static constexpr StringType emptyPath = "./";
+        static constexpr const char* emptyPath = "./";
 #endif
     };
 

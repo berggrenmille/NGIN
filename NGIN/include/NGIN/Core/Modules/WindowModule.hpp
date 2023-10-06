@@ -27,6 +27,8 @@ namespace NGIN::Core
     public:
 #ifdef NGIN_USE_SDL
         using Dependencies = Meta::TypeWrapper<SDLModule>;
+#elif NGIN_USE_GLFW
+        //using Dependencies = Meta::TypeWrapper<GLFWModule>
 #endif
 
 
