@@ -34,6 +34,7 @@ namespace NGIN::Graphics
          */
         virtual void EndFrame() = 0;
 
+
         /**
          * @brief Sets the viewport dimensions for rendering.
          *

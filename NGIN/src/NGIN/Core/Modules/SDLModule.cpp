@@ -1,4 +1,4 @@
-#include <NGIN/Core/Modules/PlatformEventsModule.hpp>
+#include <NGIN/Core/Modules/SDLModule.hpp>
 
 #include <NGIN/Core/Events/Quit.hpp>
 #include <NGIN/Core/Engine.hpp>
@@ -69,13 +69,13 @@ namespace NGIN::Core
     }
 
 
-    void PlatformEventsModule::OnInit(Engine* engine)
+    void SDLModule::OnInit(Engine* engine)
     {
         this->engine = engine;
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     }
 
-    void PlatformEventsModule::OnPreTick(const F64 deltaTime)
+    void SDLModule::OnPreTick(const F64 deltaTime)
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -100,7 +100,7 @@ namespace NGIN::Core
         }
     }
 
-    void PlatformEventsModule::OnShutdown()
+    void SDLModule::OnShutdown()
     {
         SDL_Quit();
     }

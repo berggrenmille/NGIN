@@ -6,6 +6,9 @@
 // NGIN Include(s)
 #include <NGIN/Defines.hpp>
 #include <NGIN/Graphics/Context.hpp>
+#include "VulkanRenderer.hpp"
+#include <vulkan/vulkan.hpp>
+
 // STL Include(s)
 // Other Include(s)
 
@@ -14,18 +17,34 @@ namespace NGIN::Graphics
     class VulkanContext : public Context
     {
     public:
-        NGIN_API VulkanContext() = default;
 
-        NGIN_API VulkanContext(const VulkanContext& other) = default;
 
-        NGIN_API VulkanContext& operator=(const VulkanContext& other) = default;
+        Bool Init() override;
 
-        NGIN_API VulkanContext(VulkanContext&& other) = default;
+        Bool Shutdown() override;
 
-        NGIN_API VulkanContext& operator=(VulkanContext&& other) = default;
+        Bool SetupSwapchain(Ref<Window> window) override;
+
+        [[nodiscard]] Renderer& GetRenderer() const override;
 
     protected:
     private:
+        VulkanRenderer renderer;
+        vk::Instance instance;
+        vk::PhysicalDevice physicalDevice;
+        vk::Device device;
+
+        vk::SurfaceKHR surface;
+
+        Bool SetupInstance();
+
+        Bool SetupSurface();
+
+        Bool SetupDevice();
+
+        [[nodiscard]] static int RateDeviceSuitability(const vk::PhysicalDevice& device);
+
+
     };
 }
 

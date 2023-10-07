@@ -8,21 +8,14 @@ set(NGIN_CORE_SRC
         "src/NGIN/Config.cpp"
         "src/NGIN/Core/Engine.cpp"
         "src/NGIN/Core/Modules/GraphicsModule.cpp"
+        "src/NGIN/Core/Modules/SDLModule.cpp"
 )
-
-if (NGIN_USE_SDL)
-    list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/SDL/PlatformEventsModule.cpp")
-endif ()
 
 set(NGIN_GRAPHICS_SRC
-        # "src/NGIN/Graphics/Vulkan/Renderer.cpp"
+        # "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
         #"src/NGIN/Graphics/Context.cpp"
 )
-if (NGIN_USE_SDL)
-    list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/SDL/PlatformEventsModule.cpp")
-elseif (NGIN_USE_GLFW)
-    # list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/GLFW/PlatformEventsModule.cpp")
-endif ()
+
 
 set(NGIN_LOGGING_SRC
         "src/NGIN/Logging/ConsoleSink.cpp"

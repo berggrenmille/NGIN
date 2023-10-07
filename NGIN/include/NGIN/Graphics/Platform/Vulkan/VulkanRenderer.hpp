@@ -12,19 +12,19 @@ namespace NGIN::Graphics
 namespace NGIN::Graphics::Vulkan
 {
     /**
-     * @class Renderer
-     * @brief A Renderer implementation using the Vulkan Graphics API.
+     * @class VulkanRenderer
+     * @brief A VulkanRenderer implementation using the Vulkan Graphics API.
      *
      * This class provides functionalities for rendering using Vulkan.
      * It manages Vulkan resources such as instances, devices, and surfaces, and provides
      * core rendering functionalities like viewport setting, frame clearing, and more.
      */
-    class Renderer final : public ::NGIN::Graphics::Renderer
+    class VulkanRenderer final : public ::NGIN::Graphics::Renderer
     {
     public:
-        NGIN_API explicit Renderer(Ref <Window> window);
+        NGIN_API explicit VulkanRenderer(Ref<Window> window);
 
-        NGIN_API ~Renderer() override;
+        NGIN_API ~VulkanRenderer() override;
 
         NGIN_API bool Init() override;
 
@@ -48,7 +48,7 @@ namespace NGIN::Graphics::Vulkan
 
         [[nodiscard]] int RateDeviceSuitability(const vk::PhysicalDevice& device) const;
 
-        Ref <Window> window;
+        Ref<Window> window;
         vk::Instance vkInstance;
         vk::SurfaceKHR vkSurface;
         vk::PhysicalDevice vkPhysicalDevice;

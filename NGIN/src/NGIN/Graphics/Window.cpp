@@ -5,19 +5,20 @@
 //Precompiled include
 #include "Precompiled/PCH.h"
 // NGIN Include(s)
-#include "NGIN/Graphics/Platform/SDL/SDLWindow.hpp"
-// STL Include(s)
-// Other Include(s)
+#include "NGIN/Graphics/Window.hpp"
+
+#include <SDL2/SDL.h>
+
 
 namespace NGIN::Graphics
 {
 
-    SDLWindow::~SDLWindow()
+    Window::~Window()
     {
-        ShutdownImpl();
+        Shutdown();
     }
 
-    Bool SDLWindow::Init(WindowConfig& windowConfig)
+    Bool Window::Init(WindowConfig& windowConfig)
     {
         UInt32 flags = 0;
         if (windowConfig.fullscreen)
@@ -49,34 +50,33 @@ namespace NGIN::Graphics
         return sdlWindow != nullptr;
     }
 
-    void* SDLWindow::GetNativeHandle() const
-    {
-        return static_cast<void*>(sdlWindow);
-    }
 
-    void SDLWindow::GetDimensions(int& outWidth, int& outHeight) const
+    void Window::GetDimensions(int& outWidth, int& outHeight) const
     {
         SDL_GetWindowSize(sdlWindow, &outWidth, &outHeight);
     }
 
-    void SDLWindow::Shutdown()
-    {
-        ShutdownImpl();
-    }
-
-    void SDLWindow::ShutdownImpl()
+    void Window::Shutdown()
     {
         if (!sdlWindow)
             return;
     }
 
-    void SDLWindow::Resize(UInt32 width, UInt32 height)
+
+    void Window::Resize(UInt32 width, UInt32 height)
     {
         SDL_SetWindowSize(sdlWindow, static_cast<Int32>(width), static_cast<Int32>(height));
     }
 
-    Bool SDLWindow::IsOpen() const
+    Bool Window::IsOpen() const
     {
         return sdlWindow != nullptr;
     }
+
+    SDL_Window* Window::GetSDLWindow() const
+    {
+        return sdlWindow;
+    }
 }
+
+

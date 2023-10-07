@@ -6,7 +6,6 @@
 // NGIN Include(s)
 #include <NGIN/Defines.hpp>
 #include <NGIN/Core/Module.hpp>
-#include <NGIN/Core/Modules/WindowModule.hpp>
 #include <NGIN/Core/Engine.hpp>
 
 #include <NGIN/Graphics/Context.hpp>
@@ -19,7 +18,6 @@ namespace NGIN::Core
     {
     public:
 
-        using Dependencies = Meta::TypeWrapper<WindowModule>;
 
     protected:
         NGIN_API void OnInit(Engine* engine) override;
@@ -27,7 +25,7 @@ namespace NGIN::Core
 
     private:
         Engine* engine = nullptr;
-        // Graphics::Context* context = nullptr;
+        Scope <Graphics::Context> context = nullptr;
     };
 }
 

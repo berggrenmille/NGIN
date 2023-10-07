@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+struct SDL_Window;
+
 namespace NGIN::Graphics
 {
     struct WindowConfig
@@ -23,22 +25,24 @@ namespace NGIN::Graphics
     class Window : public Surface
     {
     public:
-        NGIN_API Window() = default;
+        Window() = default;
 
-        NGIN_API  ~Window() override = default;
+        ~Window() override;
 
-        [[nodiscard]] NGIN_API void* GetNativeHandle() const override = 0;
+        Bool Init(WindowConfig& config);
 
-        NGIN_API void GetDimensions(int& width, int& height) const override = 0;
+        Void Shutdown();
 
-        NGIN_API virtual Bool Init(WindowConfig& config) = 0;
+        Void Resize(UInt32 width, UInt32 height);
 
-        NGIN_API virtual Void Shutdown() = 0;
+        [[nodiscard]]  SDL_Window* GetSDLWindow() const;
 
-        NGIN_API virtual Void Resize(UInt32 width, UInt32 height) = 0;
+        void GetDimensions(int& width, int& height) const override;
 
-        [[nodiscard]] NGIN_API virtual Bool IsOpen() const = 0;
+        [[nodiscard]]   Bool IsOpen() const;
 
+    private:
+        SDL_Window* sdlWindow = nullptr;
 
     };
 }
