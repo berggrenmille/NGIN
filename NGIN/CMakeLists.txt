@@ -11,15 +11,17 @@ set(NGIN_CORE_SRC
 )
 
 if (NGIN_USE_SDL)
-    list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/SDL/SDLModule.cpp")
+    list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/SDL/PlatformEventsModule.cpp")
 endif ()
 
 set(NGIN_GRAPHICS_SRC
         # "src/NGIN/Graphics/Vulkan/Renderer.cpp"
-        "src/NGIN/Graphics/Context.cpp"
+        #"src/NGIN/Graphics/Context.cpp"
 )
 if (NGIN_USE_SDL)
-    list(APPEND NGIN_CORE_SRC "src/NGIN/Graphics/Platform/SDL/SDLWindow.cpp")
+    list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/SDL/PlatformEventsModule.cpp")
+elseif (NGIN_USE_GLFW)
+    # list(APPEND NGIN_CORE_SRC "src/NGIN/Core/Platform/GLFW/PlatformEventsModule.cpp")
 endif ()
 
 set(NGIN_LOGGING_SRC

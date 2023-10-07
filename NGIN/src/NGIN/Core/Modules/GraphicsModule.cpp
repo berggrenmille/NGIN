@@ -5,7 +5,6 @@
 //Precompiled include
 #include <Precompiled/PCH.h>
 #include <NGIN/Core/Modules/GraphicsModule.hpp>
-#include <NGIN/Core/Platform/SDL/SDLModule.hpp>
 
 #include <NGIN/Core/Engine.hpp>
 
@@ -31,8 +30,8 @@ namespace NGIN::Core
         settings.title = "NGIN";
 
 
-        this->context = new Graphics::Context();
-        context->Init(Graphics::GraphicsAPI::VULKAN, &settings);
+//  this->context = new Graphics::Context();
+        //      context->Init(Graphics::GraphicsAPI::VULKAN, &settings);
     }
 
 

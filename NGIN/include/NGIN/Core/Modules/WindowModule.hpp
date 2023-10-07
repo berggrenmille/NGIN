@@ -10,7 +10,7 @@
 
 #ifdef NGIN_USE_SDL
 #include <NGIN/Graphics/Platform/SDL/SDLWindow.hpp>
-#include "NGIN/Core/Platform/SDL/SDLModule.hpp"
+#include "NGIN/Core/Modules/PlatformEventsModule.hpp"
 #endif
 
 #ifdef NGIN_USE_GLFW
@@ -26,14 +26,14 @@ namespace NGIN::Core
     {
     public:
 #ifdef NGIN_USE_SDL
-        using Dependencies = Meta::TypeWrapper<SDLModule>;
+        using Dependencies = Meta::TypeWrapper<PlatformEventsModule>;
 #elif NGIN_USE_GLFW
         //using Dependencies = Meta::TypeWrapper<GLFWModule>
 #endif
     protected:
 
     private:
-        
+
     };
 }
 

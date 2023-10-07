@@ -20,9 +20,9 @@ namespace NGIN::Core
 
         using Dependencies = Meta::TypeWrapper<void>;
 
-        Module() = default;
+        NGIN_API Module() = default;
 
-        virtual ~Module() = default;
+        NGIN_API virtual ~Module() = default;
 
     protected:
         NGIN_API virtual void OnInit(Engine* engine) {}

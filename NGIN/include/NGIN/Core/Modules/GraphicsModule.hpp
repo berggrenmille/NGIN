@@ -6,7 +6,8 @@
 // NGIN Include(s)
 #include <NGIN/Defines.hpp>
 #include <NGIN/Core/Module.hpp>
-#include "NGIN/Core/Modules/WindowModule.hpp"
+#include <NGIN/Core/Modules/WindowModule.hpp>
+#include <NGIN/Core/Engine.hpp>
 
 #include <NGIN/Graphics/Context.hpp>
 // STL Include(s)
@@ -26,7 +27,7 @@ namespace NGIN::Core
 
     private:
         Engine* engine = nullptr;
-        Graphics::Context* context = nullptr;
+        // Graphics::Context* context = nullptr;
     };
 }
 
