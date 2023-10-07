@@ -8,14 +8,11 @@
 #include <NGIN/Core/Module.hpp>
 #include <NGIN/Graphics/Window.hpp>
 
-#ifdef NGIN_USE_SDL
-#include <NGIN/Graphics/Platform/SDL/SDLWindow.hpp>
-#include "NGIN/Core/Modules/PlatformEventsModule.hpp"
-#endif
+#include <NGIN/Graphics/Window.hpp>
+#include "NGIN/Core/Modules/SDLModule.hpp"
+#include <NGIN/Core/Modules/GraphicsModule.hpp>
 
-#ifdef NGIN_USE_GLFW
-/// TODO: Implement GLFW Window
-#endif
+
 
 // STL Include(s)
 // Other Include(s)
@@ -26,7 +23,7 @@ namespace NGIN::Core
     {
     public:
 #ifdef NGIN_USE_SDL
-        using Dependencies = Meta::TypeWrapper<PlatformEventsModule>;
+        using Dependencies = Meta::TypeWrapper<SDLModule, GraphicsModule>;
 #elif NGIN_USE_GLFW
         //using Dependencies = Meta::TypeWrapper<GLFWModule>
 #endif

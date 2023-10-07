@@ -1,5 +1,5 @@
 #include "Precompiled/PCH.h"
-#include "NGIN/Graphics/Platform/Vulkan/Renderer.hpp"
+#include "NGIN/Graphics/Platform/Vulkan/VulkanRenderer.hpp"
 #include "NGIN/Graphics/Window.hpp"
 #include "SDL2/SDL_vulkan.h"
 
@@ -8,20 +8,20 @@
 
 namespace NGIN::Graphics::Vulkan
 {
-    Renderer::Renderer(Ref<Window> window)
+    VulkanRenderer::VulkanRenderer(Ref<Window> window)
             : window(window)
     {
         // Init other members as necessary
     }
 
-    Renderer::~Renderer()
+    VulkanRenderer::~VulkanRenderer()
     {
         // Cleanup Vulkan resources
         vkDevice.destroy();
         vkInstance.destroy();
     }
 
-    bool Renderer::Init()
+    bool VulkanRenderer::Init()
     {
         if (!SetupInstance())
             return false;
@@ -37,22 +37,22 @@ namespace NGIN::Graphics::Vulkan
         return true;
     }
 
-    void Renderer::BeginFrame()
+    void VulkanRenderer::BeginFrame()
     {
         // Begin frame by starting a command buffer
     }
 
-    void Renderer::EndFrame()
+    void VulkanRenderer::EndFrame()
     {
         // Submit command buffers to the GPU
     }
 
-    void Renderer::SetViewport(int width, int height)
+    void VulkanRenderer::SetViewport(int width, int height)
     {
         // Set viewport
     }
 
-    void Renderer::Clear(float r, float g, float b, float a)
+    void VulkanRenderer::Clear(float r, float g, float b, float a)
     {
         // Clear the screen
     }
@@ -69,7 +69,7 @@ namespace NGIN::Graphics::Vulkan
         return VK_FALSE;
     }
 
-    bool Renderer::SetupInstance()
+    bool VulkanRenderer::SetupInstance()
     {
         // Define the application info
         vk::ApplicationInfo appInfo;
@@ -118,7 +118,7 @@ namespace NGIN::Graphics::Vulkan
         return true;
     }
 
-    bool Renderer::SetupDevice()
+    bool VulkanRenderer::SetupDevice()
     {
         // 1. Physical device selection, return false if no suitable device is found
         std::vector<vk::PhysicalDevice> devices = vkInstance.enumeratePhysicalDevices();
@@ -237,7 +237,7 @@ namespace NGIN::Graphics::Vulkan
         return indices;
     }
 
-    bool Renderer::SetupSwapchain()
+    bool VulkanRenderer::SetupSwapchain()
     {
         // 1. Query the surface capabilities
         vk::SurfaceCapabilitiesKHR surfaceCapabilities = vkPhysicalDevice.getSurfaceCapabilitiesKHR(vkSurface);
@@ -343,7 +343,7 @@ namespace NGIN::Graphics::Vulkan
     }
 
 
-    int Renderer::RateDeviceSuitability(const vk::PhysicalDevice& device) const
+    int VulkanRenderer::RateDeviceSuitability(const vk::PhysicalDevice& device) const
     {
         vk::PhysicalDeviceProperties deviceProperties = device.getProperties();
         vk::PhysicalDeviceFeatures deviceFeatures = device.getFeatures();
@@ -385,7 +385,7 @@ namespace NGIN::Graphics::Vulkan
         return score;
     }
 
-    bool Renderer::SetupSurface()
+    bool VulkanRenderer::SetupSurface()
     {
         // Create a temporary VkSurfaceKHR handle
         VkSurfaceKHR tempSurface;

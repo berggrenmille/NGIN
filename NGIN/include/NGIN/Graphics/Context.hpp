@@ -6,9 +6,9 @@
 
 namespace NGIN::Graphics
 {
-    class Renderer;
+    class Renderer;vulkanpipeline
 
-
+    RendererAP
     class NGIN_API Context
     {
     public:
@@ -26,13 +26,11 @@ namespace NGIN::Graphics
         /// @return True if the context was shutdown successfully, false otherwise.
         virtual Bool Shutdown() = 0;
 
-        /// @brief Set up a swapchain for the given window.
-        /// @param window The window for which to set up a swapchain.
-        virtual Bool SetupSwapchain(Ref<Window> window) = 0;
-
         /// @brief Get the renderer
         /// @return The renderer
         [[nodiscard]] virtual Renderer& GetRenderer() const = 0;
+
+        [[nodiscard]] virtual String GetAPIName() const = 0;
 
     };
 }

@@ -2,7 +2,7 @@
 #include <NGIN/Graphics/Context.hpp>
 #include <NGIN/Graphics/Renderer.hpp>
 
-#include <NGIN/Graphics/Platform/SDL/SDLWindow.hpp>
+#include <NGIN/Graphics/Platform/SDL/Window.hpp>
 #include <NGIN/Logging.hpp>
 
 namespace NGIN::Graphics
@@ -33,7 +33,7 @@ namespace NGIN::Graphics
                 return false;
         }
 
-        window = Ref<Window>(new SDLWindow());
+        window = Ref<Window>(new Window());
 
         if (!window->Init(*windowSettings))
         {
@@ -46,7 +46,7 @@ namespace NGIN::Graphics
             case GraphicsAPI::OPENGL:
             case GraphicsAPI::DX12:
             case GraphicsAPI::VULKAN:
-                //renderer = CreateRef<Vulkan::Renderer>(window);
+                //renderer = CreateRef<Vulkan::VulkanRenderer>(window);
                 break;
 
 

@@ -14,7 +14,7 @@
 
 namespace NGIN::Core
 {
-    class NGIN_API PlatformEventsModule : public Module
+    class NGIN_API SDLModule : public Module
     {
     public:
 
