@@ -6,9 +6,9 @@
 
 namespace NGIN::Graphics
 {
-    class Renderer;
+    class Renderer;vulkanpipeline
 
-
+    RendererAP
     class NGIN_API Context
     {
     public:
