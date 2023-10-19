@@ -6,6 +6,7 @@
 #include "Precompiled/PCH.h"
 // NGIN Include(s)
 #include "NGIN/Graphics/Window.hpp"
+#include <NGIN/Logging.hpp>
 
 #include <SDL2/SDL.h>
 
@@ -18,15 +19,12 @@ namespace NGIN::Graphics
         Shutdown();
     }
 
-    Bool Window::Init(WindowConfig& windowConfig)
+    Bool Window::Init(const WindowConfig& windowConfig)
     {
         UInt32 flags = 0;
-        if (windowConfig.fullscreen)
-            flags |= SDL_WINDOW_FULLSCREEN;
-        if (windowConfig.resizable)
-            flags |= SDL_WINDOW_RESIZABLE;
-        if (windowConfig.borderless)
-            flags |= SDL_WINDOW_BORDERLESS;
+        flags |= windowConfig.fullscreen ? SDL_WINDOW_FULLSCREEN : 0;
+        flags |= windowConfig.resizable ? SDL_WINDOW_RESIZABLE : 0;
+        flags |= windowConfig.borderless ? SDL_WINDOW_BORDERLESS : 0;
 
         switch (windowConfig.api)
         {
@@ -35,33 +33,52 @@ namespace NGIN::Graphics
                 break;
             case GraphicsAPI::OPENGL:
                 flags |= SDL_WINDOW_OPENGL;
-                break;
+                [[fallthrough]];
             case GraphicsAPI::DX12:
+                [[fallthrough]];
             default:
+                NGIN_ASSERT(false, "GraphicsAPI not supported!");
                 break;
         }
 
         sdlWindow = SDL_CreateWindow(windowConfig.title.c_str(),
                                      SDL_WINDOWPOS_CENTERED,
                                      SDL_WINDOWPOS_CENTERED,
-                                     windowConfig.width,
-                                     windowConfig.height,
+                                     static_cast<Int32>(windowConfig.width),
+                                     static_cast<Int32>(windowConfig.height),
                                      flags);
-        return sdlWindow != nullptr;
+
+        if (!sdlWindow)
+        {
+            NGIN_ERROR("Failed to create window: {}", SDL_GetError());
+            return false;
+        }
+
+        return true;
     }
 
 
-    void Window::GetDimensions(int& outWidth, int& outHeight) const
+    void Window::GetDimensions(UInt32& outWidth, UInt32& outHeight) const
     {
-        SDL_GetWindowSize(sdlWindow, &outWidth, &outHeight);
+        int x, y;
+        SDL_GetWindowSize(sdlWindow, &x, &y);
+        outWidth  = static_cast<UInt32>(x);
+        outHeight = static_cast<UInt32>(y);
     }
 
     void Window::Shutdown()
     {
         if (!sdlWindow)
+        {
+            NGIN_WARNING("Trying to shutdown a window that is not initialized! UUID: {}",
+                         uuid.ToString());
             return;
-    }
+        }
 
+        SDL_DestroyWindow(sdlWindow);
+        sdlWindow = nullptr;
+        NGIN_INFO("Window with UUID: {} has been shutdown!", uuid.ToString());
+    }
 
     void Window::Resize(UInt32 width, UInt32 height)
     {
@@ -74,6 +91,11 @@ namespace NGIN::Graphics
     }
 
     SDL_Window* Window::GetSDLWindow() const
+    {
+        return sdlWindow;
+    }
+
+    void* Window::GetNativeHandle() const
     {
         return sdlWindow;
     }
