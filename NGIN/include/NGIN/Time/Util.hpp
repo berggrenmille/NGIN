@@ -25,15 +25,6 @@ namespace NGIN::Time
     }
 
 
-    template<class T>
-    struct IsDuration : std::false_type {};
-
-    template<class Rep, class Period>
-    struct IsDuration<std::chrono::duration<Rep, Period>> : std::true_type {};
-
-    template<typename T>
-    concept is_duration = IsDuration<T>::value;
-
     /**
      * @brief Wraps a long chrono call into a much prettier one
      */
