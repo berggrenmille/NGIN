@@ -5,37 +5,37 @@
 namespace NGIN::Meta
 {
     UUID::UUID()
-        : uuid(GenerateUUID())
+            : uuid(GenerateUUID())
     {
     }
 
-    UUID::UUID(uint64_t uuid)
-        : uuid(uuid)
+    UUID::UUID(IDType uuid)
+            : uuid(uuid)
     {
     }
 
-    std::string UUID::ToString() const
+    String UUID::ToString() const
     {
         std::stringstream ss;
         ss << std::hex << std::setw(16) << std::setfill('0') << uuid;
         return ss.str();
     }
 
-    bool UUID::operator==(const UUID &other) const
+    bool UUID::operator==(const UUID& other) const
     {
         return uuid == other.uuid;
     }
 
-    bool UUID::operator!=(const UUID &other) const
+    bool UUID::operator!=(const UUID& other) const
     {
         return uuid != other.uuid;
     }
 
-    uint64_t UUID::GenerateUUID()
+    UUID::IDType UUID::GenerateUUID()
     {
         static std::random_device rd;
         static std::mt19937_64 generator(rd());
-        static std::uniform_int_distribution<uint64_t> distribution;
+        static std::uniform_int_distribution<IDType> distribution;
         return distribution(generator);
     }
 }
