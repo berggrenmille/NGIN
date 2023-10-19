@@ -9,7 +9,7 @@ namespace NGIN::Logging
                                         const String& message,
                                         const std::source_location& location)
     {
-        auto file = Util::ExtractFileName(location.file_name());
+        auto file    = Util::ExtractFileName(location.file_name());
         auto timeNow = Time::GetCurrentTime();
 
         return Util::Format("{:%Y-%m-%d %H:%M:%S} | {:>20}:{:<5} | {:<8} | {}",
@@ -22,7 +22,6 @@ namespace NGIN::Logging
 
     void BaseLogger::Log(Level level, const String& message, const std::source_location& location)
     {
-
         LogInternal(level, FormatLogMessage(level, message, location));
     }
 }
