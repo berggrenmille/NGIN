@@ -18,7 +18,7 @@ namespace NGIN::Core
         {
             timer.Reset();
             Tick(delta);
-            delta = timer.ElapsedSeconds();
+            delta = timer.Elapsed<F64, Time::Seconds>();
         }
 
         //Shutdown modules in reverse order

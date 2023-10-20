@@ -26,6 +26,9 @@ int main(int argc, char* argv[])
     // Initialize Global subsystems
     NGIN::Logging::Init();
     NGIN::Config::Init();
+    auto timer = NGIN::Time::Timer<NGIN::Time::SystemClock>();
+    std::this_thread::sleep_for(std::chrono::milliseconds(120));
+    NGIN_WARNING("Time: {0}", timer.ElapsedInt<>());
 //  NGIN::VFS::Init();
 
     // Call client application's main function

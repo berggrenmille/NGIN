@@ -56,14 +56,14 @@ namespace NGIN::Core
         void UnpackModuleDependencies(Meta::TypeWrapper<void>) {}
 
         std::unordered_map<String, UInt64> moduleIndexMap = {};
-        std::vector<Module*> moduleVector = {};
+        std::vector<Module*>               moduleVector   = {};
 
-        Time::Timer timer = Time::Timer();
+        Time::Timer<Time::SteadyClock> timer = Time::Timer<Time::SteadyClock>();
 
         EventBus eventBus = EventBus();
 
-        Bool shouldQuit = false;
-        Bool isRunning = false;
+        Bool shouldQuit    = false;
+        Bool isRunning     = false;
         Bool isInitialized = false;
     };
 

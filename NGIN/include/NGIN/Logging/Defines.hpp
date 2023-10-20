@@ -64,6 +64,6 @@ namespace NGIN::Logging
     {
         Level  level;
         String message;
-        const SourceLocation& src;
+        // const SourceLocation& src;
     };
 }

@@ -46,12 +46,12 @@ namespace NGIN::Logging
          */
         virtual void Flush() = 0;
 
-    private:
+    protected:
         void LogHeader()
         {
             Log({Level::Info,
                  "Timestamp           | File:Line                  | Level    | Message\n--------------------+----------------------------+----------+"});
-        }
+        };
     };
 
 } // namespace NGIN

@@ -10,29 +10,38 @@ namespace NGIN::Time
     /// @class Timer
     /// @brief A high-resolution timer used to measure durations.
     ///
-    /// @tparam T The duration type to be used for measurements.
+    /// @tparam ClockType The clock type to use for the timer. Ex: NGIN::Time::SteadyClock
     template<typename ClockType>
     class Timer
     {
     public:
 
         /// @brief Resets the timer to the current time.
-        void Reset()
+        inline void Reset()
         {
             startTime = ClockType::now();
         }
 
         /// @brief Gets the elapsed time since the timer was started or reset.
-        /// @return Elapsed time as a duration of type T.
-        template<IsDurationV T>
-        [[nodiscard]] T Elapsed() const
+        template<typename ReturnT = Int, typename DurationT = Seconds>
+        [[nodiscard]] inline ReturnT Elapsed() const
         {
-            return std::chrono::duration_cast<T>(Now() - startTime);
+            const auto elapsedTime = ClockType::now() - startTime;
+            const auto elapsedF64  = Duration<F64, typename DurationT::period>(elapsedTime).count();
+            return static_cast<ReturnT>(elapsedF64);
         }
 
-        [[nodiscard]] F64 ElapsedSeconds() const
+        template<typename DurationT = Seconds>
+        [[nodiscard]] inline F64 ElapsedF64() const
         {
-            return std::chrono::duration<F64>(Elapsed<Microseconds>()).count();
+            return Elapsed<F64, DurationT>();
+        }
+
+        //ElapsedInt
+        template<typename DurationT = Seconds>
+        [[nodiscard]] inline Int ElapsedInt() const
+        {
+            return Elapsed<Int, DurationT>();
         }
 
     private:

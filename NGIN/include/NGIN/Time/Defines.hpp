@@ -64,19 +64,19 @@ namespace NGIN::Time
      * @brief Represents a duration of weeks.
      */
     template<typename Rep = Int>
-    using Weeks = std::chrono::duration<int, std::ratio_multiply<std::ratio<7>, typename Days<Rep>::period>>;
+    using Weeks = Duration<Rep, std::ratio_multiply<std::ratio<7>, typename Days<Rep>::period>>;
 
     /**
      * @brief Represents a duration of months (approximated to 30 days).
      */
     template<typename Rep = Int>
-    using Months = std::chrono::duration<int, std::ratio_multiply<std::ratio<30>, typename Days<Rep>::period>>;
+    using Months = Duration<Rep, std::ratio_multiply<std::ratio<30>, typename Days<Rep>::period>>;
 
     /**
      * @brief Represents a duration of years (approximated to 365 days).
      */
     template<typename Rep = Int>
-    using Years = std::chrono::duration<int, std::ratio_multiply<std::ratio<365>, typename Days<Rep>::period>>;
+    using Years = Duration<Rep, std::ratio_multiply<std::ratio<365>, typename Days<Rep>::period>>;
 
     template<class T>
     struct IsDuration : std::false_type {};
