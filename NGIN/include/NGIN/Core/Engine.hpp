@@ -36,7 +36,7 @@ namespace NGIN::Core
 
         template<typename T, typename ... Args>
         requires std::is_base_of_v<Module, T>
-        void AddModule(Args&& ... args);
+        T& AddModule(Args&& ... args);
 
         template<typename T>
         requires std::is_base_of_v<Module, T>
@@ -72,13 +72,13 @@ namespace NGIN::Core
     /// TODO: AddModule() should allocate the module from an allocator
     template<typename T, typename ... Args>
     requires std::is_base_of_v<Module, T>
-    void Engine::AddModule(Args&& ... args)
+    T& Engine::AddModule(Args&& ... args)
     {
         const String TName = String(NGIN::Meta::TypeName<T>::Class());
 
         // Check if layer already exists
         if (moduleIndexMap.contains(TName))
-            return;
+            return static_cast<T&>(*moduleVector[moduleIndexMap[TName]]);
 
         // Unpack dependencies with compiler magic. Passing empty struct with compile time type information it just makes sense.
         UnpackModuleDependencies(typename T::Dependencies {});
@@ -86,12 +86,14 @@ namespace NGIN::Core
         // Check if layer was created due to circular dependencies
         //TODO: Check if this is the correct way to handle circular dependencies
         if (moduleIndexMap.contains(TName))
-            return;
+            return static_cast<T&>(*moduleVector[moduleIndexMap[TName]]);
 
         // Create layer
         moduleIndexMap[TName] = moduleVector.size();
         moduleVector.emplace_back(new T(std::forward<Args>(args)...));
         moduleVector.back()->OnInit(this);
+
+        return static_cast<T&>(*moduleVector.back());
     }
 
     template<typename T>

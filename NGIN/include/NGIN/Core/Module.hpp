@@ -16,7 +16,7 @@ namespace NGIN::Core
     ///          They are used to extend the engine's functionality.
     ///          Modules can declare dependencies by overriding the NGIN::Core::Module::Dependencies alias
     ///          The engine will then make sure that all dependencies are initialized before the module itself.
-    ///          Circular dependencies are not supported and will result in undefined behavior.
+    ///          Circular dependencies are not support and will result in undefined behavior.
     ///          Modules are initialized in the order of their dependencies.
     ///          Modules are shutdown in the reverse order of their dependencies.
     ///          It is recommended to loosely couple modules by using Events instead of using the modules directly.

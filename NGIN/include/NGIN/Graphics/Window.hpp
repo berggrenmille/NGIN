@@ -18,6 +18,7 @@ namespace NGIN::Graphics
     /// \note This struct is subject to change.
     struct WindowConfig
     {
+        String      name       = "Primary";
         String      title      = "NGIN";
         UInt32      width      = 1280;
         UInt32      height     = 720;
@@ -37,26 +38,31 @@ namespace NGIN::Graphics
     class Window : public Surface
     {
     public:
-        Window() = default;
+        NGIN_API Window() = default;
 
-        ~Window() override;
+        NGIN_API ~Window() override;
 
-        Bool Init(const WindowConfig& config);
+        NGIN_API Bool Init(const WindowConfig& config);
 
-        Void Shutdown();
+        NGIN_API Void Shutdown();
 
-        Void Resize(UInt32 width, UInt32 height);
+        NGIN_API Void Resize(UInt32 width, UInt32 height);
 
-        [[nodiscard]] void* GetNativeHandle() const override;
+        [[nodiscard]] NGIN_API void* GetNativeHandle() const override;
 
-        [[nodiscard]] SDL_Window* GetSDLWindow() const;
+        [[nodiscard]] NGIN_API SDL_Window* GetSDLWindow() const;
 
-        void GetDimensions(UInt32& outWidth, UInt32& outHeight) const override;
+        NGIN_API void GetDimensions(UInt32& outWidth, UInt32& outHeight) const override;
 
-        [[nodiscard]] Bool IsOpen() const;
+        [[nodiscard]] NGIN_API Bool IsOpen() const;
+
+        [[nodiscard]] NGIN_API Meta::UUID GetUUID() const;
+
+        [[nodiscard]] NGIN_API const String& GetName() const;
 
     private:
         SDL_Window* sdlWindow = nullptr;
         Meta::UUID uuid = {};
+        String     name;
     };
 }

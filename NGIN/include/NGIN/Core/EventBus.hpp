@@ -11,14 +11,7 @@
 
 namespace NGIN::Core
 {
-    /// @brief The mode in which an event will be dispatched.
-    enum class EventMode : UInt8
-    {
-        /// @brief The event will be dispatched immediately.
-        Immediate,
-        /// @brief The event will be dispatched at the end of the frame.
-        Queued
-    };
+
 
     struct ListenerHandle
     {
@@ -33,18 +26,15 @@ namespace NGIN::Core
         using EventVector = std::vector<DynamicDelegate>;
         using QueuedEvent = StaticDelegate<void()>;
 
+        /// @brief Default constructor
+        EventBus() = default;
+
+        /// @brief Default constructor
+        ~EventBus() = default;
+
         template<typename EventType, typename FuncType>
         requires std::is_same_v<typename Meta::FunctionTraits<FuncType>::template ArgNType<0>, const EventType&>
-        ListenerHandle Subscribe(FuncType&& func)
-        {
-            auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
-
-            auto& listeners = listenersMap[eventTypeIndex];
-            //auto test = EventListener<EventType>(std::move(listener));
-
-            listeners.emplace_back(std::forward<FuncType>(func));
-            return {eventTypeIndex, listeners.size() - 1};
-        }
+        ListenerHandle Subscribe(FuncType&& func);
 
 
         /**
@@ -56,19 +46,11 @@ namespace NGIN::Core
          * @param memberFunction Pointer to the member function.
          */
         template<typename EventType, typename T>
-        ListenerHandle Subscribe(T* instance, void (T::* memberFunction)(const EventType&))
-        {
-            constexpr auto eventTypeIndex = Meta::TypeID<EventType>();
-            auto& listeners = listenersMap[eventTypeIndex];
-            listeners.emplace_back(std::move(DynamicDelegate(memberFunction, instance)));
-            return {eventTypeIndex, listeners.size() - 1};
-        }
+        ListenerHandle Subscribe(T* instance, void (T::* memberFunction)(const EventType&));
 
-        void Unsubscribe(const ListenerHandle& handle)
-        {
-            auto& listeners = listenersMap[handle.eventID];
-            listeners.erase(listeners.begin() + static_cast<UInt>(handle.listenerIndex));
-        }
+
+        void Unsubscribe(const ListenerHandle& handle);
+
 
         /**
          * @brief Publish (dispatch) an event.
@@ -78,47 +60,51 @@ namespace NGIN::Core
          * @param event The event to dispatch.
          */
         template<typename EventType>
-        void Publish(EventType event, const EventMode mode = EventMode::Immediate)
-        {
-            constexpr auto eventTypeIndex = Meta::TypeID<EventType>();
+        void Publish(const EventType& event);
 
-            const EventType& constEvent = event;
-            if (listenersMap.count(eventTypeIndex) != 0)
-            {
-                auto& listeners = listenersMap[eventTypeIndex];
-                for (auto& delegate: listeners)
-                {
-                    if (mode == EventMode::Immediate)
-                        delegate(constEvent);
-                    else
-                        eventQueue.push_back([=]() mutable { delegate(constEvent); });
-                }
-            }
-        }
-
-        void FlushEvents()
-        {
-            while (!eventQueue.empty())
-            {
-                eventQueue.front()();   //Call the delegate
-                eventQueue.pop_front(); //Remove the delegate
-            }
-        }
-
-        /**
-         * @brief Destructor. Clears all listeners.
-         */
-        ~EventBus()
-        {
-
-        }
 
     private:
 
         /// @brief Map of event listeners indexed by event type.
         std::unordered_map<UInt64, EventVector> listenersMap;
-        /// @brief Queue for events to be processed later.
-        std::deque<QueuedEvent> eventQueue;
     };
 
+
+    // Inline template implementations
+    template<typename EventType, typename FuncType>
+    requires std::is_same_v<typename Meta::FunctionTraits<FuncType>::template ArgNType<0>, const EventType&>
+    inline ListenerHandle EventBus::Subscribe(FuncType&& func)
+    {
+        auto eventTypeIndex = NGIN::Meta::TypeID<EventType>();
+
+        auto& listeners = listenersMap[eventTypeIndex];
+        //auto test = EventListener<EventType>(std::move(listener));
+
+        listeners.emplace_back(std::forward<FuncType>(func));
+        return {eventTypeIndex, listeners.size() - 1};
+    }
+
+    template<typename EventType, typename T>
+    inline ListenerHandle EventBus::Subscribe(T* instance, void (T::* memberFunction)(const EventType&))
+    {
+        constexpr auto eventTypeIndex = Meta::TypeID<EventType>();
+        auto& listeners = listenersMap[eventTypeIndex];
+        listeners.emplace_back(std::move(DynamicDelegate(memberFunction, instance)));
+        return {eventTypeIndex, listeners.size() - 1};
+    }
+
+    template<typename EventType>
+    inline void EventBus::Publish(const EventType& event)
+    {
+        constexpr auto eventTypeIndex = Meta::TypeID<EventType>(); //Get the type index of the event
+
+        if (listenersMap.count(eventTypeIndex) == 0)        //If there are no listeners for this event type
+            return;
+
+        auto& listeners = listenersMap[eventTypeIndex];            // Get the listeners for this event type
+
+        for (auto& delegate: listeners)
+            delegate(event);
+
+    }
 }

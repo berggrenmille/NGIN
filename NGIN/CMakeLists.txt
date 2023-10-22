@@ -5,13 +5,16 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeDependencies.cmake)
 
 set(NGIN_CORE_SRC
         "src/NGIN/App.cpp"
+        "src/NGIN/Core/EventBus.cpp"
         "src/NGIN/Config.cpp"
         "src/NGIN/Core/Engine.cpp"
         "src/NGIN/Core/Modules/GraphicsModule.cpp"
         "src/NGIN/Core/Modules/SDLModule.cpp"
+        "src/NGIN/Core/Modules/WindowModule.cpp"
 )
 
 set(NGIN_GRAPHICS_SRC
+        "src/NGIN/Graphics/Window.cpp"
         # "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
         #"src/NGIN/Graphics/Context.cpp"
 )

@@ -99,6 +99,16 @@ namespace NGIN::Graphics
     {
         return sdlWindow;
     }
+
+    Meta::UUID Window::GetUUID() const
+    {
+        return uuid;
+    }
+
+    const String& Window::GetName() const
+    {
+        return name;
+    }
 }
 
 
