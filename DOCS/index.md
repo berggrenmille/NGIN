@@ -21,7 +21,7 @@ NGIN is grounded in C++ and is only tested for C++20 or newer.
 
 ### 2️⃣ CMake
 
-NGIN stands tall on the robust foundation of CMake.
+NGIN uses CMake as it's build system.
 
 > 📘 **Quick Note**: This guide assumes a basic understanding of CMake and won't delve deep into its intricacies.
 
@@ -34,6 +34,7 @@ NGIN stands tall on the robust foundation of CMake.
     ```bash
     sudo apt-get install cmake
     ```
+  - CMake can also be installed using Snap or the built-in software application
 
 ### 3️⃣ Graphics Libraries
 
@@ -41,18 +42,20 @@ NGIN is made to support diffrent kinds of graphic APIs, here are all the steps t
 
 #### 🎮 Vulkan SDK
 
-- **Windows**:
-  - Immerse yourself in Vulkan by visiting the [official Vulkan SDK website](https://vulkan.lunarg.com/sdk/home) and fetching the installer for Windows. Simply follow the on-screen cues, and you're set!
-  
-- **Ubuntu**:
-  - For Ubuntu, the world of Vulkan is just a couple of commands away:
+By default, NGIN in configured to support Vulkan. This can be disabled in the cmake configuration with the NGIN_BUILD_VULKAN flag.
 
-    ```bash
-    sudo apt update
-    sudo apt install vulkan-sdk
-    ```
+- **Windows/Ubuntu**:
+  - Immerse yourself in Vulkan by visiting the [official Vulkan SDK website](https://vulkan.lunarg.com/sdk/home) Simply follow the on-screen cues, and you're set!
+  
+
 
 #### 🖼 OpenGL
 
-- **Windows/Linux**:
+- **Windows/Ubuntu**:
   - OpenGL drivers typically come bundled with your GPU drivers. So, all you need to do is to ensure your GPU drivers (from NVIDIA, AMD, or Intel) are up-to-date.
+  
+### 4 Dependencies
+
+#### No need
+
+- NGIN handles dependencies automatically using CMake Fetch. The only requirement is a solid internet connection.
