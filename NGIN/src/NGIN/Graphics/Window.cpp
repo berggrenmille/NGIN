@@ -16,7 +16,8 @@ namespace NGIN::Graphics
 
     Window::~Window()
     {
-        Shutdown();
+        if(sdlWindow)
+            Shutdown();
     }
 
     Bool Window::Init(const WindowConfig& windowConfig)
