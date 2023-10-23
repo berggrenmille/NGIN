@@ -3,8 +3,8 @@
 //
 
 //Precompiled include
-#include <Precompiled/PCH.h>
 #include <NGIN/Core/Modules/GraphicsModule.hpp>
+#include <Precompiled/PCH.h>
 
 #include <NGIN/Core/Engine.hpp>
 
@@ -15,8 +15,6 @@
 
 namespace NGIN::Core
 {
-
-
     void GraphicsModule::OnInit(Engine* enginePtr)
     {
         engine = enginePtr;
@@ -30,9 +28,9 @@ namespace NGIN::Core
         settings.title = "NGIN";
 
 
-//  this->context = new Graphics::Context();
+        //  this->context = new Graphics::Context();
         //      context->Init(Graphics::GraphicsAPI::VULKAN, &settings);
     }
 
 
-}
+}// namespace NGIN::Core

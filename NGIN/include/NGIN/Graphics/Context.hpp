@@ -1,18 +1,17 @@
 #pragma once
 
-#include <NGIN/Defines.hpp>
 #include "GraphicsAPI.hpp"
+#include <NGIN/Defines.hpp>
 #include <NGIN/Graphics/Window.hpp>
 
 namespace NGIN::Graphics
 {
     class Renderer;
 
-    
+
     class NGIN_API Context
     {
     public:
-
         Context() = default;
 
         virtual ~Context() = default;
@@ -30,7 +29,8 @@ namespace NGIN::Graphics
         /// @return The renderer
         [[nodiscard]] virtual Renderer& GetRenderer() const = 0;
 
+        /// @brief Get the name of the current graphics API in use.
+        /// @return A String containing the current GraphicsApi in use.
         [[nodiscard]] virtual String GetAPIName() const = 0;
-
     };
-}
+}// namespace NGIN::Graphics

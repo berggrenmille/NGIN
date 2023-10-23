@@ -17,13 +17,11 @@ namespace NGIN::Core
         this->engine = engine;
         graphicsModule = engine->GetModule<GraphicsModule>();
         NGIN_ASSERT(graphicsModule != nullptr, "GetModule<GraphicsModule> returned nullptr");
-
     }
 
     void WindowModule::OnShutdown()
     {
         DestroyAllWindows();
-        windows.clear();
     }
 
 
@@ -50,54 +48,47 @@ namespace NGIN::Core
     void WindowModule::DestroyWindow(const String& name)
     {
         // Find window by name
-        auto it = std::find_if
-                (
-                        windows.begin(),
-                        windows.end(),
-                        [&name](const Graphics::Window& window) { return window.GetName() == name; }
-                );
+        auto it = std::find_if(
+                windows.begin(),
+                windows.end(),
+                [&name](const Graphics::Window& window) { return window.GetName() == name; });
 
-        if (it != windows.end())
-        {
-            it->Shutdown();
-            windows.erase(it);
-        }
+        if (it == windows.end())
+            return;
+
+        it->Shutdown();
+        windows.erase(it);
     }
 
     void WindowModule::DestroyWindow(const Meta::UUID id)
     {
         // Find window by UUID
-        auto it = std::find_if
-                (
-                        windows.begin(),
-                        windows.end(),
-                        [&id](const Graphics::Window& window) { return window.GetUUID() == id; }
-                );
-        if (it != windows.end())
-        {
-            it->Shutdown();
-            windows.erase(it);
-        }
+        auto it = std::find_if(
+                windows.begin(),
+                windows.end(),
+                [&id](const Graphics::Window& window) { return window.GetUUID() == id; });
+
+        if (it == windows.end())
+            return;
+
+        it->Shutdown();
+        windows.erase(it);
     }
 
     void WindowModule::DestroyAllWindows()
     {
         for (auto& window: windows)
-        {
             window.Shutdown();
-        }
         windows.clear();
     }
 
     Graphics::Window& WindowModule::GetWindow(const String& name)
     {
         // Find window by name
-        auto it = std::find_if
-                (
-                        windows.begin(),
-                        windows.end(),
-                        [&name](const Graphics::Window& window) { return window.GetName() == name; }
-                );
+        auto it = std::find_if(
+                windows.begin(),
+                windows.end(),
+                [&name](const Graphics::Window& window) { return window.GetName() == name; });
         NGIN_ASSERT(it != windows.end(), "Could not find window with name: {}", name);
         return *it;
     }
@@ -105,12 +96,10 @@ namespace NGIN::Core
     Graphics::Window& WindowModule::GetWindow(Meta::UUID id)
     {
         // Find window by UUID
-        auto it = std::find_if
-                (
-                        windows.begin(),
-                        windows.end(),
-                        [&id](const Graphics::Window& window) { return window.GetUUID() == id; }
-                );
+        auto it = std::find_if(
+                windows.begin(),
+                windows.end(),
+                [&id](const Graphics::Window& window) { return window.GetUUID() == id; });
         NGIN_ASSERT(it != windows.end(), "Could not find window with UUID: {}", id.ToString());
         return *it;
     }
@@ -119,4 +108,4 @@ namespace NGIN::Core
     {
         return windows;
     }
-}
+}// namespace NGIN::Core
