@@ -7,18 +7,16 @@
 namespace NGIN::Graphics
 {
 
-    /**
-     * @brief Represents a common rendering interface that abstracts the specifics of any graphics API.
-     *
-     */
+    class IContext;
+
+    /// class IRenderer
+    /// @brief Interface for a renderer.
     class NGIN_API IRenderer
     {
     public:
-        IRenderer(IContext& context) : context(context) {}
-        // Renderer methods that use context...
+        virtual ~IRenderer() = default;
 
-    private:
-        IContext& context;
+        [[nodiscard]] virtual IContext& GetContext() const = 0;
     };
 
 }

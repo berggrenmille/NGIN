@@ -6,6 +6,14 @@ namespace NGIN::Graphics
 {
     class IRenderer;
 
+    enum class eGraphicsAPI : UInt8
+    {
+        NONE = 0,
+        VULKAN,
+        OPENGL,
+        DX12
+    };
+
     class NGIN_API IContext
     {
     public:
@@ -54,6 +62,10 @@ namespace NGIN::Graphics
         /// @brief Get the name of the current graphics API in use.
         /// @return A String containing the current GraphicsApi in use.
         [[nodiscard]] virtual String GetAPIName() const = 0;
+
+        /// @brief Get the current graphics API in use.
+        /// @return The current GraphicsApi in use.
+        [[nodiscard]] virtual eGraphicsAPI GetAPI() const = 0;
 
 
     protected:
