@@ -60,7 +60,9 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 fetch_dependency(googletest "https://github.com/google/googletest" "main")
 
 # Vulkan
-find_package(Vulkan QUIET)
+message(STATUS "Checking Vulkan path: $ENV{VULKAN_SDK}")
+
+find_package(Vulkan REQUIRED)
 
 # vulkan-hpp
 #find_package(VulkanHeaders QUIET)

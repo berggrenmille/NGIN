@@ -3,8 +3,8 @@
 //
 
 //Precompiled include
-#include <NGIN/Core/Modules/GraphicsModule.hpp>
 #include <Precompiled/PCH.h>
+#include <NGIN/Core/Modules/GraphicsModule.hpp>
 
 #include <NGIN/Core/Engine.hpp>
 

@@ -1,5 +1,6 @@
 project(NGIN)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Include Dependencies 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeDependencies.cmake)
 
