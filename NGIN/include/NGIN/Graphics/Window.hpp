@@ -2,7 +2,7 @@
 
 #include <NGIN/Defines.hpp>
 #include <NGIN/Graphics/GraphicsAPI.hpp>
-#include <NGIN/Graphics/Surface.hpp>
+#include <NGIN/Graphics/ISurface.hpp>
 #include <NGIN/Meta/UUID.hpp>
 
 #include <string>

@@ -10,13 +10,13 @@
 
 namespace NGIN::Graphics
 {
-    /// @class Surface
+    /// @class ISurface
     /// @brief Interface for a rendering target surface.
-    class NGIN_API Surface
+    class NGIN_API ISurface
     {
     public:
         /// @brief Virtual destructor to ensure proper cleanup for derived classes.
-        virtual ~Surface() = default;
+        virtual ~ISurface() = default;
 
         /// @brief Retrieves the native handle of the surface.
         /// @return A pointer to the native surface handle.
@@ -34,10 +34,13 @@ namespace NGIN::Graphics
 
         /// @brief  Binds the surface for rendering.
         virtual void Bind() = 0;
+
         /// @brief Unbinds the surface from rendering.
         virtual void Unbind() = 0;
+
         /// @brief Clears the surface.
         virtual void Clear() = 0;
+
         /// @brief Presents the surface.
         /// This is only applicable for surfaces that are double/triple buffered.
         virtual void Present() = 0;

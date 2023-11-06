@@ -6,6 +6,13 @@
 #include <memory>
 #include <string>
 #include <source_location>
+#include <vector>
+#include <span>
+#include <deque>
+#include <list>
+#include <queue>
+#include <unordered_map>
+#include <map>
 
 
 /**
@@ -99,4 +106,20 @@ namespace NGIN
     {
         return TicketPtr<T>(ptr);
     }
+
+    template<typename T>
+    using Vector = std::vector<T>;
+    template<typename T>
+    using Span = std::span<T>;
+    template<typename T>
+    using Deque = std::deque<T>;
+    template<typename T>
+    using List = std::list<T>;
+    template<typename T>
+    using Queue = std::queue<T>;
+    template<typename Key, typename Value>
+    using UnorderedMap = std::unordered_map<Key, Value>;
+    template<typename Key, typename Value>
+    using Map = std::map<Key, Value>;
+
 }
