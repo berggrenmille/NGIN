@@ -15,7 +15,7 @@ set(NGIN_CORE_SRC
 )
 
 set(NGIN_GRAPHICS_SRC
-        "src/NGIN/Graphics/Window.cpp"
+        #"src/NGIN/Graphics/Window.cpp"
         # "src/NGIN/Graphics/Vulkan/VulkanRenderer.cpp"
         #"src/NGIN/Graphics/Context.cpp"
 )
