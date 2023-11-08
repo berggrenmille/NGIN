@@ -35,7 +35,7 @@ namespace NGIN::Graphics
     /// This class is used to create and manage a window.
     /// Internally it uses SDL for window creation and management
     /// \note This class exposes the SDL_Window* handle, which might change in the future.
-    class Window : public Surface
+    class Window : public ISurface
     {
     public:
         NGIN_API Window() = default;
